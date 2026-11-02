@@ -6,7 +6,7 @@ variable "konnect_pat" {
 
 variable "konnect_server_url" {
   type    = string
-  default = "https://us.api.konghq.com"
+  default = "https://in.api.konghq.com"
 }
 
 variable "control_plane_name" {

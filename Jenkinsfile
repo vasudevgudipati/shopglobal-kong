@@ -7,7 +7,7 @@ pipeline {
     KC_AI        = '/var/lib/jenkins/.kube/config'      // cluster on .42
     KC_API       = '/var/lib/jenkins/.kube/config-api'  // cluster on .41
     CP_NAME      = 'shopglobal-uat'
-    KONNECT_ADDR = 'https://us.api.konghq.com'
+    KONNECT_ADDR = 'https://in.api.konghq.com'
     NS_API       = 'shopglobal-uat-api'
     NS_AI        = 'shopglobal-uat-ai'
     TF_DIR       = 'terraform/envs/uat'
@@ -15,6 +15,26 @@ pipeline {
     CHART_DIR    = '/var/lib/jenkins/charts'
   }
   stages {
+    stage('Migrate: remove old US control plane') {
+      // One-off, automatic: if the saved state still points at the US geo, destroy those
+      // resources (using the US API) so Terraform can recreate them in the IN geo.
+      steps {
+        withCredentials([string(credentialsId: 'konnect-pat', variable: 'TF_VAR_konnect_pat')]) {
+          dir(env.TF_DIR) {
+            sh '''
+              terraform init -input=false
+              EP=$(terraform output -raw control_plane_endpoint 2>/dev/null || true)
+              case "$EP" in
+                *.us.cp.*)
+                  echo "State points at US geo ($EP) - destroying before recreating in IN"
+                  TF_VAR_konnect_server_url=https://us.api.konghq.com terraform destroy -auto-approve -input=false ;;
+                *) echo "No US resources in state - nothing to migrate" ;;
+              esac
+            '''
+          }
+        }
+      }
+    }
     stage('Terraform plan') {
       steps {
         withCredentials([string(credentialsId: 'konnect-pat', variable: 'TF_VAR_konnect_pat')]) {
