@@ -1,0 +1,5 @@
+proxy:
+  enabled: true
+  type: NodePort
+  http:  { enabled: true, servicePort: 80,  nodePort: 30080 }
+  tls:   { enabled: true, servicePort: 443, nodePort: 30443 }

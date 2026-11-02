@@ -1,0 +1,38 @@
+# Shared hybrid data plane settings. Endpoints are injected by Jenkins (--set).
+image:
+  repository: kong/kong-gateway
+  tag: "3.12"            # confirm AI/MCP plugin availability for this tag
+ingressController:
+  enabled: false
+deployment:
+  kong:
+    enabled: true
+replicaCount: 1
+secretVolumes:
+  - kong-cluster-cert
+env:
+  role: data_plane
+  database: "off"
+  konnect_mode: "on"
+  vitals: "off"
+  cluster_mtls: pki
+  cluster_cert: /etc/secrets/kong-cluster-cert/tls.crt
+  cluster_cert_key: /etc/secrets/kong-cluster-cert/tls.key
+  lua_ssl_trusted_certificate: system
+admin:
+  enabled: false
+manager:
+  enabled: false
+portal:
+  enabled: false
+portalapi:
+  enabled: false
+cluster:
+  enabled: false
+clustertelemetry:
+  enabled: false
+enterprise:
+  enabled: false
+resources:
+  requests: { cpu: 500m, memory: 1Gi }
+  limits:   { cpu: "2",  memory: 4Gi }
