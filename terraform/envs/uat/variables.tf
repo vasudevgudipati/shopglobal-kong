@@ -11,5 +11,5 @@ variable "konnect_server_url" {
 
 variable "control_plane_name" {
   type    = string
-  default = "shopglobal-uat"
+  default = "shopglobal-api-uat"
 }

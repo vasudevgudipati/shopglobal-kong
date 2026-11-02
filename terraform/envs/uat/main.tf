@@ -1,6 +1,6 @@
 resource "konnect_gateway_control_plane" "this" {
   name         = var.control_plane_name
-  description  = "ShopGlobal UAT (dev/test) - API and AI data planes"
+  description  = "ShopGlobal UAT (dev/test) - API gateway"
   cluster_type = "CLUSTER_TYPE_CONTROL_PLANE"
   auth_type    = "pinned_client_certs"
   labels = {

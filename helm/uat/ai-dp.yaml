@@ -1,5 +1,31 @@
+# Konnect AI Gateway data plane (standalone values - does not use common-dp.yaml).
+# Endpoints come from helm/uat/ai-gw-endpoints.env via --set in the Jenkinsfile.
+ingressController:
+  enabled: false
+image:
+  repository: kong/kong-ai-gateway
+  tag: "2.3.0-distroless"
+secretVolumes:
+  - kong-cluster-cert
+env:
+  role: data_plane
+  database: "off"
+  konnect_mode: "on"
+  vitals: "off"
+  cluster_mtls: pki
+  cluster_cert: /etc/secrets/kong-cluster-cert/tls.crt
+  cluster_cert_key: /etc/secrets/kong-cluster-cert/tls.key
+  lua_ssl_trusted_certificate: system
+  proxy_access_log: "off"
+  dns_stale_ttl: "3600"
+resources:
+  requests: { cpu: "1", memory: 2Gi }
 proxy:
   enabled: true
   type: NodePort
-  http:  { enabled: true, servicePort: 80,  nodePort: 30090 }
-  tls:   { enabled: true, servicePort: 443, nodePort: 30444 }
+  http: { enabled: true, servicePort: 80,  nodePort: 30090 }
+  tls:  { enabled: true, servicePort: 443, nodePort: 30444 }
+admin:
+  enabled: false
+manager:
+  enabled: false
