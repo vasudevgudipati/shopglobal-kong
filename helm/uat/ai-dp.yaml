@@ -5,6 +5,11 @@ ingressController:
 image:
   repository: kong/kong-ai-gateway
   tag: "2.3.0-distroless"
+deployment:
+  kong:
+    initContainers:
+      clearStalePid:
+        enabled: false   # the distroless AI image has no "rm"; this init container would crash
 secretVolumes:
   - kong-cluster-cert
 env:
