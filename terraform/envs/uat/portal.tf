@@ -39,7 +39,7 @@ resource "konnect_portal_page" "home" {
   portal_id   = konnect_portal.this.id
   slug        = "/"
   title       = "ShopGlobal Developer Portal"
-  description = "Home page"
+  description = "Home page: lists the published APIs"
   status      = "published"
   visibility  = "public"
   content     = file("${path.module}/../../../portal/uat/home.md")
@@ -54,6 +54,27 @@ resource "konnect_portal_page" "apis" {
   status      = "published"
   visibility  = "public"
   content     = file("${path.module}/../../../portal/uat/apis.md")
+}
+
+# Branding: colours from the UAT logo (purple #310068, teal accent #5eb4a4) and the top/bottom menus.
+resource "konnect_portal_customization" "this" {
+  portal_id = konnect_portal.this.id
+
+  theme = {
+    mode = "light"
+    colors = {
+      primary = "#310068"
+    }
+  }
+
+  menu = {
+    main = [
+      { title = "APIs", path = "/apis", external = false, visibility = "public" },
+    ]
+    footer_bottom = [
+      { title = "ShopGlobal UAT - for testing only", path = "/", external = false, visibility = "public" },
+    ]
+  }
 }
 
 output "portal_id" {
