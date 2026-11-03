@@ -2,7 +2,7 @@ _format_version: "3.0"
 
 # ShopGlobal UAT - API gateway (control plane shopglobal-api-uat)
 # One service for the mock API, one route per operation.
-# Paths are anchored regexes ("~" prefix) so /api/orders does not also swallow /api/orders/{id}.
+# Paths are anchored regexes ("~" prefix; Konnect accepts RE2 syntax only - no lookahead) so /api/orders does not also swallow /api/orders/{id}.
 # Authentication (Keycloak OAuth 2.0) and caching are added in later steps.
 
 services:
@@ -23,11 +23,12 @@ services:
       - name: products-compare           # compareProducts
         methods: [GET]
         paths: ["~/api/products/compare$"]
+        regex_priority: 10               # wins over products-get, which also matches /api/products/compare
         strip_path: false
         tags: [shopglobal, uat, products]
-      - name: products-get               # getProduct (excludes the word "compare")
+      - name: products-get               # getProduct
         methods: [GET]
-        paths: ["~/api/products/(?!compare$)[^/]+$"]
+        paths: ["~/api/products/[^/]+$"]
         strip_path: false
         tags: [shopglobal, uat, products]
       - name: categories-list            # listCategories
