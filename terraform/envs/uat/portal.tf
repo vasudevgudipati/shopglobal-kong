@@ -45,6 +45,17 @@ resource "konnect_portal_page" "home" {
   content     = file("${path.module}/../../../portal/uat/home.md")
 }
 
+# API listing page: shows every API published to this portal (the portal-config pipeline publishes them).
+resource "konnect_portal_page" "apis" {
+  portal_id   = konnect_portal.this.id
+  slug        = "/apis"
+  title       = "APIs"
+  description = "Browse the ShopGlobal APIs"
+  status      = "published"
+  visibility  = "public"
+  content     = file("${path.module}/../../../portal/uat/apis.md")
+}
+
 output "portal_id" {
   value = konnect_portal.this.id
 }
