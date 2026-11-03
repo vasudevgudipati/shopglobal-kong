@@ -1,6 +1,7 @@
 // ShopGlobal Kong - UAT API CONFIG pipeline (run on every API change).
 // Jenkins script path: jenkins/uat/api-config.Jenkinsfile
-// Syncs services, routes and plugins from apiops/uat/kong.yaml to the API control plane with decK.
+// 1. Syncs services, routes and plugins from apiops/uat/kong.yaml to the API control plane with decK.
+// 2. Updates the API catalog entry (API, OpenAPI spec, docs) with Terraform.
 // Needs the control plane to exist already (platform pipeline).
 pipeline {
   agent any
@@ -13,6 +14,7 @@ pipeline {
     CP_NAME      = 'shopglobal-api-uat'
     KONNECT_ADDR = 'https://in.api.konghq.com'
     API_URL      = 'http://192.168.19.41:30080'
+    CATALOG_DIR  = 'terraform/catalog/uat'
   }
   stages {
     stage('decK diff') {
@@ -27,6 +29,23 @@ pipeline {
       steps {
         withCredentials([string(credentialsId: 'konnect-pat', variable: 'KONNECT_TOKEN')]) {
           sh 'deck gateway sync apiops/$ENV_NAME/kong.yaml --konnect-token "$KONNECT_TOKEN" --konnect-addr $KONNECT_ADDR --konnect-control-plane-name $CP_NAME'
+        }
+      }
+    }
+    stage('Catalog plan') {
+      steps {
+        withCredentials([string(credentialsId: 'konnect-pat', variable: 'TF_VAR_konnect_pat')]) {
+          dir(env.CATALOG_DIR) {
+            sh 'terraform init -input=false && terraform validate && terraform plan -input=false -out=tfplan'
+          }
+        }
+      }
+    }
+    stage('Catalog apply') {
+      when { expression { return !params.DIFF_ONLY } }
+      steps {
+        withCredentials([string(credentialsId: 'konnect-pat', variable: 'TF_VAR_konnect_pat')]) {
+          dir(env.CATALOG_DIR) { sh 'terraform apply -input=false tfplan' }
         }
       }
     }

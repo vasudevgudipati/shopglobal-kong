@@ -1,0 +1,129 @@
+openapi: 3.0.3
+info:
+  title: ShopGlobal Marketplace API
+  version: 1.0.0
+  description: >
+    Products, orders, returns and saved addresses for the ShopGlobal storefront and agents.
+    This is the UAT environment. Authentication will be added with Keycloak.
+servers:
+  - url: https://shopglobal-api-uat.pronteff.com:8443
+    description: UAT
+tags:
+  - name: Products
+  - name: Orders
+  - name: Returns
+  - name: Addresses
+paths:
+  /api/products:
+    get:
+      operationId: searchProducts
+      tags: [Products]
+      summary: Search products
+      responses:
+        "200": { description: List of products }
+  /api/products/compare:
+    get:
+      operationId: compareProducts
+      tags: [Products]
+      summary: Compare products
+      responses:
+        "200": { description: Product comparison }
+  /api/products/{productId}:
+    get:
+      operationId: getProduct
+      tags: [Products]
+      summary: Get one product
+      parameters:
+        - { name: productId, in: path, required: true, schema: { type: string } }
+      responses:
+        "200": { description: The product }
+        "404": { description: Product not found }
+  /api/categories:
+    get:
+      operationId: listCategories
+      tags: [Products]
+      summary: List product categories
+      responses:
+        "200":
+          description: List of category names
+          content:
+            application/json:
+              schema: { type: array, items: { type: string } }
+  /api/return-policy:
+    get:
+      operationId: getReturnPolicy
+      tags: [Returns]
+      summary: Get the store return policy
+      responses:
+        "200": { description: The return policy }
+  /api/orders/{orderId}/return-policies:
+    get:
+      operationId: getOrderReturnPolicies
+      tags: [Returns]
+      summary: Get the return policies that apply to an order
+      parameters:
+        - { name: orderId, in: path, required: true, schema: { type: string } }
+      responses:
+        "200": { description: Return policies for the order }
+        "404": { description: Order not found }
+  /api/orders:
+    get:
+      operationId: listOrders
+      tags: [Orders]
+      summary: List orders
+      responses:
+        "200": { description: List of orders }
+    post:
+      operationId: placeOrder
+      tags: [Orders]
+      summary: Place an order
+      description: Storefront use only.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        "200": { description: The order was placed }
+  /api/orders/{orderId}:
+    get:
+      operationId: getOrderStatus
+      tags: [Orders]
+      summary: Get the status of an order
+      parameters:
+        - { name: orderId, in: path, required: true, schema: { type: string } }
+      responses:
+        "200": { description: The order }
+        "404": { description: Order not found }
+  /api/orders/{orderId}/cancel:
+    post:
+      operationId: cancelOrder
+      tags: [Orders]
+      summary: Cancel an order
+      parameters:
+        - { name: orderId, in: path, required: true, schema: { type: string } }
+      responses:
+        "200": { description: The order was cancelled }
+        "404": { description: Order not found }
+  /api/orders/{orderId}/address:
+    put:
+      operationId: changeDeliveryAddress
+      tags: [Orders]
+      summary: Change the delivery address of an order
+      parameters:
+        - { name: orderId, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        "200": { description: The address was changed }
+        "404": { description: Order not found }
+  /api/addresses:
+    get:
+      operationId: listSavedAddresses
+      tags: [Addresses]
+      summary: List saved addresses
+      responses:
+        "200": { description: List of saved addresses }
