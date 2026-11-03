@@ -3,7 +3,9 @@ _format_version: "3.0"
 # ShopGlobal UAT - API gateway (control plane shopglobal-api-uat)
 # One service for the mock API, one route per operation.
 # Paths are anchored regexes ("~" prefix; Konnect accepts RE2 syntax only - no lookahead) so /api/orders does not also swallow /api/orders/{id}.
-# Authentication (Keycloak OAuth 2.0) and caching are added in later steps.
+# Plugins: CORS, OAuth 2.0 introspection (Keycloak realm demo) and IP restriction apply to every route of the service;
+# Proxy Cache Advanced (Redis) is attached to categories, return-policy (300 s) and order status (30 s); Rate Limiting Advanced is per consumer (100/min, 10/min on infrequent routes).
+# Secrets are NOT stored here: __KEYCLOAK_BASIC__ and __REDIS_PASSWORD__ are filled in by the Jenkins pipeline at deploy time.
 
 services:
   - name: shopglobal-mock-api
@@ -13,7 +15,46 @@ services:
     write_timeout: 30000
     retries: 2
     tags: [shopglobal, uat]
+    plugins:
+      - name: cors
+        config:
+          origins:
+            - https://6a7795276d93.in.kongportals.com   # Dev Portal
+          methods: [GET, POST, PUT, OPTIONS]
+          headers: [Authorization, Content-Type, Accept]
+          credentials: true
+          max_age: 3600
+          preflight_continue: false
+        tags: [shopglobal, uat]
+      - name: oauth2-introspection
+        config:
+          introspection_url: https://marmalade-ivy-crazed.ngrok-free.dev/realms/demo/protocol/openid-connect/token/introspect
+          authorization_value: "__KEYCLOAK_BASIC__"
+          token_type_hint: access_token
+          consumer_by: client_id          # matches the consumer's custom_id to the Keycloak client id
+          ttl: 60                         # cache introspection results for 60 s
+          timeout: 10000
+          hide_credentials: false
+          run_on_preflight: false
+        tags: [shopglobal, uat]
+      - name: ip-restriction
+        config:
+          allow:
+            - 192.168.19.41/32            # API gateway server
+            - 192.168.19.42/32            # AI gateway / Jenkins / AI agent server
+            - 10.42.0.0/16                # k3s pods on .41 (web app, mock API, NGINX)
+            - 10.243.126.0/24             # admin PC range (current IP 10.243.126.248; it changes)
+          status: 403
+          message: Your IP address is not allowed
+        tags: [shopglobal, uat]
     routes:
+      # ---- CORS preflight: browsers send OPTIONS before the real call; the cors plugin answers it ----
+      - name: cors-preflight
+        methods: [OPTIONS]
+        paths: ["~/api/.*"]
+        strip_path: false
+        tags: [shopglobal, uat, cors]
+
       # ---- products ----
       - name: products-search            # searchProducts
         methods: [GET]
@@ -36,6 +77,20 @@ services:
         paths: ["~/api/categories$"]
         strip_path: false
         tags: [shopglobal, uat, products]
+        plugins:
+          - name: proxy-cache-advanced
+            config:
+              strategy: redis
+              response_code: [200]
+              request_method: [GET, HEAD]
+              content_type: [application/json]
+              cache_ttl: 300
+              redis:
+                host: redis.shopglobal-uat-api.svc.cluster.local
+                port: 6379
+                password: "__REDIS_PASSWORD__"
+                database: 0
+            tags: [shopglobal, uat]
 
       # ---- returns ----
       - name: return-policy-get          # getReturnPolicy (static data: cache candidate)
@@ -43,6 +98,20 @@ services:
         paths: ["~/api/return-policy$"]
         strip_path: false
         tags: [shopglobal, uat, returns, cacheable]
+        plugins:
+          - name: proxy-cache-advanced
+            config:
+              strategy: redis
+              response_code: [200]
+              request_method: [GET, HEAD]
+              content_type: [application/json]
+              cache_ttl: 300
+              redis:
+                host: redis.shopglobal-uat-api.svc.cluster.local
+                port: 6379
+                password: "__REDIS_PASSWORD__"
+                database: 0
+            tags: [shopglobal, uat]
       - name: orders-return-policies     # getOrderReturnPolicies
         methods: [GET]
         paths: ["~/api/orders/[^/]+/return-policies$"]
@@ -60,6 +129,20 @@ services:
         paths: ["~/api/orders/[^/]+$"]
         strip_path: false
         tags: [shopglobal, uat, orders]
+        plugins:
+          - name: proxy-cache-advanced
+            config:
+              strategy: redis
+              response_code: [200]
+              request_method: [GET, HEAD]
+              content_type: [application/json]
+              cache_ttl: 30                 # short: an order's status changes when it is cancelled or re-addressed
+              redis:
+                host: redis.shopglobal-uat-api.svc.cluster.local
+                port: 6379
+                password: "__REDIS_PASSWORD__"
+                database: 0
+            tags: [shopglobal, uat]
       - name: orders-place               # placeOrder - storefront only, never an MCP tool
         methods: [POST]
         paths: ["~/api/orders$"]
@@ -82,3 +165,98 @@ services:
         paths: ["~/api/addresses$"]
         strip_path: false
         tags: [shopglobal, uat, addresses]
+
+# Consumers = applications calling the API. custom_id must equal the Keycloak client id of the application.
+consumers:
+  - username: kong-dev-portal
+    custom_id: kong-dev-portal        # = Keycloak client id
+    tags: [shopglobal, uat]
+
+# Rate limits (Rate Limiting Advanced, counted in Redis, per consumer):
+#   100 requests per minute on all routes, 10 per minute on the infrequent routes (writes and saved addresses).
+# A plugin on consumer + route wins over the consumer-wide one, so each infrequent route has its own entry.
+plugins:
+  - name: rate-limiting-advanced
+    consumer: kong-dev-portal
+    config:
+      limit: [100]
+      window_size: [60]
+      window_type: sliding
+      identifier: consumer
+      strategy: redis
+      sync_rate: 1
+      namespace: shopglobal-uat-kong-dev-portal
+      redis:
+        host: redis.shopglobal-uat-api.svc.cluster.local
+        port: 6379
+        password: "__REDIS_PASSWORD__"
+        database: 0
+    tags: [shopglobal, uat]
+  - name: rate-limiting-advanced
+    consumer: kong-dev-portal
+    route: orders-place
+    config:
+      limit: [10]
+      window_size: [60]
+      window_type: sliding
+      identifier: consumer
+      strategy: redis
+      sync_rate: 1
+      namespace: shopglobal-uat-kong-dev-portal-orders-place
+      redis:
+        host: redis.shopglobal-uat-api.svc.cluster.local
+        port: 6379
+        password: "__REDIS_PASSWORD__"
+        database: 0
+    tags: [shopglobal, uat]
+  - name: rate-limiting-advanced
+    consumer: kong-dev-portal
+    route: orders-cancel
+    config:
+      limit: [10]
+      window_size: [60]
+      window_type: sliding
+      identifier: consumer
+      strategy: redis
+      sync_rate: 1
+      namespace: shopglobal-uat-kong-dev-portal-orders-cancel
+      redis:
+        host: redis.shopglobal-uat-api.svc.cluster.local
+        port: 6379
+        password: "__REDIS_PASSWORD__"
+        database: 0
+    tags: [shopglobal, uat]
+  - name: rate-limiting-advanced
+    consumer: kong-dev-portal
+    route: orders-change-address
+    config:
+      limit: [10]
+      window_size: [60]
+      window_type: sliding
+      identifier: consumer
+      strategy: redis
+      sync_rate: 1
+      namespace: shopglobal-uat-kong-dev-portal-orders-change-address
+      redis:
+        host: redis.shopglobal-uat-api.svc.cluster.local
+        port: 6379
+        password: "__REDIS_PASSWORD__"
+        database: 0
+    tags: [shopglobal, uat]
+  - name: rate-limiting-advanced
+    consumer: kong-dev-portal
+    route: addresses-list
+    config:
+      limit: [10]
+      window_size: [60]
+      window_type: sliding
+      identifier: consumer
+      strategy: redis
+      sync_rate: 1
+      namespace: shopglobal-uat-kong-dev-portal-addresses-list
+      redis:
+        host: redis.shopglobal-uat-api.svc.cluster.local
+        port: 6379
+        password: "__REDIS_PASSWORD__"
+        database: 0
+    tags: [shopglobal, uat]

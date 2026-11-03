@@ -19,6 +19,10 @@ env:
   cluster_cert: /etc/secrets/kong-cluster-cert/tls.crt
   cluster_cert_key: /etc/secrets/kong-cluster-cert/tls.key
   lua_ssl_trusted_certificate: system
+  # Real client address for IP restriction: trust X-Forwarded-For only from k3s pods (NGINX runs there).
+  trusted_ips: "10.42.0.0/16"
+  real_ip_header: X-Forwarded-For
+  real_ip_recursive: "on"
 admin:
   enabled: false
 manager:
