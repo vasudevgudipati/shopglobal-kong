@@ -1,1 +1,83 @@
 _format_version: "3.0"
+
+# ShopGlobal UAT - API gateway (control plane shopglobal-api-uat)
+# One service for the mock API, one route per operation.
+# Paths are anchored regexes ("~" prefix) so /api/orders does not also swallow /api/orders/{id}.
+# Authentication (Keycloak OAuth 2.0) and caching are added in later steps.
+
+services:
+  - name: shopglobal-mock-api
+    url: http://192.168.19.42:30081
+    connect_timeout: 5000
+    read_timeout: 30000
+    write_timeout: 30000
+    retries: 2
+    tags: [shopglobal, uat]
+    routes:
+      # ---- products ----
+      - name: products-search            # searchProducts
+        methods: [GET]
+        paths: ["~/api/products$"]
+        strip_path: false
+        tags: [shopglobal, uat, products]
+      - name: products-compare           # compareProducts
+        methods: [GET]
+        paths: ["~/api/products/compare$"]
+        strip_path: false
+        tags: [shopglobal, uat, products]
+      - name: products-get               # getProduct (excludes the word "compare")
+        methods: [GET]
+        paths: ["~/api/products/(?!compare$)[^/]+$"]
+        strip_path: false
+        tags: [shopglobal, uat, products]
+      - name: categories-list            # listCategories
+        methods: [GET]
+        paths: ["~/api/categories$"]
+        strip_path: false
+        tags: [shopglobal, uat, products]
+
+      # ---- returns ----
+      - name: return-policy-get          # getReturnPolicy (static data: cache candidate)
+        methods: [GET]
+        paths: ["~/api/return-policy$"]
+        strip_path: false
+        tags: [shopglobal, uat, returns, cacheable]
+      - name: orders-return-policies     # getOrderReturnPolicies
+        methods: [GET]
+        paths: ["~/api/orders/[^/]+/return-policies$"]
+        strip_path: false
+        tags: [shopglobal, uat, returns]
+
+      # ---- orders ----
+      - name: orders-list                # listOrders
+        methods: [GET]
+        paths: ["~/api/orders$"]
+        strip_path: false
+        tags: [shopglobal, uat, orders]
+      - name: orders-get                 # getOrderStatus
+        methods: [GET]
+        paths: ["~/api/orders/[^/]+$"]
+        strip_path: false
+        tags: [shopglobal, uat, orders]
+      - name: orders-place               # placeOrder - storefront only, never an MCP tool
+        methods: [POST]
+        paths: ["~/api/orders$"]
+        strip_path: false
+        tags: [shopglobal, uat, orders, no-mcp]
+      - name: orders-cancel              # cancelOrder (write)
+        methods: [POST]
+        paths: ["~/api/orders/[^/]+/cancel$"]
+        strip_path: false
+        tags: [shopglobal, uat, orders, write]
+      - name: orders-change-address      # changeDeliveryAddress (write)
+        methods: [PUT]
+        paths: ["~/api/orders/[^/]+/address$"]
+        strip_path: false
+        tags: [shopglobal, uat, orders, write]
+
+      # ---- addresses ----
+      - name: addresses-list             # listSavedAddresses
+        methods: [GET]
+        paths: ["~/api/addresses$"]
+        strip_path: false
+        tags: [shopglobal, uat, addresses]
