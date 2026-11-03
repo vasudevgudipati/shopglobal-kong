@@ -1,6 +1,13 @@
 # shopglobal-kong
 Konnect hybrid platform for ShopGlobal (org ShopGlobal, IN region). UAT first; PROD follows the same layout.
-Everything is deployed by Jenkins (see Jenkinsfile). Nothing is applied by hand.
+Everything is deployed by Jenkins. Nothing is applied by hand, except NGINX (nginx/uat) and Keycloak, which run separately.
+
+Pipelines (one Jenkins job each, script path shown):
+| Job | Script path | Runs | Does |
+|---|---|---|---|
+| shopglobal-uat-platform | jenkins/uat/platform.Jenkinsfile | rarely | Terraform API control plane, API data plane (.41), AI data plane (.42) |
+| shopglobal-uat-api-config | jenkins/uat/api-config.Jenkinsfile | every API change | decK diff + sync of apiops/uat/kong.yaml, smoke test |
+Planned: ai-config, portal-config. PROD uses the same layout under jenkins/prod with a manual approval stage.
 
 Jenkins host: 192.168.19.42. Credentials: `konnect-pat`, `github-token`, `ai-gw-tls-crt`, `ai-gw-tls-key`.
 Kubeconfigs on the Jenkins host: `/var/lib/jenkins/.kube/config` (.42, AI) and `config-api` (.41, API).

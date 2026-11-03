@@ -1,4 +1,7 @@
-// ShopGlobal Kong - UAT pipeline. Runs on the Jenkins host (192.168.19.42).
+// ShopGlobal Kong - UAT PLATFORM pipeline (run rarely: new environment, chart or image upgrade).
+// Jenkins script path: jenkins/uat/platform.Jenkinsfile
+// Creates/updates: API control plane (Terraform), API data plane (.41), AI gateway data plane (.42).
+// Does NOT touch routes/services - that is the api-config pipeline.
 // API gateway (classic control plane, Terraform)  -> k3s on 192.168.19.41
 // AI gateway  (Konnect AI Gateway, created in UI) -> k3s on 192.168.19.42
 pipeline {
@@ -73,14 +76,6 @@ pipeline {
         }
       }
     }
-    stage('AI gateway: remove old classic AI data plane (.42)') {
-      steps {
-        sh '''
-          # The first attempt deployed the AI data plane on the API control plane. Remove it once.
-          helm --kubeconfig $KC_AI -n $NS_AI uninstall kong-ai-dp 2>/dev/null || echo "no old kong-ai-dp release"
-        '''
-      }
-    }
     stage('AI gateway: certificate and data plane (.42)') {
       steps {
         withCredentials([file(credentialsId: 'ai-gw-tls-crt', variable: 'AI_CRT'),
@@ -97,13 +92,6 @@ pipeline {
               --set env.cluster_telemetry_endpoint=$TP_HOST:443 --set env.cluster_telemetry_server_name=$TP_HOST \
               --wait --timeout 10m
           '''
-        }
-      }
-    }
-    stage('decK sync (API gateway)') {
-      steps {
-        withCredentials([string(credentialsId: 'konnect-pat', variable: 'KONNECT_TOKEN')]) {
-          sh 'deck gateway sync apiops/uat/kong.yaml --konnect-token "$KONNECT_TOKEN" --konnect-addr $KONNECT_ADDR --konnect-control-plane-name $CP_NAME'
         }
       }
     }
