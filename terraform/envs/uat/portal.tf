@@ -78,41 +78,6 @@ resource "konnect_portal_customization" "this" {
   }
 }
 
-# Page colours from the UAT logo: deep purple (#310068) header/hero so the logo blends in, teal (#5eb4a4) accents and buttons.
-resource "konnect_portal_appearance" "this" {
-  portal_id         = konnect_portal.this.id
-  theme_name        = "custom"
-  use_custom_fonts  = false
-
-  custom_theme = {
-    colors = {
-      button = {
-        primary_fill = { value = "#5eb4a4" }
-        primary_text = { value = "#1e0044" }
-      }
-      section = {
-        header   = { value = "#310068" }
-        hero     = { value = "#310068" }
-        footer   = { value = "#1e0044" }
-        body     = { value = "#f7f5fb" }
-        accent   = { value = "#5eb4a4" }
-        stroke   = { value = "#d9d0e8" }
-        tertiary = { value = "#ece7f5" }
-      }
-      text = {
-        header    = { value = "#ffffff" }
-        hero      = { value = "#ffffff" }
-        footer    = { value = "#e6e0f0" }
-        headings  = { value = "#310068" }
-        link      = { value = "#5a2ca0" }
-        accent    = { value = "#2f8f7d" }
-        primary   = { value = "#1f1633" }
-        secondary = { value = "#5f5675" }
-      }
-    }
-  }
-}
-
 output "portal_id" {
   value = konnect_portal.this.id
 }
