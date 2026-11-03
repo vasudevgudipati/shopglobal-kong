@@ -71,6 +71,7 @@ resource "konnect_portal_customization" "this" {
     main = [
       { title = "APIs", path = "/apis", external = false, visibility = "public" },
     ]
+    footer_sections = []
     footer_bottom = [
       { title = "ShopGlobal UAT - for testing only", path = "/", external = false, visibility = "public" },
     ]
