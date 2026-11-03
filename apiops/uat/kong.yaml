@@ -7,7 +7,7 @@ _format_version: "3.0"
 
 services:
   - name: shopglobal-mock-api
-    url: http://192.168.19.42:30081
+    url: http://shopglobal-mock-api.shopglobal-app-uat.svc.cluster.local:8081
     connect_timeout: 5000
     read_timeout: 30000
     write_timeout: 30000
