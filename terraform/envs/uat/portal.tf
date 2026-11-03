@@ -34,6 +34,17 @@ resource "konnect_portal_favicon" "this" {
   data      = "data:image/png;base64,${filebase64("${path.module}/../../../portal/uat/assets/favicon.png")}"
 }
 
+# Home page. Without a published home page a new portal answers 404.
+resource "konnect_portal_page" "home" {
+  portal_id   = konnect_portal.this.id
+  slug        = "/"
+  title       = "ShopGlobal Developer Portal"
+  description = "Home page"
+  status      = "published"
+  visibility  = "public"
+  content     = file("${path.module}/../../../portal/uat/home.md")
+}
+
 output "portal_id" {
   value = konnect_portal.this.id
 }
