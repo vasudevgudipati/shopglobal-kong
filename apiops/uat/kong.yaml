@@ -44,6 +44,7 @@ services:
             - 192.168.19.42/32            # AI gateway / Jenkins / AI agent server
             - 10.42.0.0/16                # k3s pods on .41 (web app, mock API, NGINX)
             - 10.243.126.0/24             # admin PC range (current IP 10.243.126.248; it changes)
+            - 10.81.128.0/24              # admin PC as seen by NGINX via VPN/NAT (currently 10.81.128.4; it changes)
           status: 403
           message: Your IP address is not allowed
         tags: [shopglobal, uat]
