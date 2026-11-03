@@ -1,0 +1,21 @@
+/* ShopGlobal UAT portal branding. Colours from the UAT logo: purple #310068, dark purple #1e0044, teal #5eb4a4. */
+body, .app-container { background: #f7f5fb !important; }
+
+header.layout-header { background: #310068 !important; color: #ffffff !important; border-bottom: 3px solid #5eb4a4 !important; }
+header.layout-header a,
+header.layout-header .header-action-trigger,
+header.layout-header .header-action-trigger-text,
+header.layout-header kbd { color: #ffffff !important; }
+header.layout-header .header-action-trigger { border-color: rgba(255,255,255,.35) !important; background: rgba(255,255,255,.08) !important; }
+header.layout-header .menu-items a:hover { color: #5eb4a4 !important; }
+
+footer.layout-footer { background: #1e0044 !important; color: #e6e0f0 !important; }
+footer.layout-footer a,
+footer.layout-footer .footer-bottom-content { color: #e6e0f0 !important; border-color: rgba(255,255,255,.15) !important; }
+
+.page-mdc-content > .layout-base { max-width: 1200px !important; margin: 0 auto !important; padding: 24px 24px 48px !important; box-sizing: border-box !important; }
+.page-mdc-content h1 { color: #310068 !important; }
+
+a.k-button.secondary.portal-k-button { background: #5eb4a4 !important; border-color: #5eb4a4 !important; color: #1e0044 !important; font-weight: 600 !important; }
+a.k-button.secondary.portal-k-button:hover { background: #7ddab2 !important; border-color: #7ddab2 !important; }
+.api-card { border-top: 4px solid #5eb4a4 !important; box-shadow: 0 2px 10px rgba(49,0,104,.08) !important; }

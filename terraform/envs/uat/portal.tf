@@ -60,6 +60,9 @@ resource "konnect_portal_page" "apis" {
 resource "konnect_portal_customization" "this" {
   portal_id = konnect_portal.this.id
 
+  # Header, footer and page colours (the portal theme only exposes one colour, so the rest is CSS).
+  css = file("${path.module}/../../../portal/uat/theme.css")
+
   theme = {
     mode = "light"
     colors = {
