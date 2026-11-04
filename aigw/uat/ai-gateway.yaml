@@ -517,6 +517,7 @@ ai_gateway_mcp_servers:
     type: conversion-listener
     enabled: true
     access:
+      acl_attribute_type: consumer
       auth_strategies:
         - !ref auth-keycloak#name
     config:
