@@ -361,6 +361,11 @@ plugins:
 # HTTP Log -> OpenSearch index kong-shopglobal-uat (sensitive fields masked by Lua). __OPENSEARCH_AUTH__ is filled in by Jenkins (credential opensearch-basic).
 # Prometheus -> metrics on the data plane status port (8100), scraped by Prometheus (k8s/uat/prometheus.yaml).
 plugins:
+  # Response buffering: lets the HTTP Log Lua read (and mask) the response body. Fine for this API (small JSON, no streaming).
+  - name: pre-function
+    config:
+      access:
+        - "kong.service.request.enable_buffering()"
   - name: http-log
     config:
       http_endpoint: https://sso.pronteff.com:9200/kong-shopglobal-uat/_doc
@@ -380,8 +385,8 @@ plugins:
       custom_fields_by_lua:
         # Sensitive data masking (fields of the ShopGlobal API contract + account_id/balance). Response body is re-encoded with them replaced.
         response_body: |
-          local body = kong.service.response.get_raw_body()
-          if not body then return nil end
+          local okb, body = pcall(kong.service.response.get_raw_body)
+          if not okb or not body then return nil end
           local ok, data = pcall(cjson.decode, body)
           if not ok or type(data) ~= "table" then
             return "[REDACTED: invalid or non-JSON response]"
