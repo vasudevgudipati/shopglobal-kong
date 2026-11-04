@@ -1,6 +1,6 @@
 // ShopGlobal Kong - UAT PLATFORM pipeline (run rarely: new environment, chart or image upgrade).
 // Jenkins script path: jenkins/uat/platform.Jenkinsfile
-// Creates/updates: API control plane + Dev Portal (Terraform), API data plane and Redis (.41), AI cluster DNS and AI gateway data plane (.42).
+// Creates/updates: API control plane + Dev Portal (Terraform), API data plane and Redis (.41), AI cluster DNS, Redis Stack and AI gateway data plane (.42).
 // Does NOT touch routes/services - that is the api-config pipeline.
 // API gateway (classic control plane, Terraform)  -> k3s on 192.168.19.41
 // AI gateway  (Konnect AI Gateway, created in UI) -> k3s on 192.168.19.42
@@ -98,6 +98,20 @@ pipeline {
           kubectl --kubeconfig $KC_AI -n kube-system rollout restart deploy coredns
           kubectl --kubeconfig $KC_AI -n kube-system rollout status deploy coredns --timeout=120s
         '''
+      }
+    }
+    stage('Redis Stack (.42)') {
+      steps {
+        // Vector-capable Redis for the AI gateway: semantic routing, semantic cache, token quotas.
+        withCredentials([string(credentialsId: 'redis-password', variable: 'REDIS_PW')]) {
+          sh '''
+            set -e
+            kubectl --kubeconfig $KC_AI create namespace $NS_AI --dry-run=client -o yaml | kubectl --kubeconfig $KC_AI apply -f -
+            printf %s "$REDIS_PW" | kubectl --kubeconfig $KC_AI -n $NS_AI create secret generic redis-auth --from-file=password=/dev/stdin --dry-run=client -o yaml | kubectl --kubeconfig $KC_AI apply -f -
+            kubectl --kubeconfig $KC_AI apply -f k8s/uat/redis-stack.yaml
+            kubectl --kubeconfig $KC_AI -n $NS_AI rollout status deployment/redis-stack --timeout=300s
+          '''
+        }
       }
     }
     stage('AI gateway: certificate and data plane (.42)') {

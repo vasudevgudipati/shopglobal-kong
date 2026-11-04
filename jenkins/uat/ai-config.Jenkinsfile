@@ -1,7 +1,8 @@
 // ShopGlobal Kong - UAT AI CONFIG pipeline (run on every AI gateway change).
 // Jenkins script path: jenkins/uat/ai-config.Jenkinsfile
 // Applies aigw/uat/ai-gateway.yaml to the Konnect AI Gateway "shopglobal-ai-uat" with kongctl:
-// model providers, models (Gemini, OpenAI, Ollama fallback), MCP server (REST API as tools).
+// model providers, models (semantic router, Gemini, OpenAI, Ollama fallback), policies (prompt guard, prompt decorator,
+// semantic cache, token quotas), MCP server (REST API as tools).
 // Needs: the AI gateway (platform pipeline) and kongctl on the Jenkins host (/usr/local/bin/kongctl).
 // "apply" only creates and updates. Removing something from the YAML does not delete it in Konnect.
 pipeline {
@@ -23,7 +24,8 @@ pipeline {
       steps {
         withCredentials([string(credentialsId: 'konnect-pat',       variable: 'KONNECT_TOKEN'),
                          string(credentialsId: 'gemini-api-key',    variable: 'GEMINI_API_KEY'),
-                         string(credentialsId: 'openai-api-key',    variable: 'OPENAI_KEY')]) {
+                         string(credentialsId: 'openai-api-key',    variable: 'OPENAI_KEY'),
+                         string(credentialsId: 'redis-password',    variable: 'REDIS_PASSWORD')]) {
           sh '''
             set -e
             export OPENAI_AUTH_HEADER="Bearer $OPENAI_KEY"
@@ -37,7 +39,8 @@ pipeline {
       steps {
         withCredentials([string(credentialsId: 'konnect-pat',       variable: 'KONNECT_TOKEN'),
                          string(credentialsId: 'gemini-api-key',    variable: 'GEMINI_API_KEY'),
-                         string(credentialsId: 'openai-api-key',    variable: 'OPENAI_KEY')]) {
+                         string(credentialsId: 'openai-api-key',    variable: 'OPENAI_KEY'),
+                         string(credentialsId: 'redis-password',    variable: 'REDIS_PASSWORD')]) {
           sh '''
             set -e
             export OPENAI_AUTH_HEADER="Bearer $OPENAI_KEY"

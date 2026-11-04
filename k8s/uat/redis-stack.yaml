@@ -1,0 +1,51 @@
+# Redis Stack for the ShopGlobal UAT AI gateway (cluster .42, namespace shopglobal-uat-ai).
+# Redis Stack = Redis + the search module (vector similarity). Needed by: semantic routing (shopglobal-auto),
+# the AI semantic cache (shopglobal-returns) and AI token quotas (Redis counters).
+# The API gateway keeps its own plain Redis on .41 (k8s/uat/redis.yaml); the two clusters cannot reach each other's services.
+# Cache only: no persistence. After a restart the vector indexes are rebuilt by the gateway.
+# The password comes from the Secret redis-auth (created by the platform pipeline from the Jenkins credential redis-password).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-stack
+  namespace: shopglobal-uat-ai
+  labels: { app: redis-stack }
+spec:
+  replicas: 1
+  strategy: { type: Recreate }
+  selector:
+    matchLabels: { app: redis-stack }
+  template:
+    metadata:
+      labels: { app: redis-stack }
+    spec:
+      containers:
+        - name: redis-stack
+          image: redis/redis-stack-server:7.4.0-v1
+          command: ["sh", "-c", "export REDIS_ARGS=\"--requirepass $REDIS_PASSWORD --save '' --appendonly no --maxmemory 512mb --maxmemory-policy volatile-lru\"; exec /entrypoint.sh"]
+          env:
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef: { name: redis-auth, key: password }
+          ports:
+            - containerPort: 6379
+          readinessProbe:
+            tcpSocket: { port: 6379 }
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          resources:
+            requests: { cpu: 100m, memory: 256Mi }
+            limits:   { cpu: 1000m, memory: 768Mi }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-stack
+  namespace: shopglobal-uat-ai
+spec:
+  type: ClusterIP
+  selector: { app: redis-stack }
+  ports:
+    - name: redis
+      port: 6379
+      targetPort: 6379
