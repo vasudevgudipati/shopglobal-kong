@@ -266,15 +266,14 @@ ai_gateway_models:
             type: openai
         vectordb:
           type: redis
+          dimensions: 1536
+          distance_metric: cosine
+          threshold: 0.7
           redis:
-            type: redis
             host: redis-stack.shopglobal-uat-ai.svc.cluster.local
             port: 6379
             password: !secret {source: !env REDIS_PASSWORD}
             database: 0
-            dimensions: 1536
-            distance_metric: cosine
-            threshold: 0.7
     targets:
       - name: gpt-5-mini
         provider: shopglobal-openai
