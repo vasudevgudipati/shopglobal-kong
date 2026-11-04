@@ -2,7 +2,7 @@
 // Jenkins script path: jenkins/uat/app.Jenkinsfile
 // Builds the three images from app/, pushes them, and rolls them out:
 //   mock API + website -> k3s on 192.168.19.41 (kubeconfig config-api), agent -> k3s on 192.168.19.42 (kubeconfig config).
-// A new image tag per build, so the nodes never reuse a cached image. Secrets are created once, not here (checked below).
+// A new image tag per build, so the nodes never reuse a cached image. The agent's OAuth secret is created from a Jenkins credential; the database secret is created once by hand.
 // Run after: platform, api-config, ai-config (the app needs the gateways). Jenkins credential needed: dockerhub (user + token).
 pipeline {
   agent any
@@ -19,17 +19,18 @@ pipeline {
     TAG     = "1.0.${env.BUILD_NUMBER}-uat"
   }
   stages {
-    stage('Check secrets exist') {
+    stage('Secrets') {
       steps {
-        sh '''
-          set -e
-          miss=0
-          for s in shopglobal-db shopglobal-oauth; do
-            kubectl --kubeconfig $KC_API -n $NS get secret $s >/dev/null 2>&1 || { echo "MISSING on .41: secret $s"; miss=1; }
-          done
-          kubectl --kubeconfig $KC_AI -n $NS get secret shopglobal-agent-oauth >/dev/null 2>&1 || { echo "MISSING on .42: secret shopglobal-agent-oauth"; miss=1; }
-          [ $miss = 0 ] || { echo "Create the missing secrets once (see DEPLOY.md / the comments in k8s/uat/*.yaml)"; exit 1; }
-        '''
+        // The database secret is created once by hand (it holds the Oracle password). The agent's OAuth secret is created here
+        // from the Jenkins credential keycloak-ai-client-secret (the same one the ai-config pipeline uses), so no manual step.
+        withCredentials([string(credentialsId: 'keycloak-ai-client-secret', variable: 'AI_SECRET')]) {
+          sh '''
+            set -e
+            kubectl --kubeconfig $KC_API -n $NS get secret shopglobal-db >/dev/null 2>&1 || { echo "MISSING on .41: secret shopglobal-db (create it once, see DEPLOY.md)"; exit 1; }
+            printf %s "$AI_SECRET" | kubectl --kubeconfig $KC_AI -n $NS create secret generic shopglobal-agent-oauth \
+              --from-file=OAUTH_CLIENT_SECRET=/dev/stdin --dry-run=client -o yaml | kubectl --kubeconfig $KC_AI apply -f -
+          '''
+        }
       }
     }
     stage('Build and push images') {
