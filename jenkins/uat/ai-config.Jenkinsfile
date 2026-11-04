@@ -24,8 +24,7 @@ pipeline {
       steps {
         withCredentials([string(credentialsId: 'konnect-pat',       variable: 'KONNECT_TOKEN'),
                          string(credentialsId: 'gemini-api-key',    variable: 'GEMINI_API_KEY'),
-                         string(credentialsId: 'openai-api-key',    variable: 'OPENAI_KEY'),
-                         string(credentialsId: 'redis-password',    variable: 'REDIS_PASSWORD')]) {
+                         string(credentialsId: 'openai-api-key',    variable: 'OPENAI_KEY')]) {
           sh '''
             set -e
             export OPENAI_AUTH_HEADER="Bearer $OPENAI_KEY"
@@ -39,8 +38,7 @@ pipeline {
       steps {
         withCredentials([string(credentialsId: 'konnect-pat',       variable: 'KONNECT_TOKEN'),
                          string(credentialsId: 'gemini-api-key',    variable: 'GEMINI_API_KEY'),
-                         string(credentialsId: 'openai-api-key',    variable: 'OPENAI_KEY'),
-                         string(credentialsId: 'redis-password',    variable: 'REDIS_PASSWORD')]) {
+                         string(credentialsId: 'openai-api-key',    variable: 'OPENAI_KEY')]) {
           sh '''
             set -e
             export OPENAI_AUTH_HEADER="Bearer $OPENAI_KEY"

@@ -12,7 +12,8 @@
 #   shopglobal-returns   return-policy questions, answered from the semantic cache when a similar question was asked before
 #   shopglobal-frontier / shopglobal-fast   fixed models (direct tests; Ollama fallback)
 # Redis Stack (vector search) for routing, cache and token quotas: k8s/uat/redis-stack.yaml (platform pipeline).
-#   REDIS_PASSWORD     <- credential redis-password
+#   Redis password: not in this file. Policies and the router use the Kong vault reference {vault://env/redis-password};
+#   the data plane reads it from the env var REDIS_PASSWORD (helm/uat/ai-dp.yaml, Secret redis-auth).
 # No client authentication on the AI gateway yet (Keycloak is added later).
 _defaults:
   kongctl:
@@ -126,7 +127,7 @@ ai_gateway_policies:
         redis:
           host: redis-stack.shopglobal-uat-ai.svc.cluster.local
           port: 6379
-          password: !secret {source: !env REDIS_PASSWORD}
+          password: "{vault://env/redis-password}"
           database: 1
 
   # AI Rate Limiting Advanced: token quotas, counted in Redis. No client identity on the AI gateway yet, so the quota is per model;
@@ -144,7 +145,7 @@ ai_gateway_policies:
       redis:
         host: redis-stack.shopglobal-uat-ai.svc.cluster.local
         port: 6379
-        password: !secret {source: !env REDIS_PASSWORD}
+        password: "{vault://env/redis-password}"
         database: 2
       policies:
         - window_type: sliding
@@ -272,7 +273,7 @@ ai_gateway_models:
           redis:
             host: redis-stack.shopglobal-uat-ai.svc.cluster.local
             port: 6379
-            password: !secret {source: !env REDIS_PASSWORD}
+            password: "{vault://env/redis-password}"
             database: 0
     targets:
       - name: gpt-5-mini
