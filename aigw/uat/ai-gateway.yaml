@@ -130,7 +130,7 @@ ai_gateway_policies:
         strategy: redis
         dimensions: 1536
         distance_metric: cosine
-        threshold: 0.9                # strict: only near-identical questions share an answer
+        threshold: 0.12               # cosine DISTANCE (lower = stricter): only near-identical wording shares an answer. 0.9 matched everything.
         redis:
           host: redis-stack.shopglobal-uat-ai.svc.cluster.local
           port: 6379
