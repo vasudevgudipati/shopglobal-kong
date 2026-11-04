@@ -30,6 +30,9 @@ pipeline {
         withCredentials([string(credentialsId: 'grafana-token', variable: 'GF_TOKEN')]) {
           sh '''
             set -e
+            # Remove the old combined dashboard (uid shopglobal-kong); HTTP 404 just means it is already gone.
+            code=$(curl -s -o /dev/null -w '%{http_code}' -X DELETE -H "Authorization: Bearer $GF_TOKEN" $GRAFANA_URL/api/dashboards/uid/shopglobal-kong)
+            echo "delete old combined dashboard -> HTTP $code"
             for f in grafana/kong-api-gateway.json grafana/kong-ai-gateway.json; do
               printf '{"dashboard":' > /tmp/dash.json; cat $f >> /tmp/dash.json
               printf ',"overwrite":true,"message":"jenkins"}' >> /tmp/dash.json

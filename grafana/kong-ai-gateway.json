@@ -182,6 +182,202 @@
      "legendFormat": "{{code}}"
     }
    ]
+  },
+  {
+   "type": "timeseries",
+   "title": "Estimated cost per hour by model",
+   "datasource": {
+    "type": "prometheus",
+    "uid": "shopglobal-prom"
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "sum(increase(kong_ai_llm_cost_total{gateway=\"ai\"}[1h])) by (ai_model)",
+     "legendFormat": "{{ai_model}}"
+    }
+   ],
+   "id": 7,
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 0,
+    "y": 24
+   }
+  },
+  {
+   "type": "timeseries",
+   "title": "Estimated cost per hour by consumer",
+   "datasource": {
+    "type": "prometheus",
+    "uid": "shopglobal-prom"
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "sum(increase(kong_ai_llm_cost_total{gateway=\"ai\"}[1h])) by (consumer)",
+     "legendFormat": "{{consumer}}"
+    }
+   ],
+   "id": 8,
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 12,
+    "y": 24
+   }
+  },
+  {
+   "type": "timeseries",
+   "title": "Blocked / rejected per second (400 guard, 401 auth, 429 quota)",
+   "datasource": {
+    "type": "prometheus",
+    "uid": "shopglobal-prom"
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "reqps"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "sum(rate(kong_http_requests_total{gateway=\"ai\",code=~\"400|401|429\"}[5m])) by (code)",
+     "legendFormat": "{{code}}"
+    }
+   ],
+   "id": 9,
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 0,
+    "y": 32
+   }
+  },
+  {
+   "type": "timeseries",
+   "title": "Requests by provider (Ollama = fallback in use)",
+   "datasource": {
+    "type": "prometheus",
+    "uid": "shopglobal-prom"
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "reqps"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "sum(rate(kong_ai_llm_requests_total{gateway=\"ai\"}[5m])) by (ai_provider)",
+     "legendFormat": "{{ai_provider}}"
+    }
+   ],
+   "id": 10,
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 12,
+    "y": 32
+   }
+  },
+  {
+   "type": "timeseries",
+   "title": "Model picked by routing (requests/s)",
+   "datasource": {
+    "type": "prometheus",
+    "uid": "shopglobal-prom"
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "reqps"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "sum(rate(kong_ai_llm_requests_total{gateway=\"ai\"}[5m])) by (ai_model, ai_provider)",
+     "legendFormat": "{{ai_provider}} / {{ai_model}}"
+    }
+   ],
+   "id": 11,
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 0,
+    "y": 40
+   }
+  },
+  {
+   "type": "timeseries",
+   "title": "Prompt vs completion tokens per minute",
+   "datasource": {
+    "type": "prometheus",
+    "uid": "shopglobal-prom"
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "sum(rate(kong_ai_llm_tokens_total{gateway=\"ai\"}[5m])*60) by (token_type)",
+     "legendFormat": "{{token_type}}"
+    }
+   ],
+   "id": 12,
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 12,
+    "y": 40
+   }
+  },
+  {
+   "type": "timeseries",
+   "title": "Provider errors (5xx) per second",
+   "datasource": {
+    "type": "prometheus",
+    "uid": "shopglobal-prom"
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "reqps"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "sum(rate(kong_http_requests_total{gateway=\"ai\",code=~\"5..\"}[5m])) by (code)",
+     "legendFormat": "{{code}}"
+    }
+   ],
+   "id": 13,
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 0,
+    "y": 48
+   }
   }
  ]
 }
