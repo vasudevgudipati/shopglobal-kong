@@ -114,6 +114,18 @@ pipeline {
         }
       }
     }
+    stage('AI provider secret (.42)') {
+      steps {
+        // The semantic cache policy needs the OpenAI key on the data plane (env OPENAI_AUTH_HEADER, see helm/uat/ai-dp.yaml).
+        withCredentials([string(credentialsId: 'openai-api-key', variable: 'OPENAI_KEY')]) {
+          sh '''
+            set -e
+            kubectl --kubeconfig $KC_AI create namespace $NS_AI --dry-run=client -o yaml | kubectl --kubeconfig $KC_AI apply -f -
+            printf %s "Bearer $OPENAI_KEY" | kubectl --kubeconfig $KC_AI -n $NS_AI create secret generic openai-auth --from-file=header=/dev/stdin --dry-run=client -o yaml | kubectl --kubeconfig $KC_AI apply -f -
+          '''
+        }
+      }
+    }
     stage('AI gateway: certificate and data plane (.42)') {
       steps {
         withCredentials([file(credentialsId: 'ai-gw-tls-crt', variable: 'AI_CRT'),

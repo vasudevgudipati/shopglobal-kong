@@ -14,6 +14,7 @@
 # Redis Stack (vector search) for routing, cache and token quotas: k8s/uat/redis-stack.yaml (platform pipeline).
 #   Redis password: not in this file. Policies and the router use the Kong vault reference {vault://env/redis-password};
 #   the data plane reads it from the env var REDIS_PASSWORD (helm/uat/ai-dp.yaml, Secret redis-auth).
+#   The semantic cache's OpenAI embeddings header uses {vault://env/openai-auth-header} (env OPENAI_AUTH_HEADER, Secret openai-auth).
 # No client authentication on the AI gateway yet (Keycloak is added later).
 _defaults:
   kongctl:
@@ -115,10 +116,14 @@ ai_gateway_policies:
       message_countback: 1            # only the customer's last message is compared
       cache_ttl: 3600
       embeddings:
-        provider: shopglobal-openai
-        name: text-embedding-3-small
-        config:
-          type: openai
+        # Policies take the embeddings model inline (not a provider reference like the router does), so the key is passed
+        # as a header. The value is a Kong vault reference: the data plane reads env OPENAI_AUTH_HEADER ("Bearer <key>").
+        auth:
+          header_name: Authorization
+          header_value: "{vault://env/openai-auth-header}"
+        model:
+          provider: openai
+          name: text-embedding-3-small
       vectordb:
         strategy: redis
         dimensions: 1536

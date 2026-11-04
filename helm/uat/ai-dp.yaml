@@ -31,6 +31,12 @@ customEnv:
       secretKeyRef:
         name: redis-auth
         key: password
+  # "Bearer <OpenAI key>" for the semantic cache's embeddings call ({vault://env/openai-auth-header}). Secret openai-auth: platform pipeline.
+  OPENAI_AUTH_HEADER:
+    valueFrom:
+      secretKeyRef:
+        name: openai-auth
+        key: header
 resources:
   requests: { cpu: "1", memory: 2Gi }
 proxy:
