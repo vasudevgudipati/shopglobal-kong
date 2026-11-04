@@ -135,7 +135,7 @@ ai_gateway_policies:
           host: redis-stack.shopglobal-uat-ai.svc.cluster.local
           port: 6379
           password: "{vault://env/redis-password}"
-          database: 1
+          database: 0               # Redis search (vector index) only works in database 0
 
   # AI Rate Limiting Advanced: token quotas, counted in Redis. No client identity on the AI gateway yet, so the quota is per model;
   # add a consumer / consumer_group match here when Keycloak (OIDC) is enabled.
@@ -227,6 +227,7 @@ ai_gateway_policies:
         "request.headers.authorization": "return nil"
         "request.headers.proxy-authorization": "return nil"
         "request.headers.cookie": "return nil"
+        "authenticated_entity.id": "return nil"   # the Keycloak access token
         "request.headers.x-customer-id": "return '[REDACTED]'"
 
   - ref: pol-prometheus
@@ -244,25 +245,7 @@ ai_gateway_policies:
       ai_metrics: true
       per_consumer: true
 
-# ---------------------------------------------------------------- authentication (Keycloak)
-ai_gateway_auth_strategies:
-  - ref: auth-keycloak
-    ai_gateway: !ref shopglobal-ai-uat
-    name: shopglobal-keycloak
-    display_name: ShopGlobal Keycloak
-    type: openid-connect
-    config:
-      issuer: https://marmalade-ivy-crazed.ngrok-free.dev/realms/demo
-      client_id:
-        - kong-ai-admin
-      client_secret:
-        - !secret {source: !env KEYCLOAK_AI_CLIENT_SECRET}
-      auth_methods:
-        - bearer
-      scopes:
-        - openid
-      cache_tokens_salt: shopglobal-keycloak-uat
-      consumer_optional: true
+# Keycloak authentication is on hold: see aigw/uat/keycloak-auth.yaml.disabled (the auth strategy and the 'access' blocks for models and the MCP server).
 
 ai_gateway_models:
   - ref: model-frontier
@@ -275,9 +258,6 @@ ai_gateway_models:
     formats:
       - type: openai
     policies: [ !ref pol-prompt-guard#name, !ref pol-prompt-decorator#name, !ref pol-ai-rate-limit#name ]
-    access:
-      auth_strategies:
-        - !ref auth-keycloak#name
     config:
       route:
         paths:
@@ -312,9 +292,6 @@ ai_gateway_models:
     formats:
       - type: openai
     policies: [ !ref pol-prompt-guard#name, !ref pol-prompt-decorator#name, !ref pol-ai-rate-limit#name ]
-    access:
-      auth_strategies:
-        - !ref auth-keycloak#name
     config:
       route:
         paths:
@@ -354,9 +331,6 @@ ai_gateway_models:
     formats:
       - type: openai
     policies: [ !ref pol-prompt-guard#name, !ref pol-prompt-decorator#name, !ref pol-ai-rate-limit#name ]
-    access:
-      auth_strategies:
-        - !ref auth-keycloak#name
     config:
       route:
         paths:
@@ -413,9 +387,6 @@ ai_gateway_models:
     formats:
       - type: openai
     policies: [ !ref pol-prompt-guard#name, !ref pol-prompt-decorator#name, !ref pol-semantic-cache#name, !ref pol-ai-rate-limit#name ]
-    access:
-      auth_strategies:
-        - !ref auth-keycloak#name
     config:
       route:
         paths:
@@ -453,9 +424,6 @@ ai_gateway_mcp_servers:
     display_name: ShopGlobal Marketplace API
     type: conversion-listener
     enabled: true
-    access:
-      auth_strategies:
-        - !ref auth-keycloak#name
     config:
       url: https://shopglobal-api-uat.pronteff.com:8443
       route:

@@ -415,6 +415,7 @@ plugins:
         "request.headers.authorization": "return nil"
         "request.headers.proxy-authorization": "return nil"
         "request.headers.cookie": "return nil"
+        "authenticated_entity.id": "return nil"   # the Keycloak access token
         "request.headers.x-customer-id": "return '[REDACTED]'"
   - name: prometheus
     config:
