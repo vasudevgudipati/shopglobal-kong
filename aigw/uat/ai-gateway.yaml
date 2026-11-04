@@ -126,7 +126,8 @@ ai_gateway_models:
           upstream_url: http://192.168.19.42:11434
 
 # ---------------------------------------------------------------- MCP: the ShopGlobal Marketplace API as MCP tools
-# Generated from apiops/uat/openapi.yaml (12 operations). Tools call the API gateway through NGINX, on the internal
+# Generated from apiops/uat/openapi.yaml (12 operations, with their query/path/body arguments; the X-Customer-Id header is
+# deliberately not exposed to the model). Tools call the API gateway through NGINX, on the internal
 # route /internal/api/... (apiops/uat/kong.yaml), which only accepts this server's IP (192.168.19.42) and needs no token.
 # MCP clients connect to  https://shopglobal-ai-uat.pronteff.com:8443/mcp/marketplace
 ai_gateway_mcp_servers:
@@ -143,63 +144,144 @@ ai_gateway_mcp_servers:
           - /mcp/marketplace
     tools:
       - name: searchProducts
-        description: Search products
+        description: Search the ShopGlobal catalogue. Returns only the best few matches (default 5, raise `query_limit` up to 200 for more) with the total match count and facets (brands, fits, colours, price range) over ALL matches. Put the product words in `query_q` (e.g. 'slim fit trousers'); use the other filters for category, brand, size, fit, colour and price range. All filters combine with AND. If nothing matches every word it falls back to any word.
         method: GET
         path: /internal/api/products
+        parameters:
+        - name: q
+          in: query
+          required: false
+          description: Free-text search, e.g. 'slim fit trousers'. Omit to match every product.
+          schema:
+            type: string
+        - name: category
+          in: query
+          required: false
+          description: Top-level category or sub-category, exact match ignoring case (e.g. "Men's Fashion", Trousers, Footwear).
+          schema:
+            type: string
+        - name: brand
+          in: query
+          required: false
+          description: Brand, exact match ignoring case (e.g. UrbanEdge).
+          schema:
+            type: string
+        - name: size
+          in: query
+          required: false
+          description: Exact size as listed on the product, case-sensitive (waist 34, UK shoe size 9, S/M/L/XL/XXL).
+          schema:
+            type: string
+        - name: fit
+          in: query
+          required: false
+          description: Fit, exact match ignoring case (Slim, Regular, Relaxed, Tapered, Straight). Products with no fit never match.
+          schema:
+            type: string
+        - name: color
+          in: query
+          required: false
+          description: Colour, case-insensitive substring of any colour of the product (blue also matches Sky Blue).
+          schema:
+            type: string
+        - name: minPrice
+          in: query
+          required: false
+          description: Minimum selling price in rupees, inclusive.
+          schema:
+            type: integer
+            format: int32
+        - name: maxPrice
+          in: query
+          required: false
+          description: Maximum selling price in rupees, inclusive.
+          schema:
+            type: integer
+            format: int32
+        - name: sort
+          in: query
+          required: false
+          description: 'Sort order. Not validated: any other value behaves as relevance (best match first, then rating).'
+          schema:
+            type: string
+            enum:
+            - relevance
+            - price_asc
+            - price_desc
+            - rating
+            - discount
+            default: relevance
+        - name: limit
+          in: query
+          required: false
+          description: Number of products returned. Out-of-range values are clamped to 1..200, not rejected.
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 200
+            default: 5
         annotations:
           read_only_hint: true
       - name: compareProducts
-        description: Compare products
+        description: Compare 2 to 4 products side by side (price, discount, rating, fit, sizes, colours, stock, return window). `query_ids` is ONE comma-separated string of product ids, e.g. 'P1001,P1002'. Get ids from searchProducts first.
         method: GET
         path: /internal/api/products/compare
+        parameters:
+        - name: ids
+          in: query
+          required: true
+          description: Comma-separated product ids in ONE parameter. Between 2 and 4 ids; each is trimmed and matched ignoring case. Repeating the parameter (ids=P1&ids=P2) is joined by Spring into the same comma list, but the contract is the comma list. Duplicate ids are not rejected.
+          schema:
+            type: string
         annotations:
           read_only_hint: true
       - name: getProduct
-        description: Get one product
+        description: Get the full details of one product by id (e.g. P1001). Returns 404 if the id does not exist.
         method: GET
         path: /internal/api/products/{productId}
         parameters:
         - name: productId
           in: path
           required: true
-          description: productId
+          description: Product id, case-insensitive.
           schema:
             type: string
         annotations:
           read_only_hint: true
       - name: listCategories
-        description: List product categories
+        description: List the top-level product categories (alphabetical). Use these exact names for the category filter of searchProducts and getReturnPolicy.
         method: GET
         path: /internal/api/categories
         annotations:
           read_only_hint: true
       - name: getReturnPolicy
-        description: Get the store return policy
+        description: Get the return policy for a product (`query_productId`) or for a top-level category (`query_category`, e.g. "Men's Fashion"). If both are given the product wins. Sub-categories such as Trousers return 404.
         method: GET
         path: /internal/api/return-policy
-        annotations:
-          read_only_hint: true
-      - name: getOrderReturnPolicies
-        description: Get the return policies that apply to an order
-        method: GET
-        path: /internal/api/orders/{orderId}/return-policies
         parameters:
-        - name: orderId
-          in: path
-          required: true
-          description: orderId
+        - name: productId
+          in: query
+          required: false
+          description: Product id (case-insensitive). The policy of the product's category is returned.
+          schema:
+            type: string
+        - name: category
+          in: query
+          required: false
+          description: Top-level category, exact match ignoring case, e.g. "Men's Fashion". A sub-category such as Trousers returns 404.
           schema:
             type: string
         annotations:
           read_only_hint: true
       - name: listOrders
-        description: List orders
+        description: List the customer's orders, newest first, with items, status and totals.
         method: GET
         path: /internal/api/orders
         annotations:
           read_only_hint: true
       - name: placeOrder
-        description: Place an order. Storefront use only.
+        description: 'Place a new order. Write operation: confirm items, quantities and the delivery address with the customer before calling. Prices come from the catalogue. Needs `body.items` (productId, qty, optional size/color) and `body.address` (all fields except line2 required, 6-digit pincode); payment defaults to COD.'
         method: POST
         path: /internal/api/orders
         request_body:
@@ -208,41 +290,125 @@ ai_gateway_mcp_servers:
             application/json:
               schema:
                 type: object
+                required:
+                - items
+                - address
+                properties:
+                  items:
+                    type: array
+                    minItems: 1
+                    items:
+                      type: object
+                      required:
+                      - productId
+                      - qty
+                      properties:
+                        productId:
+                          type: string
+                        qty:
+                          type: integer
+                          minimum: 1
+                          description: Values below 1 are raised to 1.
+                        size:
+                          type: string
+                          nullable: true
+                        color:
+                          type: string
+                          nullable: true
+                  address:
+                    type: object
+                    description: Delivery address. Required for placeOrder and changeDeliveryAddress; no length or phone-format checks.
+                    required:
+                    - name
+                    - line1
+                    - city
+                    - state
+                    - pincode
+                    - phone
+                    properties:
+                      name:
+                        type: string
+                      line1:
+                        type: string
+                      line2:
+                        type: string
+                        nullable: true
+                      city:
+                        type: string
+                      state:
+                        type: string
+                      pincode:
+                        type: string
+                        pattern: ^\d{6}$
+                      phone:
+                        type: string
+                  payment:
+                    type: string
+                    default: COD
+                    description: Free text; blank = COD.
       - name: getOrderStatus
-        description: Get the status of an order
+        description: Get one order with item-level status (PLACED, PACKED, SHIPPED, OUT_FOR_DELIVERY, DELIVERED, CANCELLED), carrier, tracking and expected delivery. Returns 404 if the order does not exist for this customer.
         method: GET
         path: /internal/api/orders/{orderId}
         parameters:
         - name: orderId
           in: path
           required: true
-          description: orderId
+          description: Order id, case-insensitive. Orders of other customers behave as not found.
+          schema:
+            type: string
+        annotations:
+          read_only_hint: true
+      - name: getOrderReturnPolicies
+        description: 'Return policy of every item in an order: window, exchange, condition, last return date and whether each item can be returned today.'
+        method: GET
+        path: /internal/api/orders/{orderId}/return-policies
+        parameters:
+        - name: orderId
+          in: path
+          required: true
+          description: Order id, case-insensitive. Orders of other customers behave as not found.
           schema:
             type: string
         annotations:
           read_only_hint: true
       - name: cancelOrder
-        description: Cancel an order
+        description: 'Cancel a whole order or selected items, only while items are PLACED or PACKED (all-or-nothing; fails with 409 if any targeted item has shipped). Omit `body.productIds` to cancel every active item. Write operation: ask the customer to confirm first.'
         method: POST
         path: /internal/api/orders/{orderId}/cancel
         parameters:
         - name: orderId
           in: path
           required: true
-          description: orderId
+          description: Order id, case-insensitive. Orders of other customers behave as not found.
           schema:
             type: string
+        request_body:
+          required: false
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  productIds:
+                    type: array
+                    items:
+                      type: string
+                    description: Items to cancel; empty or absent = the whole order. Ids are matched ignoring case; listing one twice fails with ITEM_NOT_FOUND.
+                  reason:
+                    type: string
+                    description: Accepted but not stored.
         annotations:
           destructive_hint: true
       - name: changeDeliveryAddress
-        description: Change the delivery address of an order
+        description: 'Replace the delivery address of an order. Allowed only while the order is PLACED or PACKED (409 ADDRESS_LOCKED afterwards). Body is the complete new address. Write operation: ask the customer to confirm first.'
         method: PUT
         path: /internal/api/orders/{orderId}/address
         parameters:
         - name: orderId
           in: path
           required: true
-          description: orderId
+          description: Order id, case-insensitive. Orders of other customers behave as not found.
           schema:
             type: string
         request_body:
@@ -251,8 +417,35 @@ ai_gateway_mcp_servers:
             application/json:
               schema:
                 type: object
+                description: Delivery address. Required for placeOrder and changeDeliveryAddress; no length or phone-format checks.
+                required:
+                - name
+                - line1
+                - city
+                - state
+                - pincode
+                - phone
+                properties:
+                  name:
+                    type: string
+                  line1:
+                    type: string
+                  line2:
+                    type: string
+                    nullable: true
+                  city:
+                    type: string
+                  state:
+                    type: string
+                  pincode:
+                    type: string
+                    pattern: ^\d{6}$
+                  phone:
+                    type: string
+        annotations:
+          destructive_hint: true
       - name: listSavedAddresses
-        description: List saved addresses
+        description: The customer's saved addresses (Address 1 - Home, Address 2 - Office). Use it to resolve requests like 'deliver to address two'.
         method: GET
         path: /internal/api/addresses
         annotations:

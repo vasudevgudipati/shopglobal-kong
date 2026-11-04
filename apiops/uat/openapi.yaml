@@ -2,128 +2,955 @@ openapi: 3.0.3
 info:
   title: ShopGlobal Marketplace API
   version: 1.0.0
-  description: >
-    Products, orders, returns and saved addresses for the ShopGlobal storefront and agents.
-    This is the UAT environment. Authentication will be added with Keycloak.
+  description: Products, orders, returns and saved addresses for the ShopGlobal storefront and agents. UAT environment. Callers authenticate with an OAuth 2.0 bearer token issued by Keycloak (realm demo). Contract written from the Spring code of shopglobal-mock-api.
 servers:
-  - url: https://shopglobal-api-uat.pronteff.com:8443
-    description: UAT
+- url: https://shopglobal-api-uat.pronteff.com:8443
+  description: UAT
 tags:
-  - name: Products
-  - name: Orders
-  - name: Returns
-  - name: Addresses
+- name: Products
+- name: Returns
+- name: Orders
+- name: Addresses
 paths:
   /api/products:
     get:
+      tags:
+      - Products
       operationId: searchProducts
-      tags: [Products]
-      summary: Search products
-      responses:
-        "200": { description: List of products }
-  /api/products/compare:
-    get:
-      operationId: compareProducts
-      tags: [Products]
-      summary: Compare products
-      responses:
-        "200": { description: Product comparison }
-  /api/products/{productId}:
-    get:
-      operationId: getProduct
-      tags: [Products]
-      summary: Get one product
+      summary: Search the product catalogue (returns the best few, not everything)
+      description: 'Returns at most `limit` products ranked by relevance, plus the total match count and facets computed over ALL matches. All filters combine with AND. Text in `q` is lower-cased and split on anything that is not a-z, 0-9 or "-"; stop words (a, an, the, of, in, for, me, my, find, show, i, want, need, looking, pair, inch, inches, with, and, to, please, some, any) are dropped; pants/pant -> trouser, tshirt -> t-shirt, trainers -> sneaker, cellphone -> phone; a trailing "s" is removed from words longer than 3 letters. Every remaining word must match (name, brand, category, sub-category, fit, description, colours or highlights, as a substring); a purely numeric word matches a size exactly. If no product matches all words, the search falls back to products matching ANY word.
+
+        '
       parameters:
-        - { name: productId, in: path, required: true, schema: { type: string } }
+      - name: q
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Free-text search, e.g. 'slim fit trousers'. Omit to match every product.
+      - name: category
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Top-level category or sub-category, exact match ignoring case (e.g. "Men's Fashion", Trousers, Footwear).
+      - name: brand
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Brand, exact match ignoring case (e.g. UrbanEdge).
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Exact size as listed on the product, case-sensitive (waist 34, UK shoe size 9, S/M/L/XL/XXL).
+      - name: fit
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Fit, exact match ignoring case (Slim, Regular, Relaxed, Tapered, Straight). Products with no fit never match.
+      - name: color
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Colour, case-insensitive substring of any colour of the product (blue also matches Sky Blue).
+      - name: minPrice
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+        description: Minimum selling price in rupees, inclusive.
+      - name: maxPrice
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+        description: Maximum selling price in rupees, inclusive.
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - relevance
+          - price_asc
+          - price_desc
+          - rating
+          - discount
+          default: relevance
+        description: 'Sort order. Not validated: any other value behaves as relevance (best match first, then rating).'
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 200
+          default: 5
+        description: Number of products returned. Out-of-range values are clamped to 1..200, not rejected.
       responses:
-        "200": { description: The product }
-        "404": { description: Product not found }
-  /api/categories:
-    get:
-      operationId: listCategories
-      tags: [Products]
-      summary: List product categories
-      responses:
-        "200":
-          description: List of category names
+        '200':
+          description: Search result (empty `products` when nothing matches).
           content:
             application/json:
-              schema: { type: array, items: { type: string } }
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+        '400':
+          $ref: '#/components/responses/SpringBadRequest'
+  /api/products/compare:
+    get:
+      tags:
+      - Products
+      operationId: compareProducts
+      summary: Compare 2 to 4 products side by side
+      description: Price, discount, rating, fit, sizes, colours, stock and return window for each id, in the order given.
+      parameters:
+      - name: ids
+        in: query
+        required: true
+        schema:
+          type: string
+          example: P1001,P1002
+        description: 'Comma-separated product ids in ONE parameter. Between 2 and 4 ids; each is trimmed and matched ignoring case. Repeating the parameter (ids=P1&ids=P2) is joined by Spring into the same comma list, but the contract is the comma list. Duplicate ids are not rejected.
+
+          '
+      responses:
+        '200':
+          description: One row per id, same order as requested.
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 2
+                maxItems: 4
+                items:
+                  $ref: '#/components/schemas/CompareRow'
+        '400':
+          description: Fewer than 2 or more than 4 ids (error BAD_IDS), or `ids` missing (Spring default error body).
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ErrorBody'
+                - $ref: '#/components/schemas/SpringError'
+        '404':
+          $ref: '#/components/responses/NotFoundProduct'
+  /api/products/{productId}:
+    get:
+      tags:
+      - Products
+      operationId: getProduct
+      summary: Get one product by id
+      parameters:
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: string
+          example: P1001
+        description: Product id, case-insensitive.
+      responses:
+        '200':
+          description: The product.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          $ref: '#/components/responses/NotFoundProduct'
+  /api/categories:
+    get:
+      tags:
+      - Products
+      operationId: listCategories
+      summary: List product categories
+      description: Distinct top-level categories (not sub-categories), sorted alphabetically.
+      responses:
+        '200':
+          description: Category names.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                example:
+                - Beauty
+                - Electronics
+                - Footwear
+                - Home & Kitchen
+                - Men's Fashion
+                - Sports & Fitness
+                - Women's Fashion
   /api/return-policy:
     get:
+      tags:
+      - Returns
       operationId: getReturnPolicy
-      tags: [Returns]
-      summary: Get the store return policy
-      responses:
-        "200": { description: The return policy }
-  /api/orders/{orderId}/return-policies:
-    get:
-      operationId: getOrderReturnPolicies
-      tags: [Returns]
-      summary: Get the return policies that apply to an order
+      summary: Get the return policy for a product or a category
+      description: 'Policy depends on the TOP-LEVEL category (not the sub-category), so an order with four items can have four policies. Give productId or category. If both are given, productId wins and category is ignored.
+
+        '
       parameters:
-        - { name: orderId, in: path, required: true, schema: { type: string } }
+      - name: productId
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Product id (case-insensitive). The policy of the product's category is returned.
+      - name: category
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Top-level category, exact match ignoring case, e.g. "Men's Fashion". A sub-category such as Trousers returns 404.
       responses:
-        "200": { description: Return policies for the order }
-        "404": { description: Order not found }
+        '200':
+          description: The policy. `returnWindowDays` 0 means not returnable (except damaged or wrong item, see `condition`).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReturnPolicyView'
+        '400':
+          description: Neither productId nor category given (MISSING_PARAMETER).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '404':
+          description: Unknown product (PRODUCT_NOT_FOUND) or no policy for the category (CATEGORY_NOT_FOUND).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
   /api/orders:
     get:
+      tags:
+      - Orders
       operationId: listOrders
-      tags: [Orders]
-      summary: List orders
+      summary: List the customer's orders, newest first
+      description: Sorted by placed date, then order id, both descending. Empty array when the customer has no orders.
+      parameters:
+      - $ref: '#/components/parameters/CustomerId'
       responses:
-        "200": { description: List of orders }
+        '200':
+          description: Orders with their items.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
     post:
+      tags:
+      - Orders
       operationId: placeOrder
-      tags: [Orders]
-      summary: Place an order
-      description: Storefront use only.
+      summary: Place a new order (used by the storefront checkout)
+      description: 'Creates the order with status PLACED, expected delivery 5 days from today and a generated id (ORD-<sequence>). Unit prices come from the catalogue, never from the request. Stock and size/colour values are not validated. An `qty` below 1 is raised to 1. Payment defaults to COD when blank. Returns HTTP 200 (not 201).
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/CustomerId'
       requestBody:
         required: true
         content:
           application/json:
-            schema: { type: object }
+            schema:
+              $ref: '#/components/schemas/CreateOrderRequest'
       responses:
-        "200": { description: The order was placed }
+        '200':
+          description: The created order.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: No items (EMPTY_ORDER) or invalid address (INVALID_ADDRESS); a missing or unreadable body gives Spring's default error body.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ErrorBody'
+                - $ref: '#/components/schemas/SpringError'
+        '404':
+          $ref: '#/components/responses/NotFoundProduct'
   /api/orders/{orderId}:
     get:
+      tags:
+      - Orders
       operationId: getOrderStatus
-      tags: [Orders]
-      summary: Get the status of an order
+      summary: Get an order with item-level status and delivery details
+      description: Item status is one of PLACED, PACKED, SHIPPED, OUT_FOR_DELIVERY, DELIVERED, CANCELLED. Orders of other customers return 404.
       parameters:
-        - { name: orderId, in: path, required: true, schema: { type: string } }
+      - $ref: '#/components/parameters/OrderId'
+      - $ref: '#/components/parameters/CustomerId'
       responses:
-        "200": { description: The order }
-        "404": { description: Order not found }
+        '200':
+          description: The order.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '404':
+          $ref: '#/components/responses/NotFoundOrder'
+  /api/orders/{orderId}/return-policies:
+    get:
+      tags:
+      - Returns
+      operationId: getOrderReturnPolicies
+      summary: Return policy of every item in an order
+      description: 'One row per item: window, exchange, condition, last return date and whether it can be returned today. A return date is only computed for DELIVERED items of an order that has a deliveredOn date and a window above 0; the window counts from the order''s delivery date.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/OrderId'
+      - $ref: '#/components/parameters/CustomerId'
+      responses:
+        '200':
+          description: One row per order item, in line order.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemReturnView'
+        '404':
+          description: Unknown order (ORDER_NOT_FOUND) or an item whose product no longer exists (PRODUCT_NOT_FOUND).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
   /api/orders/{orderId}/cancel:
     post:
+      tags:
+      - Orders
       operationId: cancelOrder
-      tags: [Orders]
-      summary: Cancel an order
+      summary: Cancel a whole order or selected items (only if not yet shipped)
+      description: 'Allowed only for items in PLACED or PACKED. All-or-nothing: if any targeted item is past PACKED the whole request fails and nothing changes. Leave productIds empty (or send no body) to cancel every item that is not already cancelled. The order status becomes CANCELLED only when every item is cancelled. `reason` is accepted but not stored. The refund is the sum of unitPrice x qty of the cancelled items. Write operation: the agent asks the customer to confirm first.
+
+        '
       parameters:
-        - { name: orderId, in: path, required: true, schema: { type: string } }
+      - $ref: '#/components/parameters/OrderId'
+      - $ref: '#/components/parameters/CustomerId'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CancelRequest'
       responses:
-        "200": { description: The order was cancelled }
-        "404": { description: Order not found }
+        '200':
+          description: Cancellation result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CancelResult'
+        '404':
+          description: Unknown order (ORDER_NOT_FOUND) or a productId that is not in the order, or listed twice (ITEM_NOT_FOUND).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+        '409':
+          description: No active items (NOTHING_TO_CANCEL) or a targeted item is already shipped, delivered or cancelled (NOT_CANCELLABLE).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
   /api/orders/{orderId}/address:
     put:
+      tags:
+      - Orders
       operationId: changeDeliveryAddress
-      tags: [Orders]
-      summary: Change the delivery address of an order
+      summary: Change the delivery address of an order (only before it ships)
+      description: 'Allowed only while the ORDER status is PLACED or PACKED. Replaces the whole address (line2 may be omitted to clear it). Write operation: the agent asks the customer to confirm first.
+
+        '
       parameters:
-        - { name: orderId, in: path, required: true, schema: { type: string } }
+      - $ref: '#/components/parameters/OrderId'
+      - $ref: '#/components/parameters/CustomerId'
       requestBody:
         required: true
         content:
           application/json:
-            schema: { type: object }
+            schema:
+              $ref: '#/components/schemas/Address'
       responses:
-        "200": { description: The address was changed }
-        "404": { description: Order not found }
+        '200':
+          description: The updated order.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: Invalid address (INVALID_ADDRESS) or missing body (Spring default error body).
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/ErrorBody'
+                - $ref: '#/components/schemas/SpringError'
+        '404':
+          $ref: '#/components/responses/NotFoundOrder'
+        '409':
+          description: Order already shipped or later (ADDRESS_LOCKED).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
   /api/addresses:
     get:
+      tags:
+      - Addresses
       operationId: listSavedAddresses
-      tags: [Addresses]
-      summary: List saved addresses
+      summary: The customer's saved addresses (Address 1 - Home, Address 2 - Office)
+      description: Fixed demo data (two addresses) returned for every customer id. Use it to resolve "deliver to address two".
+      parameters:
+      - $ref: '#/components/parameters/CustomerId'
       responses:
-        "200": { description: List of saved addresses }
+        '200':
+          description: Saved addresses.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SavedAddress'
+components:
+  parameters:
+    CustomerId:
+      name: X-Customer-Id
+      in: header
+      required: false
+      schema:
+        type: string
+        default: CUST-1001
+      description: Customer id. Defaults to CUST-1001 when absent (no identity yet; Kong/Keycloak later).
+    OrderId:
+      name: orderId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: ORD-1003
+      description: Order id, case-insensitive. Orders of other customers behave as not found.
+  responses:
+    NotFoundProduct:
+      description: No product with that id (PRODUCT_NOT_FOUND).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorBody'
+    NotFoundOrder:
+      description: No such order for this customer (ORDER_NOT_FOUND).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorBody'
+    SpringBadRequest:
+      description: A parameter has the wrong type, e.g. a non-number in minPrice, maxPrice or limit (Spring default error body).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SpringError'
+  schemas:
+    ErrorBody:
+      type: object
+      description: Error thrown by the service.
+      required:
+      - error
+      - message
+      properties:
+        error:
+          type: string
+          description: Machine code.
+          enum:
+          - PRODUCT_NOT_FOUND
+          - CATEGORY_NOT_FOUND
+          - MISSING_PARAMETER
+          - BAD_IDS
+          - ORDER_NOT_FOUND
+          - ITEM_NOT_FOUND
+          - NOTHING_TO_CANCEL
+          - NOT_CANCELLABLE
+          - ADDRESS_LOCKED
+          - INVALID_ADDRESS
+          - EMPTY_ORDER
+        message:
+          type: string
+          description: Human-readable text.
+    SpringError:
+      type: object
+      description: Spring Boot default error body, for requests rejected before the service runs (bad types, missing required parameter or body).
+      properties:
+        timestamp:
+          type: string
+        status:
+          type: integer
+        error:
+          type: string
+        path:
+          type: string
+    Product:
+      type: object
+      required:
+      - id
+      - name
+      - brand
+      - category
+      - subCategory
+      - price
+      - mrp
+      - rating
+      - ratingCount
+      - colors
+      - sizes
+      - description
+      - highlights
+      - stock
+      properties:
+        id:
+          type: string
+          example: P1001
+        name:
+          type: string
+        brand:
+          type: string
+        category:
+          type: string
+          description: Top-level category.
+        subCategory:
+          type: string
+        price:
+          type: integer
+          description: Selling price in rupees.
+        mrp:
+          type: integer
+          description: List price in rupees.
+        rating:
+          type: number
+          format: double
+        ratingCount:
+          type: integer
+        colors:
+          type: array
+          items:
+            type: string
+        sizes:
+          type: array
+          items:
+            type: string
+          description: Empty for products without sizes.
+        sizeType:
+          type: string
+          nullable: true
+          description: e.g. Waist (inches), UK size, Size. Null when there are no sizes.
+        fit:
+          type: string
+          nullable: true
+        description:
+          type: string
+        highlights:
+          type: array
+          items:
+            type: string
+        stock:
+          type: integer
+          description: Units in stock; 0 = out of stock.
+        tag:
+          type: string
+          nullable: true
+          description: e.g. Bestseller.
+    Facets:
+      type: object
+      description: Counts over ALL matches, not just the returned page.
+      required:
+      - brands
+      - fits
+      - colors
+      - minPrice
+      - maxPrice
+      properties:
+        brands:
+          type: object
+          additionalProperties:
+            type: integer
+        fits:
+          type: object
+          additionalProperties:
+            type: integer
+        colors:
+          type: object
+          additionalProperties:
+            type: integer
+          description: Product counts per colour value.
+        minPrice:
+          type: integer
+          description: 0 when nothing matched.
+        maxPrice:
+          type: integer
+          description: 0 when nothing matched.
+    SearchResponse:
+      type: object
+      required:
+      - total
+      - returned
+      - facets
+      - products
+      properties:
+        total:
+          type: integer
+          description: Products matching all filters.
+        returned:
+          type: integer
+          description: Length of `products`.
+        hint:
+          type: string
+          nullable: true
+          description: Present only when total is above the limit.
+        facets:
+          $ref: '#/components/schemas/Facets'
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+    CompareRow:
+      type: object
+      required:
+      - id
+      - name
+      - brand
+      - price
+      - mrp
+      - discountPercent
+      - rating
+      - ratingCount
+      - sizes
+      - colors
+      - stock
+      - returnWindowDays
+      - exchangeAvailable
+      - highlights
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        brand:
+          type: string
+        price:
+          type: integer
+        mrp:
+          type: integer
+        discountPercent:
+          type: integer
+          description: Rounded (mrp - price) / mrp x 100.
+        rating:
+          type: number
+          format: double
+        ratingCount:
+          type: integer
+        fit:
+          type: string
+          nullable: true
+        sizes:
+          type: array
+          items:
+            type: string
+        colors:
+          type: array
+          items:
+            type: string
+        stock:
+          type: integer
+        returnWindowDays:
+          type: integer
+        exchangeAvailable:
+          type: boolean
+        highlights:
+          type: array
+          items:
+            type: string
+    ReturnPolicyView:
+      type: object
+      required:
+      - category
+      - returnWindowDays
+      - returnable
+      - exchangeAvailable
+      - condition
+      - refund
+      - summary
+      properties:
+        category:
+          type: string
+        productId:
+          type: string
+          nullable: true
+          description: Null when looked up by category.
+        productName:
+          type: string
+          nullable: true
+        returnWindowDays:
+          type: integer
+          description: Days from delivery; 0 = not returnable.
+        returnable:
+          type: boolean
+        exchangeAvailable:
+          type: boolean
+        condition:
+          type: string
+        refund:
+          type: string
+        summary:
+          type: string
+          description: Ready-to-read sentence.
+    ItemReturnView:
+      type: object
+      required:
+      - productId
+      - name
+      - itemStatus
+      - returnWindowDays
+      - exchangeAvailable
+      - condition
+      - eligibleNow
+      - note
+      properties:
+        productId:
+          type: string
+        name:
+          type: string
+        itemStatus:
+          type: string
+          enum:
+          - PLACED
+          - PACKED
+          - SHIPPED
+          - OUT_FOR_DELIVERY
+          - DELIVERED
+          - CANCELLED
+        returnWindowDays:
+          type: integer
+        exchangeAvailable:
+          type: boolean
+        condition:
+          type: string
+        returnableUntil:
+          type: string
+          format: date
+          nullable: true
+          description: Only for delivered items with a window above 0.
+        eligibleNow:
+          type: boolean
+        note:
+          type: string
+    Address:
+      type: object
+      description: Delivery address. Required for placeOrder and changeDeliveryAddress; no length or phone-format checks.
+      required:
+      - name
+      - line1
+      - city
+      - state
+      - pincode
+      - phone
+      properties:
+        name:
+          type: string
+        line1:
+          type: string
+        line2:
+          type: string
+          nullable: true
+        city:
+          type: string
+        state:
+          type: string
+        pincode:
+          type: string
+          pattern: ^\d{6}$
+        phone:
+          type: string
+    SavedAddress:
+      type: object
+      required:
+      - label
+      - address
+      properties:
+        label:
+          type: string
+          example: Address 2 - Office
+        address:
+          $ref: '#/components/schemas/Address'
+    OrderItem:
+      type: object
+      required:
+      - productId
+      - name
+      - brand
+      - qty
+      - unitPrice
+      - status
+      properties:
+        productId:
+          type: string
+        name:
+          type: string
+        brand:
+          type: string
+        qty:
+          type: integer
+        size:
+          type: string
+          nullable: true
+        color:
+          type: string
+          nullable: true
+        unitPrice:
+          type: integer
+        status:
+          type: string
+          enum:
+          - PLACED
+          - PACKED
+          - SHIPPED
+          - OUT_FOR_DELIVERY
+          - DELIVERED
+          - CANCELLED
+    Order:
+      type: object
+      required:
+      - orderId
+      - customerId
+      - placedOn
+      - status
+      - payment
+      - address
+      - items
+      - refundTotal
+      - orderTotal
+      properties:
+        orderId:
+          type: string
+          example: ORD-1003
+        customerId:
+          type: string
+        placedOn:
+          type: string
+          format: date
+        status:
+          type: string
+          enum:
+          - PLACED
+          - PACKED
+          - SHIPPED
+          - OUT_FOR_DELIVERY
+          - DELIVERED
+          - CANCELLED
+        deliveredOn:
+          type: string
+          format: date
+          nullable: true
+        expectedDelivery:
+          type: string
+          format: date
+          nullable: true
+        carrier:
+          type: string
+          nullable: true
+        tracking:
+          type: string
+          nullable: true
+        payment:
+          type: string
+          description: e.g. UPI, COD.
+        address:
+          $ref: '#/components/schemas/Address'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+        refundTotal:
+          type: integer
+          description: Rupees refunded so far.
+        orderTotal:
+          type: integer
+          description: Sum of unitPrice x qty at placement.
+    CreateOrderItem:
+      type: object
+      required:
+      - productId
+      - qty
+      properties:
+        productId:
+          type: string
+        qty:
+          type: integer
+          minimum: 1
+          description: Values below 1 are raised to 1.
+        size:
+          type: string
+          nullable: true
+        color:
+          type: string
+          nullable: true
+    CreateOrderRequest:
+      type: object
+      required:
+      - items
+      - address
+      properties:
+        items:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/CreateOrderItem'
+        address:
+          $ref: '#/components/schemas/Address'
+        payment:
+          type: string
+          default: COD
+          description: Free text; blank = COD.
+    CancelRequest:
+      type: object
+      properties:
+        productIds:
+          type: array
+          items:
+            type: string
+          description: Items to cancel; empty or absent = the whole order. Ids are matched ignoring case; listing one twice fails with ITEM_NOT_FOUND.
+        reason:
+          type: string
+          description: Accepted but not stored.
+    CancelResult:
+      type: object
+      required:
+      - orderId
+      - orderStatus
+      - cancelledItems
+      - refundAmount
+      - refundEta
+      properties:
+        orderId:
+          type: string
+        orderStatus:
+          type: string
+          description: CANCELLED only if every item is now cancelled; otherwise the order's previous status.
+        cancelledItems:
+          type: array
+          items:
+            type: string
+          description: Product NAMES (not ids) of the items cancelled in this call.
+        refundAmount:
+          type: integer
+          description: Rupees refunded by this call.
+        refundEta:
+          type: string
