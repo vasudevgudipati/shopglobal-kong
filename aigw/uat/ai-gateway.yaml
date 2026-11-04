@@ -266,15 +266,17 @@ ai_gateway_models:
           config:
             type: openai
         vectordb:
+          # For models the connection fields sit flat next to dimensions (a nested "redis:" block is silently ignored).
           type: redis
+          host: redis-stack.shopglobal-uat-ai.svc.cluster.local
+          port: 6379
+          password: "{vault://env/redis-password}"
+          database: 0
+          ssl: false
+          ssl_verify: false
           dimensions: 1536
           distance_metric: cosine
           threshold: 0.7
-          redis:
-            host: redis-stack.shopglobal-uat-ai.svc.cluster.local
-            port: 6379
-            password: "{vault://env/redis-password}"
-            database: 0
     targets:
       - name: gpt-5-mini
         provider: shopglobal-openai
