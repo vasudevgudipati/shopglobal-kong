@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.3.5</version>
+    <relativePath/>
+  </parent>
+
+  <groupId>com.shopglobal</groupId>
+  <artifactId>shopglobal-agent</artifactId>
+  <version>1.0.0</version>
+  <name>shopglobal-agent</name>
+  <description>ShopGlobal shopping agent: Kong AI gateway + MCP tools, product discovery, order actions</description>
+
+  <properties>
+    <java.version>17</java.version>
+    <!-- UAT is the default build. Use -Pprod for the production build. -->
+    <app.env>UAT</app.env>
+    <build.suffix>uat</build.suffix>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <profiles>
+    <profile>
+      <id>uat</id>
+      <activation><activeByDefault>true</activeByDefault></activation>
+      <properties><app.env>UAT</app.env><build.suffix>uat</build.suffix></properties>
+    </profile>
+    <profile>
+      <id>prod</id>
+      <properties><app.env>PROD</app.env><build.suffix>prod</build.suffix></properties>
+    </profile>
+  </profiles>
+
+  <build>
+    <finalName>shopglobal-agent-${build.suffix}</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+</project>

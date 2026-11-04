@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{TITLE}}</title>
+  <meta name="description" content="ShopGlobal marketplace – fashion, electronics, home and more.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231b2a4e'/%3E%3Ctext x='32' y='44' font-size='34' text-anchor='middle' fill='%23ff7a2f' font-family='Arial' font-weight='700'%3ESG%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/chat.css">
+  <link rel="stylesheet" href="/css/env.css">
+</head>
+<body class="env-{{ENV_LC}}" data-env="{{ENV}}">
+  {{BANNER}}
+  <div class="topbar">
+    <div class="wrap topbar-in">
+      <span>{{TOPBAR}}</span>
+      <span class="topbar-links"><a href="#/orders">Track order</a><a href="#/" data-nolink>Sell on ShopGlobal</a><a href="#/" data-nolink>Customer care</a></span>
+    </div>
+  </div>
+
+  <header class="header">
+    <div class="wrap header-in">
+      <a class="logo" href="#/" aria-label="ShopGlobal home"><span class="logo-mark">SG</span><span class="logo-text">Shop<b>Global</b></span>{{PILL}}</a>
+      <form class="search" id="searchForm" role="search">
+        <select id="searchCat" aria-label="Category"><option value="">All</option></select>
+        <input id="searchInput" type="search" placeholder="Search for products, brands and more" autocomplete="off" aria-label="Search">
+        <button type="submit" aria-label="Search">🔍</button>
+      </form>
+      <nav class="header-actions">
+        <a href="#/login" class="ha" id="acct"><span class="ha-ico">👤</span><span class="ha-txt"><small>Hello, sign in</small>Account</span></a>
+        <a href="#/orders" class="ha"><span class="ha-ico">📦</span><span class="ha-txt"><small>Returns &amp;</small>Orders</span></a>
+        <a href="#/cart" class="ha"><span class="ha-ico cart-ico">🛒<i id="cartCount">0</i></span><span class="ha-txt"><small>Your</small>Cart</span></a>
+      </nav>
+    </div>
+    <div class="catnav"><div class="wrap catnav-in" id="catNav"></div></div>
+  </header>
+
+  <main id="view" class="wrap"></main>
+
+  <footer class="footer">
+    <div class="wrap footer-in">
+      <div><h4>Get to know us</h4><a>About ShopGlobal</a><a>Careers</a><a>Press</a><a>Sustainability</a></div>
+      <div><h4>Shop with us</h4><a>Your account</a><a>Your orders</a><a>Gift cards</a><a>Wishlist</a></div>
+      <div><h4>Help</h4><a>Shipping &amp; delivery</a><a>Returns &amp; refunds</a><a>Payments</a><a>Contact us</a></div>
+      <div><h4>Sell</h4><a>Sell on ShopGlobal</a><a>Seller hub</a><a>Advertise</a><a>Fulfilment</a></div>
+    </div>
+    <div class="footer-bottom">{{FOOTER}}</div>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="/js/app.js"></script>
+  <script src="/js/chat.js"></script>
+</body>
+</html>

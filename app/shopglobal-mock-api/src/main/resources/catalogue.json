@@ -1,0 +1,5943 @@
+{
+ "products": [
+  {
+   "id": "P1001",
+   "name": "Slim Fit Stretch Chinos",
+   "brand": "UrbanEdge",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 1499,
+   "mrp": 2499,
+   "rating": 4.4,
+   "ratingCount": 3280,
+   "colors": [
+    "Khaki",
+    "Navy",
+    "Olive"
+   ],
+   "sizes": [
+    "30",
+    "32",
+    "34",
+    "36",
+    "38"
+   ],
+   "fit": "Slim",
+   "description": "Stretch cotton chinos with a tapered leg and mid-rise waist. Easy for office and weekends.",
+   "highlights": [
+    "98% cotton, 2% elastane",
+    "Machine washable",
+    "Mid rise, tapered leg"
+   ],
+   "stock": 40,
+   "tag": "Bestseller",
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1002",
+   "name": "Regular Fit Formal Trousers",
+   "brand": "Raymond Select",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 1899,
+   "mrp": 2999,
+   "rating": 4.3,
+   "ratingCount": 2104,
+   "colors": [
+    "Black",
+    "Charcoal",
+    "Navy"
+   ],
+   "sizes": [
+    "30",
+    "32",
+    "34",
+    "36",
+    "38"
+   ],
+   "fit": "Regular",
+   "description": "Wrinkle-resistant poly-viscose formal trousers with flat front and hook closure.",
+   "highlights": [
+    "Poly-viscose blend",
+    "Wrinkle resistant",
+    "Flat front"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1003",
+   "name": "Relaxed Fit Cargo Trousers",
+   "brand": "UrbanEdge",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 1799,
+   "mrp": 2799,
+   "rating": 4.2,
+   "ratingCount": 1640,
+   "colors": [
+    "Olive",
+    "Beige",
+    "Black"
+   ],
+   "sizes": [
+    "30",
+    "32",
+    "34",
+    "36",
+    "38"
+   ],
+   "fit": "Relaxed",
+   "description": "Six-pocket cargo trousers in washed cotton twill with drawcord hems.",
+   "highlights": [
+    "Washed cotton twill",
+    "6 pockets",
+    "Relaxed fit"
+   ],
+   "stock": 40,
+   "tag": "New",
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1004",
+   "name": "Comfort Fit Linen Trousers",
+   "brand": "Linen Co.",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 2199,
+   "mrp": 3299,
+   "rating": 4.5,
+   "ratingCount": 890,
+   "colors": [
+    "White",
+    "Sand",
+    "Sky Blue"
+   ],
+   "sizes": [
+    "30",
+    "32",
+    "34",
+    "36",
+    "38"
+   ],
+   "fit": "Regular",
+   "description": "Breathable linen-blend trousers for hot weather, with a drawstring-elastic waist.",
+   "highlights": [
+    "Linen-cotton blend",
+    "Breathable",
+    "Elastic waist"
+   ],
+   "stock": 22,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1005",
+   "name": "Slim Fit Stretch Jeans",
+   "brand": "DenimLab",
+   "category": "Men's Fashion",
+   "subCategory": "Jeans",
+   "price": 1999,
+   "mrp": 3499,
+   "rating": 4.4,
+   "ratingCount": 5210,
+   "colors": [
+    "Indigo",
+    "Black",
+    "Light Wash"
+   ],
+   "sizes": [
+    "30",
+    "32",
+    "34",
+    "36",
+    "38"
+   ],
+   "fit": "Slim",
+   "description": "Five-pocket stretch denim with light fade and a clean finish.",
+   "highlights": [
+    "Stretch denim",
+    "5 pockets",
+    "Light fade"
+   ],
+   "stock": 40,
+   "tag": "Bestseller",
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1006",
+   "name": "Straight Fit Classic Jeans",
+   "brand": "DenimLab",
+   "category": "Men's Fashion",
+   "subCategory": "Jeans",
+   "price": 1799,
+   "mrp": 2999,
+   "rating": 4.1,
+   "ratingCount": 2780,
+   "colors": [
+    "Dark Blue",
+    "Grey"
+   ],
+   "sizes": [
+    "30",
+    "32",
+    "34",
+    "36",
+    "38"
+   ],
+   "fit": "Straight",
+   "description": "Straight-leg jeans in rigid cotton denim, a wardrobe staple.",
+   "highlights": [
+    "100% cotton",
+    "Straight leg",
+    "Rigid denim"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1007",
+   "name": "Oxford Button-Down Shirt",
+   "brand": "Arrow Weekend",
+   "category": "Men's Fashion",
+   "subCategory": "Shirts",
+   "price": 1299,
+   "mrp": 1999,
+   "rating": 4.3,
+   "ratingCount": 3920,
+   "colors": [
+    "White",
+    "Light Blue",
+    "Pink"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Regular",
+   "description": "Soft oxford cotton button-down with a chest pocket.",
+   "highlights": [
+    "100% cotton",
+    "Button-down collar",
+    "Chest pocket"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1008",
+   "name": "Printed Casual Shirt",
+   "brand": "UrbanEdge",
+   "category": "Men's Fashion",
+   "subCategory": "Shirts",
+   "price": 999,
+   "mrp": 1799,
+   "rating": 4.0,
+   "ratingCount": 1530,
+   "colors": [
+    "Teal",
+    "Rust"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Slim",
+   "description": "Short-sleeve resort shirt with a relaxed collar.",
+   "highlights": [
+    "Viscose",
+    "Short sleeve",
+    "Resort collar"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1009",
+   "name": "Crew Neck Cotton T-Shirt (Pack of 3)",
+   "brand": "BasicsCo",
+   "category": "Men's Fashion",
+   "subCategory": "T-Shirts",
+   "price": 899,
+   "mrp": 1499,
+   "rating": 4.3,
+   "ratingCount": 8410,
+   "colors": [
+    "Black/White/Grey",
+    "Navy/Olive/Sand"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Regular",
+   "description": "Three everyday crew-neck tees in 180 GSM combed cotton.",
+   "highlights": [
+    "Pack of 3",
+    "180 GSM cotton",
+    "Pre-shrunk"
+   ],
+   "stock": 40,
+   "tag": "Bestseller",
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1010",
+   "name": "Quilted Bomber Jacket",
+   "brand": "NorthPeak",
+   "category": "Men's Fashion",
+   "subCategory": "Jackets",
+   "price": 3499,
+   "mrp": 5999,
+   "rating": 4.4,
+   "ratingCount": 970,
+   "colors": [
+    "Black",
+    "Olive"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Regular",
+   "description": "Lightweight quilted bomber with ribbed cuffs and zip pockets.",
+   "highlights": [
+    "Water-resistant shell",
+    "Zip pockets",
+    "Ribbed cuffs"
+   ],
+   "stock": 15,
+   "tag": "New",
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1011",
+   "name": "Floral Print Wrap Dress",
+   "brand": "Aarya",
+   "category": "Women's Fashion",
+   "subCategory": "Dresses",
+   "price": 1999,
+   "mrp": 3499,
+   "rating": 4.5,
+   "ratingCount": 2310,
+   "colors": [
+    "Blue Floral",
+    "Maroon Floral"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Regular",
+   "description": "Midi wrap dress in crepe with flutter sleeves.",
+   "highlights": [
+    "Crepe fabric",
+    "Wrap neckline",
+    "Midi length"
+   ],
+   "stock": 40,
+   "tag": "Bestseller",
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1012",
+   "name": "Cotton Straight Kurta",
+   "brand": "Aarya",
+   "category": "Women's Fashion",
+   "subCategory": "Kurtas",
+   "price": 1099,
+   "mrp": 1999,
+   "rating": 4.4,
+   "ratingCount": 4560,
+   "colors": [
+    "Mustard",
+    "Teal",
+    "Pink"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Straight",
+   "description": "Everyday cotton kurta with mandarin collar and three-quarter sleeves.",
+   "highlights": [
+    "100% cotton",
+    "Mandarin collar",
+    "Calf length"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1013",
+   "name": "High-Rise Wide Leg Trousers",
+   "brand": "Vera Lane",
+   "category": "Women's Fashion",
+   "subCategory": "Trousers",
+   "price": 1699,
+   "mrp": 2799,
+   "rating": 4.3,
+   "ratingCount": 1320,
+   "colors": [
+    "Black",
+    "Beige"
+   ],
+   "sizes": [
+    "26",
+    "28",
+    "30",
+    "32",
+    "34"
+   ],
+   "fit": "Relaxed",
+   "description": "High-rise wide-leg trousers with pleats and side pockets.",
+   "highlights": [
+    "Pleated",
+    "Side pockets",
+    "High rise"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1014",
+   "name": "Ribbed Knit Top",
+   "brand": "Vera Lane",
+   "category": "Women's Fashion",
+   "subCategory": "Tops",
+   "price": 699,
+   "mrp": 1299,
+   "rating": 4.1,
+   "ratingCount": 2890,
+   "colors": [
+    "White",
+    "Black",
+    "Lilac"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Slim",
+   "description": "Stretch rib-knit top with a square neck.",
+   "highlights": [
+    "Stretch knit",
+    "Square neck"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1015",
+   "name": "Court Classic Sneakers",
+   "brand": "StrideX",
+   "category": "Footwear",
+   "subCategory": "Sneakers",
+   "price": 2499,
+   "mrp": 3999,
+   "rating": 4.4,
+   "ratingCount": 6120,
+   "colors": [
+    "White",
+    "White/Green"
+   ],
+   "sizes": [
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11"
+   ],
+   "fit": "Regular",
+   "description": "Clean leather-look court sneakers with cushioned insole.",
+   "highlights": [
+    "Cushioned insole",
+    "Rubber outsole",
+    "Lace-up"
+   ],
+   "stock": 40,
+   "tag": "Bestseller",
+   "sizeType": "UK size"
+  },
+  {
+   "id": "P1016",
+   "name": "Cloudrun Running Shoes",
+   "brand": "StrideX",
+   "category": "Footwear",
+   "subCategory": "Running Shoes",
+   "price": 3299,
+   "mrp": 5499,
+   "rating": 4.5,
+   "ratingCount": 3740,
+   "colors": [
+    "Black/Red",
+    "Blue/Orange"
+   ],
+   "sizes": [
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11"
+   ],
+   "fit": "Regular",
+   "description": "Breathable mesh running shoes with responsive foam midsole.",
+   "highlights": [
+    "Mesh upper",
+    "Responsive foam",
+    "Road running"
+   ],
+   "stock": 40,
+   "tag": "New",
+   "sizeType": "UK size"
+  },
+  {
+   "id": "P1017",
+   "name": "Leather Derby Formal Shoes",
+   "brand": "Raymond Select",
+   "category": "Footwear",
+   "subCategory": "Formal Shoes",
+   "price": 3999,
+   "mrp": 6499,
+   "rating": 4.3,
+   "ratingCount": 1180,
+   "colors": [
+    "Black",
+    "Brown"
+   ],
+   "sizes": [
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11"
+   ],
+   "fit": "Regular",
+   "description": "Genuine leather derbies with stitched soles.",
+   "highlights": [
+    "Genuine leather",
+    "Leather lining"
+   ],
+   "stock": 18,
+   "tag": null,
+   "sizeType": "UK size"
+  },
+  {
+   "id": "P1018",
+   "name": "Flex Strap Sandals",
+   "brand": "StrideX",
+   "category": "Footwear",
+   "subCategory": "Sandals",
+   "price": 1199,
+   "mrp": 1999,
+   "rating": 4.0,
+   "ratingCount": 2210,
+   "colors": [
+    "Tan",
+    "Black"
+   ],
+   "sizes": [
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11"
+   ],
+   "fit": "Regular",
+   "description": "Soft footbed sandals with adjustable velcro straps.",
+   "highlights": [
+    "Memory footbed",
+    "Adjustable straps"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": "UK size"
+  },
+  {
+   "id": "P1019",
+   "name": "ANC Wireless Headphones",
+   "brand": "SonicWave",
+   "category": "Electronics",
+   "subCategory": "Headphones",
+   "price": 5999,
+   "mrp": 9999,
+   "rating": 4.4,
+   "ratingCount": 7210,
+   "colors": [
+    "Black",
+    "Silver"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Over-ear Bluetooth headphones with active noise cancellation and 40-hour battery.",
+   "highlights": [
+    "Active noise cancellation",
+    "40-hour battery",
+    "Bluetooth 5.3"
+   ],
+   "stock": 40,
+   "tag": "Bestseller",
+   "sizeType": null
+  },
+  {
+   "id": "P1020",
+   "name": "True Wireless Earbuds",
+   "brand": "SonicWave",
+   "category": "Electronics",
+   "subCategory": "Earbuds",
+   "price": 2499,
+   "mrp": 4999,
+   "rating": 4.2,
+   "ratingCount": 12800,
+   "colors": [
+    "Black",
+    "White"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Compact earbuds with 28-hour total playback and IPX5 sweat resistance.",
+   "highlights": [
+    "28-hour playback",
+    "IPX5",
+    "Touch controls"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1021",
+   "name": "Fitness Smartwatch",
+   "brand": "PulseOne",
+   "category": "Electronics",
+   "subCategory": "Smartwatches",
+   "price": 3999,
+   "mrp": 7999,
+   "rating": 4.1,
+   "ratingCount": 5340,
+   "colors": [
+    "Black",
+    "Rose Gold"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "1.8-inch AMOLED smartwatch with heart-rate, SpO2 and sleep tracking.",
+   "highlights": [
+    "1.8\" AMOLED",
+    "7-day battery",
+    "Heart rate and SpO2"
+   ],
+   "stock": 40,
+   "tag": "New",
+   "sizeType": null
+  },
+  {
+   "id": "P1022",
+   "name": "20000 mAh Power Bank",
+   "brand": "ChargeUp",
+   "category": "Electronics",
+   "subCategory": "Accessories",
+   "price": 1799,
+   "mrp": 2999,
+   "rating": 4.3,
+   "ratingCount": 6840,
+   "colors": [
+    "Black"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Fast-charging power bank with two USB-A and one USB-C port.",
+   "highlights": [
+    "20000 mAh",
+    "22.5W fast charge",
+    "3 ports"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1023",
+   "name": "Portable Bluetooth Speaker",
+   "brand": "SonicWave",
+   "category": "Electronics",
+   "subCategory": "Speakers",
+   "price": 2299,
+   "mrp": 3999,
+   "rating": 4.2,
+   "ratingCount": 3150,
+   "colors": [
+    "Blue",
+    "Black"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Waterproof speaker with 12-hour playtime and deep bass.",
+   "highlights": [
+    "IP67 waterproof",
+    "12-hour playtime"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1024",
+   "name": "Non-Stick Cookware Set (5 pcs)",
+   "brand": "HomeChef",
+   "category": "Home & Kitchen",
+   "subCategory": "Cookware",
+   "price": 2799,
+   "mrp": 4999,
+   "rating": 4.2,
+   "ratingCount": 2760,
+   "colors": [
+    "Black"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Five-piece induction-friendly non-stick cookware set.",
+   "highlights": [
+    "Induction compatible",
+    "PFOA free",
+    "5 pieces"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1025",
+   "name": "Cotton Double Bedsheet Set",
+   "brand": "SleepWell",
+   "category": "Home & Kitchen",
+   "subCategory": "Bedding",
+   "price": 1299,
+   "mrp": 2499,
+   "rating": 4.3,
+   "ratingCount": 4120,
+   "colors": [
+    "Grey",
+    "Blue",
+    "Cream"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Double bedsheet with two pillow covers in 180 TC cotton.",
+   "highlights": [
+    "180 TC cotton",
+    "Fade resistant"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1026",
+   "name": "Electric Kettle 1.5L",
+   "brand": "HomeChef",
+   "category": "Home & Kitchen",
+   "subCategory": "Appliances",
+   "price": 999,
+   "mrp": 1799,
+   "rating": 4.1,
+   "ratingCount": 5090,
+   "colors": [
+    "Steel"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Stainless-steel 1.5 L kettle with auto shut-off.",
+   "highlights": [
+    "1500 W",
+    "Auto shut-off"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1027",
+   "name": "Vitamin C Face Serum",
+   "brand": "GlowLab",
+   "category": "Beauty",
+   "subCategory": "Skincare",
+   "price": 599,
+   "mrp": 999,
+   "rating": 4.2,
+   "ratingCount": 9620,
+   "colors": [
+    "30 ml"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Brightening serum with 10% vitamin C and hyaluronic acid.",
+   "highlights": [
+    "10% Vitamin C",
+    "Fragrance free"
+   ],
+   "stock": 40,
+   "tag": "Bestseller",
+   "sizeType": null
+  },
+  {
+   "id": "P1028",
+   "name": "Matte Lipstick Set (4 shades)",
+   "brand": "GlowLab",
+   "category": "Beauty",
+   "subCategory": "Makeup",
+   "price": 799,
+   "mrp": 1499,
+   "rating": 4.0,
+   "ratingCount": 3210,
+   "colors": [
+    "Assorted"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Four long-wear matte lipsticks in everyday shades.",
+   "highlights": [
+    "Long wear",
+    "Set of 4"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1029",
+   "name": "Non-Slip Yoga Mat 6mm",
+   "brand": "FitCore",
+   "category": "Sports & Fitness",
+   "subCategory": "Yoga",
+   "price": 899,
+   "mrp": 1599,
+   "rating": 4.4,
+   "ratingCount": 3870,
+   "colors": [
+    "Purple",
+    "Teal"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "6 mm cushioned yoga mat with non-slip texture and carry strap.",
+   "highlights": [
+    "6 mm thick",
+    "Non-slip",
+    "Carry strap"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1030",
+   "name": "Adjustable Dumbbell Set 20kg",
+   "brand": "FitCore",
+   "category": "Sports & Fitness",
+   "subCategory": "Weights",
+   "price": 3499,
+   "mrp": 5499,
+   "rating": 4.3,
+   "ratingCount": 1450,
+   "colors": [
+    "Black"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Adjustable dumbbell pair, 2 x 10 kg, with anti-roll plates.",
+   "highlights": [
+    "2 x 10 kg",
+    "Quick-lock"
+   ],
+   "stock": 12,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1031",
+   "name": "Insulated Steel Bottle 1L",
+   "brand": "FitCore",
+   "category": "Sports & Fitness",
+   "subCategory": "Accessories",
+   "price": 699,
+   "mrp": 1199,
+   "rating": 4.5,
+   "ratingCount": 6320,
+   "colors": [
+    "Matte Black",
+    "Blue"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Double-wall vacuum bottle keeps drinks cold for 24 hours.",
+   "highlights": [
+    "24h cold / 12h hot",
+    "Leak proof"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1032",
+   "name": "Slim Fit Chinos",
+   "brand": "UrbanEdge",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 1999,
+   "mrp": 2799,
+   "rating": 4.5,
+   "ratingCount": 891,
+   "colors": [
+    "Teal",
+    "Rust",
+    "Black"
+   ],
+   "sizes": [
+    "30",
+    "32",
+    "34",
+    "36",
+    "38"
+   ],
+   "fit": "Slim",
+   "description": "Stretch cotton chinos for office and weekends.",
+   "highlights": [
+    "98% cotton, 2% elastane",
+    "Machine washable",
+    "Slim fit"
+   ],
+   "stock": 8,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1033",
+   "name": "Relaxed Fit Formal Trousers",
+   "brand": "Raymond Select",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 2799,
+   "mrp": 3899,
+   "rating": 4.1,
+   "ratingCount": 2091,
+   "colors": [
+    "Khaki",
+    "Navy",
+    "Olive"
+   ],
+   "sizes": [
+    "30",
+    "32",
+    "34",
+    "36"
+   ],
+   "fit": "Relaxed",
+   "description": "Crease-resistant formal trousers with a clean front.",
+   "highlights": [
+    "Poly-viscose blend",
+    "Wrinkle resistant",
+    "Relaxed fit"
+   ],
+   "stock": 0,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1034",
+   "name": "Straight Fit Cargo Trousers",
+   "brand": "Linen Co.",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 2699,
+   "mrp": 3799,
+   "rating": 3.8,
+   "ratingCount": 5259,
+   "colors": [
+    "Sand",
+    "White"
+   ],
+   "sizes": [
+    "28",
+    "30",
+    "32",
+    "34",
+    "36",
+    "38"
+   ],
+   "fit": "Straight",
+   "description": "Utility cargo trousers with six pockets.",
+   "highlights": [
+    "100% cotton twill",
+    "Adjustable hem",
+    "Straight fit"
+   ],
+   "stock": 25,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1035",
+   "name": "Regular Fit Linen Trousers",
+   "brand": "FlexFit",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 1099,
+   "mrp": 1499,
+   "rating": 4.5,
+   "ratingCount": 2492,
+   "colors": [
+    "Black",
+    "Charcoal"
+   ],
+   "sizes": [
+    "28",
+    "30",
+    "32",
+    "34",
+    "36",
+    "38"
+   ],
+   "fit": "Regular",
+   "description": "Breathable linen blend for warm days.",
+   "highlights": [
+    "Linen-cotton blend",
+    "Light and airy",
+    "Regular fit"
+   ],
+   "stock": 15,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1036",
+   "name": "Tapered Fit Jogger Trousers",
+   "brand": "NorthLane",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 1399,
+   "mrp": 2499,
+   "rating": 3.8,
+   "ratingCount": 4884,
+   "colors": [
+    "Sand",
+    "White"
+   ],
+   "sizes": [
+    "32",
+    "34",
+    "36",
+    "38"
+   ],
+   "fit": "Tapered",
+   "description": "Elastic-waist joggers with a tapered ankle.",
+   "highlights": [
+    "Cotton-spandex",
+    "Drawcord waist",
+    "Tapered fit"
+   ],
+   "stock": 25,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1037",
+   "name": "Regular Fit Corduroy Trousers",
+   "brand": "Rugged & Co.",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 2999,
+   "mrp": 4999,
+   "rating": 3.7,
+   "ratingCount": 608,
+   "colors": [
+    "Khaki",
+    "Navy",
+    "Olive"
+   ],
+   "sizes": [
+    "30",
+    "32",
+    "34",
+    "36",
+    "38"
+   ],
+   "fit": "Regular",
+   "description": "Soft corduroy trousers for the cooler months.",
+   "highlights": [
+    "Cotton corduroy",
+    "Mid rise",
+    "Regular fit"
+   ],
+   "stock": 25,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1038",
+   "name": "Tapered Fit Chinos",
+   "brand": "ClassicCo",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 1599,
+   "mrp": 2599,
+   "rating": 4.6,
+   "ratingCount": 3082,
+   "colors": [
+    "Beige",
+    "Brown",
+    "Grey"
+   ],
+   "sizes": [
+    "30",
+    "32",
+    "34",
+    "36",
+    "38",
+    "40"
+   ],
+   "fit": "Tapered",
+   "description": "Stretch cotton chinos for office and weekends.",
+   "highlights": [
+    "98% cotton, 2% elastane",
+    "Machine washable",
+    "Tapered fit"
+   ],
+   "stock": 8,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1039",
+   "name": "Slim Fit Formal Trousers",
+   "brand": "UrbanEdge",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 1699,
+   "mrp": 2399,
+   "rating": 3.9,
+   "ratingCount": 4175,
+   "colors": [
+    "Black",
+    "Charcoal"
+   ],
+   "sizes": [
+    "32",
+    "34",
+    "36",
+    "38",
+    "40"
+   ],
+   "fit": "Slim",
+   "description": "Crease-resistant formal trousers with a clean front.",
+   "highlights": [
+    "Poly-viscose blend",
+    "Wrinkle resistant",
+    "Slim fit"
+   ],
+   "stock": 8,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1040",
+   "name": "Relaxed Fit Cargo Trousers",
+   "brand": "Raymond Select",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 3299,
+   "mrp": 6199,
+   "rating": 3.7,
+   "ratingCount": 3545,
+   "colors": [
+    "Sand",
+    "White"
+   ],
+   "sizes": [
+    "30",
+    "32",
+    "34",
+    "36",
+    "38",
+    "40"
+   ],
+   "fit": "Relaxed",
+   "description": "Utility cargo trousers with six pockets.",
+   "highlights": [
+    "100% cotton twill",
+    "Adjustable hem",
+    "Relaxed fit"
+   ],
+   "stock": 3,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1041",
+   "name": "Straight Fit Linen Trousers",
+   "brand": "Linen Co.",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 3399,
+   "mrp": 5399,
+   "rating": 4.7,
+   "ratingCount": 755,
+   "colors": [
+    "Navy",
+    "Maroon",
+    "Black"
+   ],
+   "sizes": [
+    "28",
+    "30",
+    "32",
+    "34",
+    "36"
+   ],
+   "fit": "Straight",
+   "description": "Breathable linen blend for warm days.",
+   "highlights": [
+    "Linen-cotton blend",
+    "Light and airy",
+    "Straight fit"
+   ],
+   "stock": 60,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1042",
+   "name": "Relaxed Fit Jogger Trousers",
+   "brand": "FlexFit",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 2699,
+   "mrp": 4199,
+   "rating": 4.1,
+   "ratingCount": 3857,
+   "colors": [
+    "Teal",
+    "Rust",
+    "Black"
+   ],
+   "sizes": [
+    "30",
+    "32",
+    "34",
+    "36",
+    "38"
+   ],
+   "fit": "Relaxed",
+   "description": "Elastic-waist joggers with a tapered ankle.",
+   "highlights": [
+    "Cotton-spandex",
+    "Drawcord waist",
+    "Relaxed fit"
+   ],
+   "stock": 0,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1043",
+   "name": "Straight Fit Corduroy Trousers",
+   "brand": "NorthLane",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 1199,
+   "mrp": 2099,
+   "rating": 3.7,
+   "ratingCount": 5866,
+   "colors": [
+    "Teal",
+    "Rust",
+    "Black"
+   ],
+   "sizes": [
+    "30",
+    "32",
+    "34",
+    "36",
+    "38"
+   ],
+   "fit": "Straight",
+   "description": "Soft corduroy trousers for the cooler months.",
+   "highlights": [
+    "Cotton corduroy",
+    "Mid rise",
+    "Straight fit"
+   ],
+   "stock": 8,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1044",
+   "name": "Regular Fit Chinos",
+   "brand": "Rugged & Co.",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 2999,
+   "mrp": 4699,
+   "rating": 4.3,
+   "ratingCount": 304,
+   "colors": [
+    "Teal",
+    "Rust",
+    "Black"
+   ],
+   "sizes": [
+    "30",
+    "32",
+    "34",
+    "36",
+    "38",
+    "40"
+   ],
+   "fit": "Regular",
+   "description": "Stretch cotton chinos for office and weekends.",
+   "highlights": [
+    "98% cotton, 2% elastane",
+    "Machine washable",
+    "Regular fit"
+   ],
+   "stock": 15,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1045",
+   "name": "Tapered Fit Formal Trousers",
+   "brand": "ClassicCo",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 2099,
+   "mrp": 3399,
+   "rating": 3.8,
+   "ratingCount": 2474,
+   "colors": [
+    "Khaki",
+    "Navy",
+    "Olive"
+   ],
+   "sizes": [
+    "32",
+    "34",
+    "36",
+    "38",
+    "40"
+   ],
+   "fit": "Tapered",
+   "description": "Crease-resistant formal trousers with a clean front.",
+   "highlights": [
+    "Poly-viscose blend",
+    "Wrinkle resistant",
+    "Tapered fit"
+   ],
+   "stock": 3,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1046",
+   "name": "Slim Fit Cargo Trousers",
+   "brand": "UrbanEdge",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 3299,
+   "mrp": 6099,
+   "rating": 4.1,
+   "ratingCount": 1482,
+   "colors": [
+    "Navy",
+    "Maroon",
+    "Black"
+   ],
+   "sizes": [
+    "30",
+    "32",
+    "34",
+    "36",
+    "38"
+   ],
+   "fit": "Slim",
+   "description": "Utility cargo trousers with six pockets.",
+   "highlights": [
+    "100% cotton twill",
+    "Adjustable hem",
+    "Slim fit"
+   ],
+   "stock": 15,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1047",
+   "name": "Tapered Fit Linen Trousers",
+   "brand": "Raymond Select",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 2199,
+   "mrp": 3999,
+   "rating": 3.9,
+   "ratingCount": 3522,
+   "colors": [
+    "Navy",
+    "Maroon",
+    "Black"
+   ],
+   "sizes": [
+    "28",
+    "30",
+    "32",
+    "34",
+    "36"
+   ],
+   "fit": "Tapered",
+   "description": "Breathable linen blend for warm days.",
+   "highlights": [
+    "Linen-cotton blend",
+    "Light and airy",
+    "Tapered fit"
+   ],
+   "stock": 8,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1048",
+   "name": "Slim Fit Jogger Trousers",
+   "brand": "Linen Co.",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 3099,
+   "mrp": 4299,
+   "rating": 3.8,
+   "ratingCount": 5514,
+   "colors": [
+    "Black",
+    "Charcoal"
+   ],
+   "sizes": [
+    "28",
+    "30",
+    "32",
+    "34",
+    "36",
+    "38"
+   ],
+   "fit": "Slim",
+   "description": "Elastic-waist joggers with a tapered ankle.",
+   "highlights": [
+    "Cotton-spandex",
+    "Drawcord waist",
+    "Slim fit"
+   ],
+   "stock": 3,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1049",
+   "name": "Relaxed Fit Corduroy Trousers",
+   "brand": "FlexFit",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 999,
+   "mrp": 1499,
+   "rating": 3.8,
+   "ratingCount": 4499,
+   "colors": [
+    "Beige",
+    "Brown",
+    "Grey"
+   ],
+   "sizes": [
+    "28",
+    "30",
+    "32",
+    "34",
+    "36",
+    "38"
+   ],
+   "fit": "Relaxed",
+   "description": "Soft corduroy trousers for the cooler months.",
+   "highlights": [
+    "Cotton corduroy",
+    "Mid rise",
+    "Relaxed fit"
+   ],
+   "stock": 8,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1050",
+   "name": "Straight Fit Chinos",
+   "brand": "NorthLane",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 2899,
+   "mrp": 5299,
+   "rating": 4.6,
+   "ratingCount": 5485,
+   "colors": [
+    "Teal",
+    "Rust",
+    "Black"
+   ],
+   "sizes": [
+    "28",
+    "30",
+    "32",
+    "34",
+    "36"
+   ],
+   "fit": "Straight",
+   "description": "Stretch cotton chinos for office and weekends.",
+   "highlights": [
+    "98% cotton, 2% elastane",
+    "Machine washable",
+    "Straight fit"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1051",
+   "name": "Regular Fit Formal Trousers",
+   "brand": "Rugged & Co.",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 3299,
+   "mrp": 5899,
+   "rating": 4.0,
+   "ratingCount": 3388,
+   "colors": [
+    "Teal",
+    "Rust",
+    "Black"
+   ],
+   "sizes": [
+    "34",
+    "36",
+    "38",
+    "40"
+   ],
+   "fit": "Regular",
+   "description": "Crease-resistant formal trousers with a clean front.",
+   "highlights": [
+    "Poly-viscose blend",
+    "Wrinkle resistant",
+    "Regular fit"
+   ],
+   "stock": 15,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1052",
+   "name": "Straight Fit Cargo Trousers",
+   "brand": "ClassicCo",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 1299,
+   "mrp": 1899,
+   "rating": 4.7,
+   "ratingCount": 3729,
+   "colors": [
+    "Khaki",
+    "Navy",
+    "Olive"
+   ],
+   "sizes": [
+    "30",
+    "32",
+    "34",
+    "36",
+    "38",
+    "40"
+   ],
+   "fit": "Straight",
+   "description": "Utility cargo trousers with six pockets.",
+   "highlights": [
+    "100% cotton twill",
+    "Adjustable hem",
+    "Straight fit"
+   ],
+   "stock": 3,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1053",
+   "name": "Regular Fit Linen Trousers",
+   "brand": "UrbanEdge",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 1299,
+   "mrp": 1799,
+   "rating": 4.2,
+   "ratingCount": 4515,
+   "colors": [
+    "Khaki",
+    "Navy",
+    "Olive"
+   ],
+   "sizes": [
+    "32",
+    "34",
+    "36",
+    "38",
+    "40"
+   ],
+   "fit": "Regular",
+   "description": "Breathable linen blend for warm days.",
+   "highlights": [
+    "Linen-cotton blend",
+    "Light and airy",
+    "Regular fit"
+   ],
+   "stock": 0,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1054",
+   "name": "Tapered Fit Jogger Trousers",
+   "brand": "Raymond Select",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 2099,
+   "mrp": 3499,
+   "rating": 3.8,
+   "ratingCount": 2186,
+   "colors": [
+    "Black",
+    "Charcoal"
+   ],
+   "sizes": [
+    "28",
+    "30",
+    "32",
+    "34"
+   ],
+   "fit": "Tapered",
+   "description": "Elastic-waist joggers with a tapered ankle.",
+   "highlights": [
+    "Cotton-spandex",
+    "Drawcord waist",
+    "Tapered fit"
+   ],
+   "stock": 8,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1055",
+   "name": "Slim Fit Corduroy Trousers",
+   "brand": "Linen Co.",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 2899,
+   "mrp": 4099,
+   "rating": 4.1,
+   "ratingCount": 3937,
+   "colors": [
+    "Khaki",
+    "Navy",
+    "Olive"
+   ],
+   "sizes": [
+    "30",
+    "32",
+    "34",
+    "36",
+    "38"
+   ],
+   "fit": "Slim",
+   "description": "Soft corduroy trousers for the cooler months.",
+   "highlights": [
+    "Cotton corduroy",
+    "Mid rise",
+    "Slim fit"
+   ],
+   "stock": 15,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1056",
+   "name": "Relaxed Fit Chinos",
+   "brand": "FlexFit",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 2499,
+   "mrp": 3499,
+   "rating": 4.0,
+   "ratingCount": 2288,
+   "colors": [
+    "Black",
+    "Charcoal"
+   ],
+   "sizes": [
+    "28",
+    "30",
+    "32",
+    "34",
+    "36"
+   ],
+   "fit": "Relaxed",
+   "description": "Stretch cotton chinos for office and weekends.",
+   "highlights": [
+    "98% cotton, 2% elastane",
+    "Machine washable",
+    "Relaxed fit"
+   ],
+   "stock": 15,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1057",
+   "name": "Slim Fit Formal Trousers",
+   "brand": "NorthLane",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 3199,
+   "mrp": 4699,
+   "rating": 4.6,
+   "ratingCount": 3083,
+   "colors": [
+    "Khaki",
+    "Navy",
+    "Olive"
+   ],
+   "sizes": [
+    "32",
+    "34",
+    "36",
+    "38",
+    "40"
+   ],
+   "fit": "Slim",
+   "description": "Crease-resistant formal trousers with a clean front.",
+   "highlights": [
+    "Poly-viscose blend",
+    "Wrinkle resistant",
+    "Slim fit"
+   ],
+   "stock": 3,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1058",
+   "name": "Relaxed Fit Cargo Trousers",
+   "brand": "Rugged & Co.",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 3199,
+   "mrp": 5799,
+   "rating": 4.4,
+   "ratingCount": 2259,
+   "colors": [
+    "Teal",
+    "Rust",
+    "Black"
+   ],
+   "sizes": [
+    "32",
+    "34",
+    "36",
+    "38"
+   ],
+   "fit": "Relaxed",
+   "description": "Utility cargo trousers with six pockets.",
+   "highlights": [
+    "100% cotton twill",
+    "Adjustable hem",
+    "Relaxed fit"
+   ],
+   "stock": 25,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1059",
+   "name": "Straight Fit Linen Trousers",
+   "brand": "ClassicCo",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 2099,
+   "mrp": 3399,
+   "rating": 4.5,
+   "ratingCount": 2820,
+   "colors": [
+    "Black",
+    "Charcoal"
+   ],
+   "sizes": [
+    "30",
+    "32",
+    "34",
+    "36",
+    "38"
+   ],
+   "fit": "Straight",
+   "description": "Breathable linen blend for warm days.",
+   "highlights": [
+    "Linen-cotton blend",
+    "Light and airy",
+    "Straight fit"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1060",
+   "name": "Regular Fit Jogger Trousers",
+   "brand": "UrbanEdge",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 1699,
+   "mrp": 2999,
+   "rating": 3.8,
+   "ratingCount": 4360,
+   "colors": [
+    "Navy",
+    "Maroon",
+    "Black"
+   ],
+   "sizes": [
+    "28",
+    "30",
+    "32",
+    "34",
+    "36"
+   ],
+   "fit": "Regular",
+   "description": "Elastic-waist joggers with a tapered ankle.",
+   "highlights": [
+    "Cotton-spandex",
+    "Drawcord waist",
+    "Regular fit"
+   ],
+   "stock": 15,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1061",
+   "name": "Tapered Fit Corduroy Trousers",
+   "brand": "Raymond Select",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 2099,
+   "mrp": 3399,
+   "rating": 3.8,
+   "ratingCount": 5077,
+   "colors": [
+    "Beige",
+    "Brown",
+    "Grey"
+   ],
+   "sizes": [
+    "28",
+    "30",
+    "32",
+    "34"
+   ],
+   "fit": "Tapered",
+   "description": "Soft corduroy trousers for the cooler months.",
+   "highlights": [
+    "Cotton corduroy",
+    "Mid rise",
+    "Tapered fit"
+   ],
+   "stock": 8,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1062",
+   "name": "Regular Fit Chinos",
+   "brand": "Linen Co.",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 2399,
+   "mrp": 3499,
+   "rating": 3.8,
+   "ratingCount": 1731,
+   "colors": [
+    "Khaki",
+    "Navy",
+    "Olive"
+   ],
+   "sizes": [
+    "30",
+    "32",
+    "34",
+    "36",
+    "38"
+   ],
+   "fit": "Regular",
+   "description": "Stretch cotton chinos for office and weekends.",
+   "highlights": [
+    "98% cotton, 2% elastane",
+    "Machine washable",
+    "Regular fit"
+   ],
+   "stock": 8,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1063",
+   "name": "Tapered Fit Formal Trousers",
+   "brand": "FlexFit",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 1599,
+   "mrp": 2999,
+   "rating": 4.0,
+   "ratingCount": 5388,
+   "colors": [
+    "Navy",
+    "Maroon",
+    "Black"
+   ],
+   "sizes": [
+    "28",
+    "30",
+    "32",
+    "34",
+    "36",
+    "38"
+   ],
+   "fit": "Tapered",
+   "description": "Crease-resistant formal trousers with a clean front.",
+   "highlights": [
+    "Poly-viscose blend",
+    "Wrinkle resistant",
+    "Tapered fit"
+   ],
+   "stock": 12,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1064",
+   "name": "Slim Fit Cargo Trousers",
+   "brand": "NorthLane",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 3099,
+   "mrp": 5499,
+   "rating": 4.1,
+   "ratingCount": 1582,
+   "colors": [
+    "Teal",
+    "Rust",
+    "Black"
+   ],
+   "sizes": [
+    "34",
+    "36",
+    "38",
+    "40"
+   ],
+   "fit": "Slim",
+   "description": "Utility cargo trousers with six pockets.",
+   "highlights": [
+    "100% cotton twill",
+    "Adjustable hem",
+    "Slim fit"
+   ],
+   "stock": 15,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1065",
+   "name": "Relaxed Fit Linen Trousers",
+   "brand": "Rugged & Co.",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 2999,
+   "mrp": 4699,
+   "rating": 4.0,
+   "ratingCount": 815,
+   "colors": [
+    "Teal",
+    "Rust",
+    "Black"
+   ],
+   "sizes": [
+    "28",
+    "30",
+    "32",
+    "34",
+    "36"
+   ],
+   "fit": "Relaxed",
+   "description": "Breathable linen blend for warm days.",
+   "highlights": [
+    "Linen-cotton blend",
+    "Light and airy",
+    "Relaxed fit"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1066",
+   "name": "Straight Fit Jogger Trousers",
+   "brand": "ClassicCo",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 1499,
+   "mrp": 2099,
+   "rating": 4.6,
+   "ratingCount": 5492,
+   "colors": [
+    "Khaki",
+    "Navy",
+    "Olive"
+   ],
+   "sizes": [
+    "28",
+    "30",
+    "32",
+    "34",
+    "36"
+   ],
+   "fit": "Straight",
+   "description": "Elastic-waist joggers with a tapered ankle.",
+   "highlights": [
+    "Cotton-spandex",
+    "Drawcord waist",
+    "Straight fit"
+   ],
+   "stock": 3,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1067",
+   "name": "Relaxed Fit Corduroy Trousers",
+   "brand": "UrbanEdge",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 2899,
+   "mrp": 4799,
+   "rating": 3.7,
+   "ratingCount": 236,
+   "colors": [
+    "Black",
+    "Charcoal"
+   ],
+   "sizes": [
+    "30",
+    "32",
+    "34",
+    "36",
+    "38",
+    "40"
+   ],
+   "fit": "Relaxed",
+   "description": "Soft corduroy trousers for the cooler months.",
+   "highlights": [
+    "Cotton corduroy",
+    "Mid rise",
+    "Relaxed fit"
+   ],
+   "stock": 60,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1068",
+   "name": "Straight Fit Chinos",
+   "brand": "Raymond Select",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 3299,
+   "mrp": 6199,
+   "rating": 3.8,
+   "ratingCount": 1848,
+   "colors": [
+    "Navy",
+    "Maroon",
+    "Black"
+   ],
+   "sizes": [
+    "30",
+    "32",
+    "34",
+    "36"
+   ],
+   "fit": "Straight",
+   "description": "Stretch cotton chinos for office and weekends.",
+   "highlights": [
+    "98% cotton, 2% elastane",
+    "Machine washable",
+    "Straight fit"
+   ],
+   "stock": 12,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1069",
+   "name": "Regular Fit Formal Trousers",
+   "brand": "Linen Co.",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 1799,
+   "mrp": 2699,
+   "rating": 4.2,
+   "ratingCount": 2244,
+   "colors": [
+    "Sand",
+    "White"
+   ],
+   "sizes": [
+    "30",
+    "32",
+    "34",
+    "36",
+    "38"
+   ],
+   "fit": "Regular",
+   "description": "Crease-resistant formal trousers with a clean front.",
+   "highlights": [
+    "Poly-viscose blend",
+    "Wrinkle resistant",
+    "Regular fit"
+   ],
+   "stock": 25,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1070",
+   "name": "Tapered Fit Cargo Trousers",
+   "brand": "FlexFit",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 2299,
+   "mrp": 3599,
+   "rating": 4.1,
+   "ratingCount": 4898,
+   "colors": [
+    "Teal",
+    "Rust",
+    "Black"
+   ],
+   "sizes": [
+    "28",
+    "30",
+    "32",
+    "34",
+    "36"
+   ],
+   "fit": "Tapered",
+   "description": "Utility cargo trousers with six pockets.",
+   "highlights": [
+    "100% cotton twill",
+    "Adjustable hem",
+    "Tapered fit"
+   ],
+   "stock": 60,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1071",
+   "name": "Slim Fit Linen Trousers",
+   "brand": "NorthLane",
+   "category": "Men's Fashion",
+   "subCategory": "Trousers",
+   "price": 2599,
+   "mrp": 3699,
+   "rating": 4.2,
+   "ratingCount": 3725,
+   "colors": [
+    "Sand",
+    "White"
+   ],
+   "sizes": [
+    "28",
+    "30",
+    "32",
+    "34",
+    "36",
+    "38"
+   ],
+   "fit": "Slim",
+   "description": "Breathable linen blend for warm days.",
+   "highlights": [
+    "Linen-cotton blend",
+    "Light and airy",
+    "Slim fit"
+   ],
+   "stock": 60,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1072",
+   "name": "Slim Fit Classic Jeans",
+   "brand": "DenimLab",
+   "category": "Men's Fashion",
+   "subCategory": "Jeans",
+   "price": 1299,
+   "mrp": 2099,
+   "rating": 4.4,
+   "ratingCount": 4678,
+   "colors": [
+    "Indigo",
+    "Black"
+   ],
+   "sizes": [
+    "28",
+    "30",
+    "32",
+    "34",
+    "36"
+   ],
+   "fit": "Slim",
+   "description": "Denim with a comfortable stretch.",
+   "highlights": [
+    "Cotton-elastane denim",
+    "Five pockets",
+    "Slim fit"
+   ],
+   "stock": 0,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1073",
+   "name": "Straight Fit Washed Jeans",
+   "brand": "UrbanEdge",
+   "category": "Men's Fashion",
+   "subCategory": "Jeans",
+   "price": 2899,
+   "mrp": 3999,
+   "rating": 3.8,
+   "ratingCount": 465,
+   "colors": [
+    "Grey",
+    "Black",
+    "Indigo"
+   ],
+   "sizes": [
+    "28",
+    "30",
+    "32",
+    "34",
+    "36",
+    "38"
+   ],
+   "fit": "Straight",
+   "description": "Denim with a comfortable stretch.",
+   "highlights": [
+    "Cotton-elastane denim",
+    "Five pockets",
+    "Straight fit"
+   ],
+   "stock": 60,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1074",
+   "name": "Regular Fit Stretch Jeans",
+   "brand": "Rugged & Co.",
+   "category": "Men's Fashion",
+   "subCategory": "Jeans",
+   "price": 2899,
+   "mrp": 4599,
+   "rating": 4.3,
+   "ratingCount": 4261,
+   "colors": [
+    "Indigo",
+    "Black"
+   ],
+   "sizes": [
+    "28",
+    "30",
+    "32",
+    "34",
+    "36",
+    "38"
+   ],
+   "fit": "Regular",
+   "description": "Denim with a comfortable stretch.",
+   "highlights": [
+    "Cotton-elastane denim",
+    "Five pockets",
+    "Regular fit"
+   ],
+   "stock": 25,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1075",
+   "name": "Tapered Fit Classic Jeans",
+   "brand": "FlexFit",
+   "category": "Men's Fashion",
+   "subCategory": "Jeans",
+   "price": 2099,
+   "mrp": 3899,
+   "rating": 4.4,
+   "ratingCount": 2246,
+   "colors": [
+    "Grey",
+    "Black",
+    "Indigo"
+   ],
+   "sizes": [
+    "30",
+    "32",
+    "34",
+    "36",
+    "38",
+    "40"
+   ],
+   "fit": "Tapered",
+   "description": "Denim with a comfortable stretch.",
+   "highlights": [
+    "Cotton-elastane denim",
+    "Five pockets",
+    "Tapered fit"
+   ],
+   "stock": 25,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1076",
+   "name": "Relaxed Fit Classic Jeans",
+   "brand": "DenimLab",
+   "category": "Men's Fashion",
+   "subCategory": "Jeans",
+   "price": 2699,
+   "mrp": 4199,
+   "rating": 3.9,
+   "ratingCount": 5618,
+   "colors": [
+    "Indigo",
+    "Black"
+   ],
+   "sizes": [
+    "30",
+    "32",
+    "34",
+    "36",
+    "38"
+   ],
+   "fit": "Relaxed",
+   "description": "Denim with a comfortable stretch.",
+   "highlights": [
+    "Cotton-elastane denim",
+    "Five pockets",
+    "Relaxed fit"
+   ],
+   "stock": 3,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1077",
+   "name": "Slim Fit Distressed Jeans",
+   "brand": "UrbanEdge",
+   "category": "Men's Fashion",
+   "subCategory": "Jeans",
+   "price": 1499,
+   "mrp": 2699,
+   "rating": 4.6,
+   "ratingCount": 1385,
+   "colors": [
+    "Light Wash",
+    "Dark Blue"
+   ],
+   "sizes": [
+    "32",
+    "34",
+    "36",
+    "38",
+    "40"
+   ],
+   "fit": "Slim",
+   "description": "Denim with a comfortable stretch.",
+   "highlights": [
+    "Cotton-elastane denim",
+    "Five pockets",
+    "Slim fit"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1078",
+   "name": "Straight Fit Washed Jeans",
+   "brand": "Rugged & Co.",
+   "category": "Men's Fashion",
+   "subCategory": "Jeans",
+   "price": 1699,
+   "mrp": 2499,
+   "rating": 4.6,
+   "ratingCount": 3382,
+   "colors": [
+    "Light Wash",
+    "Dark Blue"
+   ],
+   "sizes": [
+    "28",
+    "30",
+    "32",
+    "34",
+    "36"
+   ],
+   "fit": "Straight",
+   "description": "Denim with a comfortable stretch.",
+   "highlights": [
+    "Cotton-elastane denim",
+    "Five pockets",
+    "Straight fit"
+   ],
+   "stock": 15,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1079",
+   "name": "Regular Fit Classic Jeans",
+   "brand": "FlexFit",
+   "category": "Men's Fashion",
+   "subCategory": "Jeans",
+   "price": 1999,
+   "mrp": 3799,
+   "rating": 4.0,
+   "ratingCount": 3571,
+   "colors": [
+    "Light Wash",
+    "Dark Blue"
+   ],
+   "sizes": [
+    "32",
+    "34",
+    "36",
+    "38",
+    "40"
+   ],
+   "fit": "Regular",
+   "description": "Denim with a comfortable stretch.",
+   "highlights": [
+    "Cotton-elastane denim",
+    "Five pockets",
+    "Regular fit"
+   ],
+   "stock": 3,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1080",
+   "name": "Tapered Fit Washed Jeans",
+   "brand": "DenimLab",
+   "category": "Men's Fashion",
+   "subCategory": "Jeans",
+   "price": 2299,
+   "mrp": 3499,
+   "rating": 4.1,
+   "ratingCount": 5880,
+   "colors": [
+    "Indigo",
+    "Black"
+   ],
+   "sizes": [
+    "32",
+    "34",
+    "36",
+    "38"
+   ],
+   "fit": "Tapered",
+   "description": "Denim with a comfortable stretch.",
+   "highlights": [
+    "Cotton-elastane denim",
+    "Five pockets",
+    "Tapered fit"
+   ],
+   "stock": 12,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1081",
+   "name": "Relaxed Fit Distressed Jeans",
+   "brand": "UrbanEdge",
+   "category": "Men's Fashion",
+   "subCategory": "Jeans",
+   "price": 2299,
+   "mrp": 3199,
+   "rating": 4.6,
+   "ratingCount": 1992,
+   "colors": [
+    "Indigo",
+    "Black"
+   ],
+   "sizes": [
+    "32",
+    "34",
+    "36",
+    "38",
+    "40"
+   ],
+   "fit": "Relaxed",
+   "description": "Denim with a comfortable stretch.",
+   "highlights": [
+    "Cotton-elastane denim",
+    "Five pockets",
+    "Relaxed fit"
+   ],
+   "stock": 12,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1082",
+   "name": "Slim Fit Stretch Jeans",
+   "brand": "Rugged & Co.",
+   "category": "Men's Fashion",
+   "subCategory": "Jeans",
+   "price": 2099,
+   "mrp": 3099,
+   "rating": 3.7,
+   "ratingCount": 3579,
+   "colors": [
+    "Indigo",
+    "Black"
+   ],
+   "sizes": [
+    "28",
+    "30",
+    "32",
+    "34",
+    "36"
+   ],
+   "fit": "Slim",
+   "description": "Denim with a comfortable stretch.",
+   "highlights": [
+    "Cotton-elastane denim",
+    "Five pockets",
+    "Slim fit"
+   ],
+   "stock": 60,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1083",
+   "name": "Straight Fit Washed Jeans",
+   "brand": "FlexFit",
+   "category": "Men's Fashion",
+   "subCategory": "Jeans",
+   "price": 2499,
+   "mrp": 4199,
+   "rating": 4.4,
+   "ratingCount": 852,
+   "colors": [
+    "Grey",
+    "Black",
+    "Indigo"
+   ],
+   "sizes": [
+    "32",
+    "34",
+    "36",
+    "38",
+    "40"
+   ],
+   "fit": "Straight",
+   "description": "Denim with a comfortable stretch.",
+   "highlights": [
+    "Cotton-elastane denim",
+    "Five pockets",
+    "Straight fit"
+   ],
+   "stock": 8,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1084",
+   "name": "Regular Fit Stretch Jeans",
+   "brand": "DenimLab",
+   "category": "Men's Fashion",
+   "subCategory": "Jeans",
+   "price": 1799,
+   "mrp": 3399,
+   "rating": 4.3,
+   "ratingCount": 2254,
+   "colors": [
+    "Light Wash",
+    "Dark Blue"
+   ],
+   "sizes": [
+    "28",
+    "30",
+    "32",
+    "34",
+    "36",
+    "38"
+   ],
+   "fit": "Regular",
+   "description": "Denim with a comfortable stretch.",
+   "highlights": [
+    "Cotton-elastane denim",
+    "Five pockets",
+    "Regular fit"
+   ],
+   "stock": 12,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1085",
+   "name": "Tapered Fit Classic Jeans",
+   "brand": "UrbanEdge",
+   "category": "Men's Fashion",
+   "subCategory": "Jeans",
+   "price": 1499,
+   "mrp": 1999,
+   "rating": 4.7,
+   "ratingCount": 3542,
+   "colors": [
+    "Light Wash",
+    "Dark Blue"
+   ],
+   "sizes": [
+    "28",
+    "30",
+    "32",
+    "34",
+    "36"
+   ],
+   "fit": "Tapered",
+   "description": "Denim with a comfortable stretch.",
+   "highlights": [
+    "Cotton-elastane denim",
+    "Five pockets",
+    "Tapered fit"
+   ],
+   "stock": 8,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1086",
+   "name": "Relaxed Fit Classic Jeans",
+   "brand": "Rugged & Co.",
+   "category": "Men's Fashion",
+   "subCategory": "Jeans",
+   "price": 1399,
+   "mrp": 2099,
+   "rating": 3.8,
+   "ratingCount": 2675,
+   "colors": [
+    "Indigo",
+    "Black"
+   ],
+   "sizes": [
+    "28",
+    "30",
+    "32",
+    "34",
+    "36"
+   ],
+   "fit": "Relaxed",
+   "description": "Denim with a comfortable stretch.",
+   "highlights": [
+    "Cotton-elastane denim",
+    "Five pockets",
+    "Relaxed fit"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1087",
+   "name": "Slim Fit Washed Jeans",
+   "brand": "FlexFit",
+   "category": "Men's Fashion",
+   "subCategory": "Jeans",
+   "price": 2899,
+   "mrp": 4699,
+   "rating": 3.8,
+   "ratingCount": 2962,
+   "colors": [
+    "Light Wash",
+    "Dark Blue"
+   ],
+   "sizes": [
+    "30",
+    "32",
+    "34",
+    "36",
+    "38"
+   ],
+   "fit": "Slim",
+   "description": "Denim with a comfortable stretch.",
+   "highlights": [
+    "Cotton-elastane denim",
+    "Five pockets",
+    "Slim fit"
+   ],
+   "stock": 60,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1088",
+   "name": "Straight Fit Stretch Jeans",
+   "brand": "DenimLab",
+   "category": "Men's Fashion",
+   "subCategory": "Jeans",
+   "price": 2099,
+   "mrp": 3699,
+   "rating": 4.2,
+   "ratingCount": 1672,
+   "colors": [
+    "Indigo",
+    "Black"
+   ],
+   "sizes": [
+    "28",
+    "30",
+    "32",
+    "34"
+   ],
+   "fit": "Straight",
+   "description": "Denim with a comfortable stretch.",
+   "highlights": [
+    "Cotton-elastane denim",
+    "Five pockets",
+    "Straight fit"
+   ],
+   "stock": 25,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1089",
+   "name": "Regular Fit Distressed Jeans",
+   "brand": "UrbanEdge",
+   "category": "Men's Fashion",
+   "subCategory": "Jeans",
+   "price": 1999,
+   "mrp": 3599,
+   "rating": 4.1,
+   "ratingCount": 4175,
+   "colors": [
+    "Grey",
+    "Black",
+    "Indigo"
+   ],
+   "sizes": [
+    "28",
+    "30",
+    "32",
+    "34",
+    "36",
+    "38"
+   ],
+   "fit": "Regular",
+   "description": "Denim with a comfortable stretch.",
+   "highlights": [
+    "Cotton-elastane denim",
+    "Five pockets",
+    "Regular fit"
+   ],
+   "stock": 25,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1090",
+   "name": "Regular Fit Formal Shirt",
+   "brand": "ClassicCo",
+   "category": "Men's Fashion",
+   "subCategory": "Shirts",
+   "price": 2599,
+   "mrp": 4899,
+   "rating": 4.0,
+   "ratingCount": 5909,
+   "colors": [
+    "Black",
+    "Grey"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Regular",
+   "description": "Formal Shirt in breathable fabric.",
+   "highlights": [
+    "Soft cotton blend",
+    "Easy care"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1091",
+   "name": "Relaxed Fit Formal Shirt",
+   "brand": "UrbanEdge",
+   "category": "Men's Fashion",
+   "subCategory": "Shirts",
+   "price": 3199,
+   "mrp": 5999,
+   "rating": 4.5,
+   "ratingCount": 236,
+   "colors": [
+    "Navy",
+    "Olive"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Relaxed",
+   "description": "Formal Shirt in breathable fabric.",
+   "highlights": [
+    "Soft cotton blend",
+    "Easy care"
+   ],
+   "stock": 12,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1092",
+   "name": "Relaxed Fit Formal Shirt",
+   "brand": "BasicsCo",
+   "category": "Men's Fashion",
+   "subCategory": "Shirts",
+   "price": 3399,
+   "mrp": 4699,
+   "rating": 4.3,
+   "ratingCount": 3240,
+   "colors": [
+    "Black",
+    "Grey"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Relaxed",
+   "description": "Formal Shirt in breathable fabric.",
+   "highlights": [
+    "Soft cotton blend",
+    "Easy care"
+   ],
+   "stock": 60,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1093",
+   "name": "Relaxed Fit Formal Shirt",
+   "brand": "BasicsCo",
+   "category": "Men's Fashion",
+   "subCategory": "Shirts",
+   "price": 2199,
+   "mrp": 2999,
+   "rating": 3.8,
+   "ratingCount": 2323,
+   "colors": [
+    "Navy",
+    "Olive"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Relaxed",
+   "description": "Formal Shirt in breathable fabric.",
+   "highlights": [
+    "Soft cotton blend",
+    "Easy care"
+   ],
+   "stock": 15,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1094",
+   "name": "Slim Fit Formal Shirt",
+   "brand": "BasicsCo",
+   "category": "Men's Fashion",
+   "subCategory": "Shirts",
+   "price": 2999,
+   "mrp": 5699,
+   "rating": 4.2,
+   "ratingCount": 2122,
+   "colors": [
+    "Navy",
+    "Olive"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Slim",
+   "description": "Formal Shirt in breathable fabric.",
+   "highlights": [
+    "Soft cotton blend",
+    "Easy care"
+   ],
+   "stock": 0,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1095",
+   "name": "Regular Fit Formal Shirt",
+   "brand": "UrbanEdge",
+   "category": "Men's Fashion",
+   "subCategory": "Shirts",
+   "price": 2899,
+   "mrp": 3899,
+   "rating": 4.0,
+   "ratingCount": 4008,
+   "colors": [
+    "Black",
+    "Grey"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Regular",
+   "description": "Formal Shirt in breathable fabric.",
+   "highlights": [
+    "Soft cotton blend",
+    "Easy care"
+   ],
+   "stock": 8,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1096",
+   "name": "Relaxed Fit Formal Shirt",
+   "brand": "UrbanEdge",
+   "category": "Men's Fashion",
+   "subCategory": "Shirts",
+   "price": 2199,
+   "mrp": 3099,
+   "rating": 4.5,
+   "ratingCount": 1298,
+   "colors": [
+    "White",
+    "Blue"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Relaxed",
+   "description": "Formal Shirt in breathable fabric.",
+   "highlights": [
+    "Soft cotton blend",
+    "Easy care"
+   ],
+   "stock": 15,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1097",
+   "name": "Relaxed Fit Formal Shirt",
+   "brand": "Arrow Weekend",
+   "category": "Men's Fashion",
+   "subCategory": "Shirts",
+   "price": 3199,
+   "mrp": 4799,
+   "rating": 4.3,
+   "ratingCount": 812,
+   "colors": [
+    "White",
+    "Blue"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Relaxed",
+   "description": "Formal Shirt in breathable fabric.",
+   "highlights": [
+    "Soft cotton blend",
+    "Easy care"
+   ],
+   "stock": 25,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1098",
+   "name": "Relaxed Fit Casual Shirt",
+   "brand": "UrbanEdge",
+   "category": "Men's Fashion",
+   "subCategory": "Shirts",
+   "price": 3099,
+   "mrp": 5399,
+   "rating": 4.1,
+   "ratingCount": 2447,
+   "colors": [
+    "Navy",
+    "Olive"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Relaxed",
+   "description": "Casual Shirt in breathable fabric.",
+   "highlights": [
+    "Soft cotton blend",
+    "Easy care"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1099",
+   "name": "Relaxed Fit Casual Shirt",
+   "brand": "UrbanEdge",
+   "category": "Men's Fashion",
+   "subCategory": "Shirts",
+   "price": 899,
+   "mrp": 1599,
+   "rating": 4.5,
+   "ratingCount": 1261,
+   "colors": [
+    "Maroon",
+    "Teal"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Relaxed",
+   "description": "Casual Shirt in breathable fabric.",
+   "highlights": [
+    "Soft cotton blend",
+    "Easy care"
+   ],
+   "stock": 25,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1100",
+   "name": "Relaxed Fit Casual Shirt",
+   "brand": "ClassicCo",
+   "category": "Men's Fashion",
+   "subCategory": "Shirts",
+   "price": 799,
+   "mrp": 1099,
+   "rating": 3.6,
+   "ratingCount": 5339,
+   "colors": [
+    "Black",
+    "Grey"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Relaxed",
+   "description": "Casual Shirt in breathable fabric.",
+   "highlights": [
+    "Soft cotton blend",
+    "Easy care"
+   ],
+   "stock": 8,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1101",
+   "name": "Slim Fit Casual Shirt",
+   "brand": "NorthPeak",
+   "category": "Men's Fashion",
+   "subCategory": "Shirts",
+   "price": 3499,
+   "mrp": 5899,
+   "rating": 4.3,
+   "ratingCount": 5696,
+   "colors": [
+    "White",
+    "Blue"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Slim",
+   "description": "Casual Shirt in breathable fabric.",
+   "highlights": [
+    "Soft cotton blend",
+    "Easy care"
+   ],
+   "stock": 3,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1102",
+   "name": "Regular Fit Casual Shirt",
+   "brand": "BasicsCo",
+   "category": "Men's Fashion",
+   "subCategory": "Shirts",
+   "price": 699,
+   "mrp": 1299,
+   "rating": 4.4,
+   "ratingCount": 4240,
+   "colors": [
+    "Maroon",
+    "Teal"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Regular",
+   "description": "Casual Shirt in breathable fabric.",
+   "highlights": [
+    "Soft cotton blend",
+    "Easy care"
+   ],
+   "stock": 25,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1103",
+   "name": "Slim Fit Casual Shirt",
+   "brand": "ClassicCo",
+   "category": "Men's Fashion",
+   "subCategory": "Shirts",
+   "price": 1099,
+   "mrp": 1599,
+   "rating": 3.7,
+   "ratingCount": 2295,
+   "colors": [
+    "Maroon",
+    "Teal"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Slim",
+   "description": "Casual Shirt in breathable fabric.",
+   "highlights": [
+    "Soft cotton blend",
+    "Easy care"
+   ],
+   "stock": 3,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1104",
+   "name": "Relaxed Fit Graphic T-Shirt",
+   "brand": "UrbanEdge",
+   "category": "Men's Fashion",
+   "subCategory": "T-Shirts",
+   "price": 2099,
+   "mrp": 3399,
+   "rating": 4.0,
+   "ratingCount": 4044,
+   "colors": [
+    "Maroon",
+    "Teal"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Relaxed",
+   "description": "Graphic T-Shirt in breathable fabric.",
+   "highlights": [
+    "Soft cotton blend",
+    "Easy care"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1105",
+   "name": "Regular Fit Graphic T-Shirt",
+   "brand": "Arrow Weekend",
+   "category": "Men's Fashion",
+   "subCategory": "T-Shirts",
+   "price": 1899,
+   "mrp": 3199,
+   "rating": 4.0,
+   "ratingCount": 5457,
+   "colors": [
+    "White",
+    "Blue"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Regular",
+   "description": "Graphic T-Shirt in breathable fabric.",
+   "highlights": [
+    "Soft cotton blend",
+    "Easy care"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1106",
+   "name": "Relaxed Fit Graphic T-Shirt",
+   "brand": "BasicsCo",
+   "category": "Men's Fashion",
+   "subCategory": "T-Shirts",
+   "price": 1499,
+   "mrp": 2399,
+   "rating": 4.1,
+   "ratingCount": 5625,
+   "colors": [
+    "White",
+    "Blue"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Relaxed",
+   "description": "Graphic T-Shirt in breathable fabric.",
+   "highlights": [
+    "Soft cotton blend",
+    "Easy care"
+   ],
+   "stock": 12,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1107",
+   "name": "Relaxed Fit Graphic T-Shirt",
+   "brand": "UrbanEdge",
+   "category": "Men's Fashion",
+   "subCategory": "T-Shirts",
+   "price": 3799,
+   "mrp": 6599,
+   "rating": 3.9,
+   "ratingCount": 3936,
+   "colors": [
+    "Navy",
+    "Olive"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Relaxed",
+   "description": "Graphic T-Shirt in breathable fabric.",
+   "highlights": [
+    "Soft cotton blend",
+    "Easy care"
+   ],
+   "stock": 15,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1108",
+   "name": "Slim Fit Graphic T-Shirt",
+   "brand": "ClassicCo",
+   "category": "Men's Fashion",
+   "subCategory": "T-Shirts",
+   "price": 1899,
+   "mrp": 3599,
+   "rating": 4.6,
+   "ratingCount": 263,
+   "colors": [
+    "Navy",
+    "Olive"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Slim",
+   "description": "Graphic T-Shirt in breathable fabric.",
+   "highlights": [
+    "Soft cotton blend",
+    "Easy care"
+   ],
+   "stock": 8,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1109",
+   "name": "Regular Fit Graphic T-Shirt",
+   "brand": "Arrow Weekend",
+   "category": "Men's Fashion",
+   "subCategory": "T-Shirts",
+   "price": 3899,
+   "mrp": 7399,
+   "rating": 4.0,
+   "ratingCount": 1846,
+   "colors": [
+    "Maroon",
+    "Teal"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Regular",
+   "description": "Graphic T-Shirt in breathable fabric.",
+   "highlights": [
+    "Soft cotton blend",
+    "Easy care"
+   ],
+   "stock": 12,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1110",
+   "name": "Relaxed Fit Graphic T-Shirt",
+   "brand": "Arrow Weekend",
+   "category": "Men's Fashion",
+   "subCategory": "T-Shirts",
+   "price": 1599,
+   "mrp": 2999,
+   "rating": 3.7,
+   "ratingCount": 5294,
+   "colors": [
+    "Navy",
+    "Olive"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Relaxed",
+   "description": "Graphic T-Shirt in breathable fabric.",
+   "highlights": [
+    "Soft cotton blend",
+    "Easy care"
+   ],
+   "stock": 25,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1111",
+   "name": "Regular Fit Graphic T-Shirt",
+   "brand": "Arrow Weekend",
+   "category": "Men's Fashion",
+   "subCategory": "T-Shirts",
+   "price": 2999,
+   "mrp": 4899,
+   "rating": 4.6,
+   "ratingCount": 3348,
+   "colors": [
+    "Black",
+    "Grey"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Regular",
+   "description": "Graphic T-Shirt in breathable fabric.",
+   "highlights": [
+    "Soft cotton blend",
+    "Easy care"
+   ],
+   "stock": 0,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1112",
+   "name": "Slim Fit Hooded Jacket",
+   "brand": "Arrow Weekend",
+   "category": "Men's Fashion",
+   "subCategory": "Jackets",
+   "price": 3799,
+   "mrp": 5999,
+   "rating": 4.4,
+   "ratingCount": 3529,
+   "colors": [
+    "Maroon",
+    "Teal"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Slim",
+   "description": "Hooded Jacket in breathable fabric.",
+   "highlights": [
+    "Soft cotton blend",
+    "Easy care"
+   ],
+   "stock": 8,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1113",
+   "name": "Regular Fit Hooded Jacket",
+   "brand": "BasicsCo",
+   "category": "Men's Fashion",
+   "subCategory": "Jackets",
+   "price": 1399,
+   "mrp": 1899,
+   "rating": 4.4,
+   "ratingCount": 3382,
+   "colors": [
+    "Navy",
+    "Olive"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Regular",
+   "description": "Hooded Jacket in breathable fabric.",
+   "highlights": [
+    "Soft cotton blend",
+    "Easy care"
+   ],
+   "stock": 12,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1114",
+   "name": "Slim Fit Hooded Jacket",
+   "brand": "Arrow Weekend",
+   "category": "Men's Fashion",
+   "subCategory": "Jackets",
+   "price": 2499,
+   "mrp": 3899,
+   "rating": 4.0,
+   "ratingCount": 4946,
+   "colors": [
+    "Navy",
+    "Olive"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Slim",
+   "description": "Hooded Jacket in breathable fabric.",
+   "highlights": [
+    "Soft cotton blend",
+    "Easy care"
+   ],
+   "stock": 0,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1115",
+   "name": "Regular Fit Hooded Jacket",
+   "brand": "NorthPeak",
+   "category": "Men's Fashion",
+   "subCategory": "Jackets",
+   "price": 2399,
+   "mrp": 3599,
+   "rating": 3.7,
+   "ratingCount": 5542,
+   "colors": [
+    "White",
+    "Blue"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Regular",
+   "description": "Hooded Jacket in breathable fabric.",
+   "highlights": [
+    "Soft cotton blend",
+    "Easy care"
+   ],
+   "stock": 8,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1116",
+   "name": "Relaxed Fit Hooded Jacket",
+   "brand": "UrbanEdge",
+   "category": "Men's Fashion",
+   "subCategory": "Jackets",
+   "price": 2199,
+   "mrp": 3499,
+   "rating": 3.9,
+   "ratingCount": 3178,
+   "colors": [
+    "Navy",
+    "Olive"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Relaxed",
+   "description": "Hooded Jacket in breathable fabric.",
+   "highlights": [
+    "Soft cotton blend",
+    "Easy care"
+   ],
+   "stock": 60,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1117",
+   "name": "Floral Printed Kurta",
+   "brand": "Vera Lane",
+   "category": "Women's Fashion",
+   "subCategory": "Kurtas",
+   "price": 1999,
+   "mrp": 3699,
+   "rating": 4.6,
+   "ratingCount": 4619,
+   "colors": [
+    "Blue",
+    "Lilac"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Straight",
+   "description": "Printed Kurta with a comfortable cut.",
+   "highlights": [
+    "Soft fabric",
+    "Machine washable"
+   ],
+   "stock": 3,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1118",
+   "name": "Floral Printed Kurta",
+   "brand": "Zari",
+   "category": "Women's Fashion",
+   "subCategory": "Kurtas",
+   "price": 799,
+   "mrp": 1299,
+   "rating": 4.4,
+   "ratingCount": 5399,
+   "colors": [
+    "Blue",
+    "Lilac"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Straight",
+   "description": "Printed Kurta with a comfortable cut.",
+   "highlights": [
+    "Soft fabric",
+    "Machine washable"
+   ],
+   "stock": 60,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1119",
+   "name": "Ethnic Printed Kurta",
+   "brand": "Vera Lane",
+   "category": "Women's Fashion",
+   "subCategory": "Kurtas",
+   "price": 799,
+   "mrp": 1199,
+   "rating": 4.1,
+   "ratingCount": 2428,
+   "colors": [
+    "Mustard",
+    "Maroon"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Straight",
+   "description": "Printed Kurta with a comfortable cut.",
+   "highlights": [
+    "Soft fabric",
+    "Machine washable"
+   ],
+   "stock": 8,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1120",
+   "name": "Block Printed Kurta",
+   "brand": "Vera Lane",
+   "category": "Women's Fashion",
+   "subCategory": "Kurtas",
+   "price": 1399,
+   "mrp": 2099,
+   "rating": 4.2,
+   "ratingCount": 3350,
+   "colors": [
+    "Mustard",
+    "Maroon"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Straight",
+   "description": "Printed Kurta with a comfortable cut.",
+   "highlights": [
+    "Soft fabric",
+    "Machine washable"
+   ],
+   "stock": 0,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1121",
+   "name": "Solid Printed Kurta",
+   "brand": "Aarya",
+   "category": "Women's Fashion",
+   "subCategory": "Kurtas",
+   "price": 899,
+   "mrp": 1499,
+   "rating": 4.1,
+   "ratingCount": 2846,
+   "colors": [
+    "Blue",
+    "Lilac"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Regular",
+   "description": "Printed Kurta with a comfortable cut.",
+   "highlights": [
+    "Soft fabric",
+    "Machine washable"
+   ],
+   "stock": 60,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1122",
+   "name": "Ethnic Printed Kurta",
+   "brand": "Vera Lane",
+   "category": "Women's Fashion",
+   "subCategory": "Kurtas",
+   "price": 999,
+   "mrp": 1499,
+   "rating": 3.8,
+   "ratingCount": 4673,
+   "colors": [
+    "Mustard",
+    "Maroon"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Straight",
+   "description": "Printed Kurta with a comfortable cut.",
+   "highlights": [
+    "Soft fabric",
+    "Machine washable"
+   ],
+   "stock": 12,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1123",
+   "name": "Solid Maxi Dress",
+   "brand": "Vera Lane",
+   "category": "Women's Fashion",
+   "subCategory": "Dresses",
+   "price": 2399,
+   "mrp": 4399,
+   "rating": 4.4,
+   "ratingCount": 3501,
+   "colors": [
+    "Mustard",
+    "Maroon"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Relaxed",
+   "description": "Maxi Dress with a comfortable cut.",
+   "highlights": [
+    "Soft fabric",
+    "Machine washable"
+   ],
+   "stock": 15,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1124",
+   "name": "Solid Maxi Dress",
+   "brand": "Vera Lane",
+   "category": "Women's Fashion",
+   "subCategory": "Dresses",
+   "price": 2499,
+   "mrp": 4399,
+   "rating": 4.1,
+   "ratingCount": 4824,
+   "colors": [
+    "Black",
+    "Beige"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Relaxed",
+   "description": "Maxi Dress with a comfortable cut.",
+   "highlights": [
+    "Soft fabric",
+    "Machine washable"
+   ],
+   "stock": 8,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1125",
+   "name": "Solid Maxi Dress",
+   "brand": "Aarya",
+   "category": "Women's Fashion",
+   "subCategory": "Dresses",
+   "price": 1499,
+   "mrp": 2299,
+   "rating": 4.3,
+   "ratingCount": 3657,
+   "colors": [
+    "Mustard",
+    "Maroon"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Relaxed",
+   "description": "Maxi Dress with a comfortable cut.",
+   "highlights": [
+    "Soft fabric",
+    "Machine washable"
+   ],
+   "stock": 8,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1126",
+   "name": "Solid Maxi Dress",
+   "brand": "Aarya",
+   "category": "Women's Fashion",
+   "subCategory": "Dresses",
+   "price": 1399,
+   "mrp": 2599,
+   "rating": 4.1,
+   "ratingCount": 719,
+   "colors": [
+    "Blue",
+    "Lilac"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Relaxed",
+   "description": "Maxi Dress with a comfortable cut.",
+   "highlights": [
+    "Soft fabric",
+    "Machine washable"
+   ],
+   "stock": 15,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1127",
+   "name": "Ethnic Maxi Dress",
+   "brand": "Zari",
+   "category": "Women's Fashion",
+   "subCategory": "Dresses",
+   "price": 2699,
+   "mrp": 3999,
+   "rating": 3.8,
+   "ratingCount": 5707,
+   "colors": [
+    "Pink",
+    "Teal"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Regular",
+   "description": "Maxi Dress with a comfortable cut.",
+   "highlights": [
+    "Soft fabric",
+    "Machine washable"
+   ],
+   "stock": 12,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1128",
+   "name": "Ethnic Casual Top",
+   "brand": "Zari",
+   "category": "Women's Fashion",
+   "subCategory": "Tops",
+   "price": 599,
+   "mrp": 799,
+   "rating": 3.7,
+   "ratingCount": 4784,
+   "colors": [
+    "Pink",
+    "Teal"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Straight",
+   "description": "Casual Top with a comfortable cut.",
+   "highlights": [
+    "Soft fabric",
+    "Machine washable"
+   ],
+   "stock": 12,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1129",
+   "name": "Block Casual Top",
+   "brand": "Zari",
+   "category": "Women's Fashion",
+   "subCategory": "Tops",
+   "price": 699,
+   "mrp": 1099,
+   "rating": 4.1,
+   "ratingCount": 1038,
+   "colors": [
+    "Black",
+    "Beige"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Straight",
+   "description": "Casual Top with a comfortable cut.",
+   "highlights": [
+    "Soft fabric",
+    "Machine washable"
+   ],
+   "stock": 12,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1130",
+   "name": "Block Casual Top",
+   "brand": "Aarya",
+   "category": "Women's Fashion",
+   "subCategory": "Tops",
+   "price": 1299,
+   "mrp": 1999,
+   "rating": 3.8,
+   "ratingCount": 5043,
+   "colors": [
+    "Mustard",
+    "Maroon"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Straight",
+   "description": "Casual Top with a comfortable cut.",
+   "highlights": [
+    "Soft fabric",
+    "Machine washable"
+   ],
+   "stock": 0,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1131",
+   "name": "Block Casual Top",
+   "brand": "Aarya",
+   "category": "Women's Fashion",
+   "subCategory": "Tops",
+   "price": 1199,
+   "mrp": 1999,
+   "rating": 4.6,
+   "ratingCount": 4013,
+   "colors": [
+    "Black",
+    "Beige"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Relaxed",
+   "description": "Casual Top with a comfortable cut.",
+   "highlights": [
+    "Soft fabric",
+    "Machine washable"
+   ],
+   "stock": 25,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1132",
+   "name": "Solid Casual Top",
+   "brand": "Aarya",
+   "category": "Women's Fashion",
+   "subCategory": "Tops",
+   "price": 499,
+   "mrp": 699,
+   "rating": 3.8,
+   "ratingCount": 5645,
+   "colors": [
+    "Black",
+    "Beige"
+   ],
+   "sizes": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+   ],
+   "fit": "Relaxed",
+   "description": "Casual Top with a comfortable cut.",
+   "highlights": [
+    "Soft fabric",
+    "Machine washable"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": "Size"
+  },
+  {
+   "id": "P1133",
+   "name": "Floral Palazzo Trousers",
+   "brand": "Vera Lane",
+   "category": "Women's Fashion",
+   "subCategory": "Trousers",
+   "price": 1299,
+   "mrp": 2399,
+   "rating": 3.8,
+   "ratingCount": 399,
+   "colors": [
+    "Blue",
+    "Lilac"
+   ],
+   "sizes": [
+    "26",
+    "28",
+    "30",
+    "32",
+    "34"
+   ],
+   "fit": "Regular",
+   "description": "Palazzo Trousers with a comfortable cut.",
+   "highlights": [
+    "Soft fabric",
+    "Machine washable"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1134",
+   "name": "Ethnic Palazzo Trousers",
+   "brand": "Vera Lane",
+   "category": "Women's Fashion",
+   "subCategory": "Trousers",
+   "price": 1399,
+   "mrp": 1999,
+   "rating": 4.5,
+   "ratingCount": 6174,
+   "colors": [
+    "Blue",
+    "Lilac"
+   ],
+   "sizes": [
+    "26",
+    "28",
+    "30",
+    "32",
+    "34"
+   ],
+   "fit": "Straight",
+   "description": "Palazzo Trousers with a comfortable cut.",
+   "highlights": [
+    "Soft fabric",
+    "Machine washable"
+   ],
+   "stock": 60,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1135",
+   "name": "Floral Palazzo Trousers",
+   "brand": "Zari",
+   "category": "Women's Fashion",
+   "subCategory": "Trousers",
+   "price": 1199,
+   "mrp": 1799,
+   "rating": 4.5,
+   "ratingCount": 2010,
+   "colors": [
+    "Mustard",
+    "Maroon"
+   ],
+   "sizes": [
+    "26",
+    "28",
+    "30",
+    "32",
+    "34"
+   ],
+   "fit": "Relaxed",
+   "description": "Palazzo Trousers with a comfortable cut.",
+   "highlights": [
+    "Soft fabric",
+    "Machine washable"
+   ],
+   "stock": 15,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1136",
+   "name": "Block Palazzo Trousers",
+   "brand": "Aarya",
+   "category": "Women's Fashion",
+   "subCategory": "Trousers",
+   "price": 1299,
+   "mrp": 2199,
+   "rating": 4.6,
+   "ratingCount": 4093,
+   "colors": [
+    "Blue",
+    "Lilac"
+   ],
+   "sizes": [
+    "26",
+    "28",
+    "30",
+    "32",
+    "34"
+   ],
+   "fit": "Regular",
+   "description": "Palazzo Trousers with a comfortable cut.",
+   "highlights": [
+    "Soft fabric",
+    "Machine washable"
+   ],
+   "stock": 15,
+   "tag": null,
+   "sizeType": "Waist (inches)"
+  },
+  {
+   "id": "P1137",
+   "name": "Flex Running Shoes",
+   "brand": "StrideX",
+   "category": "Footwear",
+   "subCategory": "Running Shoes",
+   "price": 3499,
+   "mrp": 5099,
+   "rating": 4.7,
+   "ratingCount": 1282,
+   "colors": [
+    "Black",
+    "White"
+   ],
+   "sizes": [
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11"
+   ],
+   "fit": "Regular",
+   "description": "Running Shoes with all-day cushioning.",
+   "highlights": [
+    "Cushioned insole",
+    "Durable outsole"
+   ],
+   "stock": 15,
+   "tag": null,
+   "sizeType": "UK size"
+  },
+  {
+   "id": "P1138",
+   "name": "Aero Running Shoes",
+   "brand": "StrideX",
+   "category": "Footwear",
+   "subCategory": "Running Shoes",
+   "price": 2099,
+   "mrp": 3399,
+   "rating": 4.4,
+   "ratingCount": 2693,
+   "colors": [
+    "Brown",
+    "Tan"
+   ],
+   "sizes": [
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11"
+   ],
+   "fit": "Regular",
+   "description": "Running Shoes with all-day cushioning.",
+   "highlights": [
+    "Cushioned insole",
+    "Durable outsole"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": "UK size"
+  },
+  {
+   "id": "P1139",
+   "name": "Aero Running Shoes",
+   "brand": "StrideX",
+   "category": "Footwear",
+   "subCategory": "Running Shoes",
+   "price": 1999,
+   "mrp": 2899,
+   "rating": 4.3,
+   "ratingCount": 4419,
+   "colors": [
+    "Grey",
+    "Green"
+   ],
+   "sizes": [
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11"
+   ],
+   "fit": "Regular",
+   "description": "Running Shoes with all-day cushioning.",
+   "highlights": [
+    "Cushioned insole",
+    "Durable outsole"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": "UK size"
+  },
+  {
+   "id": "P1140",
+   "name": "Aero Running Shoes",
+   "brand": "AirStep",
+   "category": "Footwear",
+   "subCategory": "Running Shoes",
+   "price": 2899,
+   "mrp": 5299,
+   "rating": 4.7,
+   "ratingCount": 3744,
+   "colors": [
+    "Brown",
+    "Tan"
+   ],
+   "sizes": [
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11"
+   ],
+   "fit": "Regular",
+   "description": "Running Shoes with all-day cushioning.",
+   "highlights": [
+    "Cushioned insole",
+    "Durable outsole"
+   ],
+   "stock": 3,
+   "tag": null,
+   "sizeType": "UK size"
+  },
+  {
+   "id": "P1141",
+   "name": "Aero Running Shoes",
+   "brand": "StrideX",
+   "category": "Footwear",
+   "subCategory": "Running Shoes",
+   "price": 1499,
+   "mrp": 2099,
+   "rating": 4.1,
+   "ratingCount": 1133,
+   "colors": [
+    "Grey",
+    "Green"
+   ],
+   "sizes": [
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11"
+   ],
+   "fit": "Regular",
+   "description": "Running Shoes with all-day cushioning.",
+   "highlights": [
+    "Cushioned insole",
+    "Durable outsole"
+   ],
+   "stock": 25,
+   "tag": null,
+   "sizeType": "UK size"
+  },
+  {
+   "id": "P1142",
+   "name": "Urban Casual Sneakers",
+   "brand": "Raymond Select",
+   "category": "Footwear",
+   "subCategory": "Sneakers",
+   "price": 3199,
+   "mrp": 5799,
+   "rating": 4.1,
+   "ratingCount": 523,
+   "colors": [
+    "Grey",
+    "Green"
+   ],
+   "sizes": [
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11"
+   ],
+   "fit": "Regular",
+   "description": "Casual Sneakers with all-day cushioning.",
+   "highlights": [
+    "Cushioned insole",
+    "Durable outsole"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": "UK size"
+  },
+  {
+   "id": "P1143",
+   "name": "Flex Casual Sneakers",
+   "brand": "AirStep",
+   "category": "Footwear",
+   "subCategory": "Sneakers",
+   "price": 3299,
+   "mrp": 4799,
+   "rating": 4.0,
+   "ratingCount": 4007,
+   "colors": [
+    "Brown",
+    "Tan"
+   ],
+   "sizes": [
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11"
+   ],
+   "fit": "Regular",
+   "description": "Casual Sneakers with all-day cushioning.",
+   "highlights": [
+    "Cushioned insole",
+    "Durable outsole"
+   ],
+   "stock": 12,
+   "tag": null,
+   "sizeType": "UK size"
+  },
+  {
+   "id": "P1144",
+   "name": "Flex Casual Sneakers",
+   "brand": "AirStep",
+   "category": "Footwear",
+   "subCategory": "Sneakers",
+   "price": 4999,
+   "mrp": 6899,
+   "rating": 3.6,
+   "ratingCount": 632,
+   "colors": [
+    "Brown",
+    "Tan"
+   ],
+   "sizes": [
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11"
+   ],
+   "fit": "Regular",
+   "description": "Casual Sneakers with all-day cushioning.",
+   "highlights": [
+    "Cushioned insole",
+    "Durable outsole"
+   ],
+   "stock": 60,
+   "tag": null,
+   "sizeType": "UK size"
+  },
+  {
+   "id": "P1145",
+   "name": "Prime Casual Sneakers",
+   "brand": "StrideX",
+   "category": "Footwear",
+   "subCategory": "Sneakers",
+   "price": 2199,
+   "mrp": 4099,
+   "rating": 4.0,
+   "ratingCount": 2350,
+   "colors": [
+    "Black",
+    "White"
+   ],
+   "sizes": [
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11"
+   ],
+   "fit": "Regular",
+   "description": "Casual Sneakers with all-day cushioning.",
+   "highlights": [
+    "Cushioned insole",
+    "Durable outsole"
+   ],
+   "stock": 8,
+   "tag": null,
+   "sizeType": "UK size"
+  },
+  {
+   "id": "P1146",
+   "name": "Prime Casual Sneakers",
+   "brand": "StrideX",
+   "category": "Footwear",
+   "subCategory": "Sneakers",
+   "price": 5699,
+   "mrp": 10599,
+   "rating": 3.9,
+   "ratingCount": 6031,
+   "colors": [
+    "Grey",
+    "Green"
+   ],
+   "sizes": [
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11"
+   ],
+   "fit": "Regular",
+   "description": "Casual Sneakers with all-day cushioning.",
+   "highlights": [
+    "Cushioned insole",
+    "Durable outsole"
+   ],
+   "stock": 60,
+   "tag": null,
+   "sizeType": "UK size"
+  },
+  {
+   "id": "P1147",
+   "name": "Aero Formal Shoes",
+   "brand": "StrideX",
+   "category": "Footwear",
+   "subCategory": "Formal Shoes",
+   "price": 2399,
+   "mrp": 3899,
+   "rating": 4.7,
+   "ratingCount": 3286,
+   "colors": [
+    "Black",
+    "White"
+   ],
+   "sizes": [
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11"
+   ],
+   "fit": "Regular",
+   "description": "Formal Shoes with all-day cushioning.",
+   "highlights": [
+    "Cushioned insole",
+    "Durable outsole"
+   ],
+   "stock": 60,
+   "tag": null,
+   "sizeType": "UK size"
+  },
+  {
+   "id": "P1148",
+   "name": "Urban Formal Shoes",
+   "brand": "TrailMate",
+   "category": "Footwear",
+   "subCategory": "Formal Shoes",
+   "price": 4099,
+   "mrp": 7599,
+   "rating": 3.8,
+   "ratingCount": 6169,
+   "colors": [
+    "Blue",
+    "Orange"
+   ],
+   "sizes": [
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11"
+   ],
+   "fit": "Regular",
+   "description": "Formal Shoes with all-day cushioning.",
+   "highlights": [
+    "Cushioned insole",
+    "Durable outsole"
+   ],
+   "stock": 8,
+   "tag": null,
+   "sizeType": "UK size"
+  },
+  {
+   "id": "P1149",
+   "name": "Flex Formal Shoes",
+   "brand": "Raymond Select",
+   "category": "Footwear",
+   "subCategory": "Formal Shoes",
+   "price": 2999,
+   "mrp": 4799,
+   "rating": 4.5,
+   "ratingCount": 5000,
+   "colors": [
+    "Grey",
+    "Green"
+   ],
+   "sizes": [
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11"
+   ],
+   "fit": "Regular",
+   "description": "Formal Shoes with all-day cushioning.",
+   "highlights": [
+    "Cushioned insole",
+    "Durable outsole"
+   ],
+   "stock": 12,
+   "tag": null,
+   "sizeType": "UK size"
+  },
+  {
+   "id": "P1150",
+   "name": "Urban Slides",
+   "brand": "Raymond Select",
+   "category": "Footwear",
+   "subCategory": "Sandals",
+   "price": 5799,
+   "mrp": 8599,
+   "rating": 3.7,
+   "ratingCount": 397,
+   "colors": [
+    "Blue",
+    "Orange"
+   ],
+   "sizes": [
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11"
+   ],
+   "fit": "Regular",
+   "description": "Slides with all-day cushioning.",
+   "highlights": [
+    "Cushioned insole",
+    "Durable outsole"
+   ],
+   "stock": 15,
+   "tag": null,
+   "sizeType": "UK size"
+  },
+  {
+   "id": "P1151",
+   "name": "Flex Slides",
+   "brand": "TrailMate",
+   "category": "Footwear",
+   "subCategory": "Sandals",
+   "price": 3699,
+   "mrp": 6999,
+   "rating": 3.9,
+   "ratingCount": 808,
+   "colors": [
+    "Black",
+    "White"
+   ],
+   "sizes": [
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11"
+   ],
+   "fit": "Regular",
+   "description": "Slides with all-day cushioning.",
+   "highlights": [
+    "Cushioned insole",
+    "Durable outsole"
+   ],
+   "stock": 3,
+   "tag": null,
+   "sizeType": "UK size"
+  },
+  {
+   "id": "P1152",
+   "name": "Urban Slides",
+   "brand": "StrideX",
+   "category": "Footwear",
+   "subCategory": "Sandals",
+   "price": 4099,
+   "mrp": 5899,
+   "rating": 3.7,
+   "ratingCount": 3895,
+   "colors": [
+    "Brown",
+    "Tan"
+   ],
+   "sizes": [
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11"
+   ],
+   "fit": "Regular",
+   "description": "Slides with all-day cushioning.",
+   "highlights": [
+    "Cushioned insole",
+    "Durable outsole"
+   ],
+   "stock": 25,
+   "tag": null,
+   "sizeType": "UK size"
+  },
+  {
+   "id": "P1153",
+   "name": "Pro Wireless Earbuds",
+   "brand": "PulseOne",
+   "category": "Electronics",
+   "subCategory": "Earbuds",
+   "price": 2799,
+   "mrp": 4199,
+   "rating": 3.9,
+   "ratingCount": 2201,
+   "colors": [
+    "Black",
+    "White"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Wireless Earbuds with reliable battery life.",
+   "highlights": [
+    "1-year warranty",
+    "Fast charging"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1154",
+   "name": "Lite Wireless Earbuds",
+   "brand": "ChargeUp",
+   "category": "Electronics",
+   "subCategory": "Earbuds",
+   "price": 3799,
+   "mrp": 5499,
+   "rating": 3.9,
+   "ratingCount": 2424,
+   "colors": [
+    "Black"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Wireless Earbuds with reliable battery life.",
+   "highlights": [
+    "1-year warranty",
+    "Fast charging"
+   ],
+   "stock": 25,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1155",
+   "name": "Max Wireless Earbuds",
+   "brand": "PulseOne",
+   "category": "Electronics",
+   "subCategory": "Earbuds",
+   "price": 1399,
+   "mrp": 2099,
+   "rating": 3.9,
+   "ratingCount": 4431,
+   "colors": [
+    "Black",
+    "White"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Wireless Earbuds with reliable battery life.",
+   "highlights": [
+    "1-year warranty",
+    "Fast charging"
+   ],
+   "stock": 3,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1156",
+   "name": "Neo Wireless Earbuds",
+   "brand": "SonicWave",
+   "category": "Electronics",
+   "subCategory": "Earbuds",
+   "price": 1199,
+   "mrp": 1599,
+   "rating": 4.6,
+   "ratingCount": 2013,
+   "colors": [
+    "Black"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Wireless Earbuds with reliable battery life.",
+   "highlights": [
+    "1-year warranty",
+    "Fast charging"
+   ],
+   "stock": 60,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1157",
+   "name": "Max Bluetooth Speaker",
+   "brand": "BoomBox",
+   "category": "Electronics",
+   "subCategory": "Speakers",
+   "price": 999,
+   "mrp": 1499,
+   "rating": 3.7,
+   "ratingCount": 5039,
+   "colors": [
+    "Black",
+    "White"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Bluetooth Speaker with reliable battery life.",
+   "highlights": [
+    "1-year warranty",
+    "Fast charging"
+   ],
+   "stock": 60,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1158",
+   "name": "Pro Bluetooth Speaker",
+   "brand": "PulseOne",
+   "category": "Electronics",
+   "subCategory": "Speakers",
+   "price": 1999,
+   "mrp": 3699,
+   "rating": 4.1,
+   "ratingCount": 2249,
+   "colors": [
+    "Blue",
+    "Black"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Bluetooth Speaker with reliable battery life.",
+   "highlights": [
+    "1-year warranty",
+    "Fast charging"
+   ],
+   "stock": 60,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1159",
+   "name": "Pro Bluetooth Speaker",
+   "brand": "SonicWave",
+   "category": "Electronics",
+   "subCategory": "Speakers",
+   "price": 2899,
+   "mrp": 4999,
+   "rating": 4.0,
+   "ratingCount": 426,
+   "colors": [
+    "Blue",
+    "Black"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Bluetooth Speaker with reliable battery life.",
+   "highlights": [
+    "1-year warranty",
+    "Fast charging"
+   ],
+   "stock": 8,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1160",
+   "name": "Lite Smartwatch",
+   "brand": "ChargeUp",
+   "category": "Electronics",
+   "subCategory": "Smartwatches",
+   "price": 1999,
+   "mrp": 3799,
+   "rating": 3.6,
+   "ratingCount": 6118,
+   "colors": [
+    "Black"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Smartwatch with reliable battery life.",
+   "highlights": [
+    "1-year warranty",
+    "Fast charging"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1161",
+   "name": "Pro Smartwatch",
+   "brand": "PulseOne",
+   "category": "Electronics",
+   "subCategory": "Smartwatches",
+   "price": 3799,
+   "mrp": 6499,
+   "rating": 3.8,
+   "ratingCount": 2677,
+   "colors": [
+    "Black",
+    "White"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Smartwatch with reliable battery life.",
+   "highlights": [
+    "1-year warranty",
+    "Fast charging"
+   ],
+   "stock": 0,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1162",
+   "name": "Pro Smartwatch",
+   "brand": "PulseOne",
+   "category": "Electronics",
+   "subCategory": "Smartwatches",
+   "price": 4899,
+   "mrp": 7899,
+   "rating": 4.0,
+   "ratingCount": 3358,
+   "colors": [
+    "Blue",
+    "Black"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Smartwatch with reliable battery life.",
+   "highlights": [
+    "1-year warranty",
+    "Fast charging"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1163",
+   "name": "Pro Power Bank",
+   "brand": "PulseOne",
+   "category": "Electronics",
+   "subCategory": "Accessories",
+   "price": 2799,
+   "mrp": 4399,
+   "rating": 3.9,
+   "ratingCount": 2440,
+   "colors": [
+    "Black"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Power Bank with reliable battery life.",
+   "highlights": [
+    "1-year warranty",
+    "Fast charging"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1164",
+   "name": "Neo Power Bank",
+   "brand": "ChargeUp",
+   "category": "Electronics",
+   "subCategory": "Accessories",
+   "price": 899,
+   "mrp": 1599,
+   "rating": 4.6,
+   "ratingCount": 3512,
+   "colors": [
+    "Black",
+    "White"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Power Bank with reliable battery life.",
+   "highlights": [
+    "1-year warranty",
+    "Fast charging"
+   ],
+   "stock": 15,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1165",
+   "name": "Max Power Bank",
+   "brand": "SonicWave",
+   "category": "Electronics",
+   "subCategory": "Accessories",
+   "price": 2799,
+   "mrp": 4399,
+   "rating": 4.0,
+   "ratingCount": 168,
+   "colors": [
+    "Black"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Power Bank with reliable battery life.",
+   "highlights": [
+    "1-year warranty",
+    "Fast charging"
+   ],
+   "stock": 15,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1166",
+   "name": "Classic Storage Container Set",
+   "brand": "SleepWell",
+   "category": "Home & Kitchen",
+   "subCategory": "Cookware",
+   "price": 1199,
+   "mrp": 1899,
+   "rating": 4.6,
+   "ratingCount": 3895,
+   "colors": [
+    "Grey"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Storage Container Set for everyday use.",
+   "highlights": [
+    "Easy to clean",
+    "Durable build"
+   ],
+   "stock": 60,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1167",
+   "name": "Classic Storage Container Set",
+   "brand": "HomeChef",
+   "category": "Home & Kitchen",
+   "subCategory": "Cookware",
+   "price": 499,
+   "mrp": 799,
+   "rating": 4.3,
+   "ratingCount": 3369,
+   "colors": [
+    "Grey"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Storage Container Set for everyday use.",
+   "highlights": [
+    "Easy to clean",
+    "Durable build"
+   ],
+   "stock": 0,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1168",
+   "name": "Everyday Storage Container Set",
+   "brand": "SleepWell",
+   "category": "Home & Kitchen",
+   "subCategory": "Cookware",
+   "price": 3699,
+   "mrp": 5299,
+   "rating": 3.9,
+   "ratingCount": 4389,
+   "colors": [
+    "Grey"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Storage Container Set for everyday use.",
+   "highlights": [
+    "Easy to clean",
+    "Durable build"
+   ],
+   "stock": 3,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1169",
+   "name": "Classic Bedsheet Set",
+   "brand": "HomeChef",
+   "category": "Home & Kitchen",
+   "subCategory": "Bedding",
+   "price": 2899,
+   "mrp": 5099,
+   "rating": 4.5,
+   "ratingCount": 1736,
+   "colors": [
+    "Blue",
+    "Cream"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Bedsheet Set for everyday use.",
+   "highlights": [
+    "Easy to clean",
+    "Durable build"
+   ],
+   "stock": 8,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1170",
+   "name": "Classic Bedsheet Set",
+   "brand": "HomeChef",
+   "category": "Home & Kitchen",
+   "subCategory": "Bedding",
+   "price": 3499,
+   "mrp": 4799,
+   "rating": 4.6,
+   "ratingCount": 3297,
+   "colors": [
+    "Blue",
+    "Cream"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Bedsheet Set for everyday use.",
+   "highlights": [
+    "Easy to clean",
+    "Durable build"
+   ],
+   "stock": 12,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1171",
+   "name": "Everyday Bedsheet Set",
+   "brand": "HomeChef",
+   "category": "Home & Kitchen",
+   "subCategory": "Bedding",
+   "price": 1899,
+   "mrp": 2999,
+   "rating": 4.5,
+   "ratingCount": 3994,
+   "colors": [
+    "Steel"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Bedsheet Set for everyday use.",
+   "highlights": [
+    "Easy to clean",
+    "Durable build"
+   ],
+   "stock": 3,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1172",
+   "name": "Everyday Mixer Grinder",
+   "brand": "HomeChef",
+   "category": "Home & Kitchen",
+   "subCategory": "Appliances",
+   "price": 699,
+   "mrp": 1299,
+   "rating": 3.8,
+   "ratingCount": 3062,
+   "colors": [
+    "Blue",
+    "Cream"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Mixer Grinder for everyday use.",
+   "highlights": [
+    "Easy to clean",
+    "Durable build"
+   ],
+   "stock": 12,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1173",
+   "name": "Classic Mixer Grinder",
+   "brand": "HomeChef",
+   "category": "Home & Kitchen",
+   "subCategory": "Appliances",
+   "price": 1699,
+   "mrp": 3099,
+   "rating": 4.5,
+   "ratingCount": 5627,
+   "colors": [
+    "Grey"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Mixer Grinder for everyday use.",
+   "highlights": [
+    "Easy to clean",
+    "Durable build"
+   ],
+   "stock": 12,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1174",
+   "name": "Everyday Water Bottle",
+   "brand": "SleepWell",
+   "category": "Home & Kitchen",
+   "subCategory": "Appliances",
+   "price": 1199,
+   "mrp": 1999,
+   "rating": 4.2,
+   "ratingCount": 5256,
+   "colors": [
+    "Blue",
+    "Cream"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Water Bottle for everyday use.",
+   "highlights": [
+    "Easy to clean",
+    "Durable build"
+   ],
+   "stock": 60,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1175",
+   "name": "Premium Water Bottle",
+   "brand": "SleepWell",
+   "category": "Home & Kitchen",
+   "subCategory": "Appliances",
+   "price": 2399,
+   "mrp": 3599,
+   "rating": 4.0,
+   "ratingCount": 3130,
+   "colors": [
+    "Steel"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Water Bottle for everyday use.",
+   "highlights": [
+    "Easy to clean",
+    "Durable build"
+   ],
+   "stock": 15,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1176",
+   "name": "Daily Face Wash",
+   "brand": "GlowLab",
+   "category": "Beauty",
+   "subCategory": "Skincare",
+   "price": 599,
+   "mrp": 899,
+   "rating": 3.6,
+   "ratingCount": 4129,
+   "colors": [
+    "Standard"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Face Wash for daily use.",
+   "highlights": [
+    "Dermatologically tested"
+   ],
+   "stock": 15,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1177",
+   "name": "Glow Face Wash",
+   "brand": "GlowLab",
+   "category": "Beauty",
+   "subCategory": "Skincare",
+   "price": 599,
+   "mrp": 1099,
+   "rating": 4.5,
+   "ratingCount": 3874,
+   "colors": [
+    "Standard"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Face Wash for daily use.",
+   "highlights": [
+    "Dermatologically tested"
+   ],
+   "stock": 60,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1178",
+   "name": "Glow Face Wash",
+   "brand": "GlowLab",
+   "category": "Beauty",
+   "subCategory": "Skincare",
+   "price": 849,
+   "mrp": 1399,
+   "rating": 3.7,
+   "ratingCount": 1172,
+   "colors": [
+    "Standard"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Face Wash for daily use.",
+   "highlights": [
+    "Dermatologically tested"
+   ],
+   "stock": 8,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1179",
+   "name": "Pure Moisturiser",
+   "brand": "GlowLab",
+   "category": "Beauty",
+   "subCategory": "Skincare",
+   "price": 499,
+   "mrp": 699,
+   "rating": 4.1,
+   "ratingCount": 4299,
+   "colors": [
+    "Standard"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Moisturiser for daily use.",
+   "highlights": [
+    "Dermatologically tested"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1180",
+   "name": "Glow Moisturiser",
+   "brand": "GlowLab",
+   "category": "Beauty",
+   "subCategory": "Skincare",
+   "price": 249,
+   "mrp": 399,
+   "rating": 3.7,
+   "ratingCount": 6128,
+   "colors": [
+    "Standard"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Moisturiser for daily use.",
+   "highlights": [
+    "Dermatologically tested"
+   ],
+   "stock": 8,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1181",
+   "name": "Daily Kajal & Eyeliner Combo",
+   "brand": "GlowLab",
+   "category": "Beauty",
+   "subCategory": "Makeup",
+   "price": 649,
+   "mrp": 899,
+   "rating": 4.4,
+   "ratingCount": 3215,
+   "colors": [
+    "Standard"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Kajal & Eyeliner Combo for daily use.",
+   "highlights": [
+    "Dermatologically tested"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1182",
+   "name": "Glow Kajal & Eyeliner Combo",
+   "brand": "GlowLab",
+   "category": "Beauty",
+   "subCategory": "Makeup",
+   "price": 249,
+   "mrp": 499,
+   "rating": 4.7,
+   "ratingCount": 6117,
+   "colors": [
+    "Standard"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Kajal & Eyeliner Combo for daily use.",
+   "highlights": [
+    "Dermatologically tested"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1183",
+   "name": "Glow Kajal & Eyeliner Combo",
+   "brand": "GlowLab",
+   "category": "Beauty",
+   "subCategory": "Makeup",
+   "price": 399,
+   "mrp": 599,
+   "rating": 4.6,
+   "ratingCount": 2478,
+   "colors": [
+    "Standard"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Kajal & Eyeliner Combo for daily use.",
+   "highlights": [
+    "Dermatologically tested"
+   ],
+   "stock": 60,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1184",
+   "name": "Pro Resistance Band Set",
+   "brand": "FitCore",
+   "category": "Sports & Fitness",
+   "subCategory": "Weights",
+   "price": 999,
+   "mrp": 1799,
+   "rating": 4.3,
+   "ratingCount": 2186,
+   "colors": [
+    "Black"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Resistance Band Set for home workouts.",
+   "highlights": [
+    "Sturdy build"
+   ],
+   "stock": 3,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1185",
+   "name": "Core Resistance Band Set",
+   "brand": "FitCore",
+   "category": "Sports & Fitness",
+   "subCategory": "Weights",
+   "price": 1099,
+   "mrp": 1599,
+   "rating": 4.2,
+   "ratingCount": 4053,
+   "colors": [
+    "Blue",
+    "Black"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Resistance Band Set for home workouts.",
+   "highlights": [
+    "Sturdy build"
+   ],
+   "stock": 3,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1186",
+   "name": "Active Resistance Band Set",
+   "brand": "FitCore",
+   "category": "Sports & Fitness",
+   "subCategory": "Weights",
+   "price": 1099,
+   "mrp": 1699,
+   "rating": 3.6,
+   "ratingCount": 1611,
+   "colors": [
+    "Black"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Resistance Band Set for home workouts.",
+   "highlights": [
+    "Sturdy build"
+   ],
+   "stock": 15,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1187",
+   "name": "Pro Gym Gloves",
+   "brand": "FitCore",
+   "category": "Sports & Fitness",
+   "subCategory": "Accessories",
+   "price": 1099,
+   "mrp": 1999,
+   "rating": 3.8,
+   "ratingCount": 2285,
+   "colors": [
+    "Blue",
+    "Black"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Gym Gloves for home workouts.",
+   "highlights": [
+    "Sturdy build"
+   ],
+   "stock": 0,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1188",
+   "name": "Active Gym Gloves",
+   "brand": "FitCore",
+   "category": "Sports & Fitness",
+   "subCategory": "Accessories",
+   "price": 399,
+   "mrp": 799,
+   "rating": 4.1,
+   "ratingCount": 4391,
+   "colors": [
+    "Blue",
+    "Black"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Gym Gloves for home workouts.",
+   "highlights": [
+    "Sturdy build"
+   ],
+   "stock": 25,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1189",
+   "name": "Active Skipping Rope",
+   "brand": "FitCore",
+   "category": "Sports & Fitness",
+   "subCategory": "Accessories",
+   "price": 599,
+   "mrp": 1099,
+   "rating": 4.3,
+   "ratingCount": 3349,
+   "colors": [
+    "Blue",
+    "Black"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Skipping Rope for home workouts.",
+   "highlights": [
+    "Sturdy build"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1190",
+   "name": "Core Skipping Rope",
+   "brand": "FitCore",
+   "category": "Sports & Fitness",
+   "subCategory": "Accessories",
+   "price": 1099,
+   "mrp": 2099,
+   "rating": 4.2,
+   "ratingCount": 3071,
+   "colors": [
+    "Blue",
+    "Black"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Skipping Rope for home workouts.",
+   "highlights": [
+    "Sturdy build"
+   ],
+   "stock": 8,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1191",
+   "name": "Pro Foam Roller",
+   "brand": "FitCore",
+   "category": "Sports & Fitness",
+   "subCategory": "Yoga",
+   "price": 1699,
+   "mrp": 2499,
+   "rating": 4.4,
+   "ratingCount": 515,
+   "colors": [
+    "Black"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Foam Roller for home workouts.",
+   "highlights": [
+    "Sturdy build"
+   ],
+   "stock": 8,
+   "tag": null,
+   "sizeType": null
+  },
+  {
+   "id": "P1192",
+   "name": "Active Foam Roller",
+   "brand": "FitCore",
+   "category": "Sports & Fitness",
+   "subCategory": "Yoga",
+   "price": 1099,
+   "mrp": 1899,
+   "rating": 4.7,
+   "ratingCount": 4919,
+   "colors": [
+    "Blue",
+    "Black"
+   ],
+   "sizes": [],
+   "fit": null,
+   "description": "Foam Roller for home workouts.",
+   "highlights": [
+    "Sturdy build"
+   ],
+   "stock": 40,
+   "tag": null,
+   "sizeType": null
+  }
+ ],
+ "returnPolicies": {
+  "Men's Fashion": {
+   "days": 15,
+   "condition": "Unworn with tags and original packaging",
+   "refund": "Refund to original payment method or store credit",
+   "exchange": true
+  },
+  "Women's Fashion": {
+   "days": 15,
+   "condition": "Unworn with tags and original packaging",
+   "refund": "Refund to original payment method or store credit",
+   "exchange": true
+  },
+  "Footwear": {
+   "days": 10,
+   "condition": "Unused, in original box, no sole wear",
+   "refund": "Refund to original payment method",
+   "exchange": true
+  },
+  "Electronics": {
+   "days": 7,
+   "condition": "Sealed or unused with all accessories; no physical damage",
+   "refund": "Refund after quality check",
+   "exchange": false
+  },
+  "Home & Kitchen": {
+   "days": 10,
+   "condition": "Unused and in original packaging",
+   "refund": "Refund to original payment method",
+   "exchange": false
+  },
+  "Beauty": {
+   "days": 0,
+   "condition": "Beauty products can only be returned if damaged or wrong item delivered, reported within 48 hours",
+   "refund": "Refund after verification",
+   "exchange": false
+  },
+  "Sports & Fitness": {
+   "days": 10,
+   "condition": "Unused and in original packaging",
+   "refund": "Refund to original payment method",
+   "exchange": true
+  }
+ },
+ "orders": [
+  {
+   "orderId": "ORD-1001",
+   "customerId": "CUST-1001",
+   "placedOn": "2026-10-22",
+   "status": "DELIVERED",
+   "deliveredOn": "2026-10-26",
+   "address": {
+    "name": "Vasudev Gudipati",
+    "line1": "Flat 402, Lakeview Residency",
+    "line2": "Madhapur",
+    "city": "Hyderabad",
+    "state": "Telangana",
+    "pincode": "500081",
+    "phone": "9876543210"
+   },
+   "payment": "UPI",
+   "items": [
+    {
+     "productId": "P1001",
+     "name": "Slim Fit Stretch Chinos",
+     "brand": "UrbanEdge",
+     "qty": 1,
+     "size": "34",
+     "color": "Khaki",
+     "unitPrice": 1499,
+     "status": "DELIVERED"
+    },
+    {
+     "productId": "P1020",
+     "name": "True Wireless Earbuds",
+     "brand": "SonicWave",
+     "qty": 1,
+     "size": null,
+     "color": "Black",
+     "unitPrice": 2499,
+     "status": "DELIVERED"
+    }
+   ]
+  },
+  {
+   "orderId": "ORD-1002",
+   "customerId": "CUST-1001",
+   "placedOn": "2026-10-29",
+   "status": "SHIPPED",
+   "expectedDelivery": "2026-11-04",
+   "carrier": "BlueDart",
+   "tracking": "BD778123990",
+   "address": {
+    "name": "Vasudev Gudipati",
+    "line1": "Flat 402, Lakeview Residency",
+    "line2": "Madhapur",
+    "city": "Hyderabad",
+    "state": "Telangana",
+    "pincode": "500081",
+    "phone": "9876543210"
+   },
+   "payment": "Card",
+   "items": [
+    {
+     "productId": "P1015",
+     "name": "Court Classic Sneakers",
+     "brand": "StrideX",
+     "qty": 1,
+     "size": "9",
+     "color": "Black/Red",
+     "unitPrice": 2499,
+     "status": "SHIPPED"
+    }
+   ]
+  },
+  {
+   "orderId": "ORD-1003",
+   "customerId": "CUST-1001",
+   "placedOn": "2026-11-01",
+   "status": "PLACED",
+   "expectedDelivery": "2026-11-07",
+   "address": {
+    "name": "Vasudev Gudipati",
+    "line1": "Flat 402, Lakeview Residency",
+    "line2": "Madhapur",
+    "city": "Hyderabad",
+    "state": "Telangana",
+    "pincode": "500081",
+    "phone": "9876543210"
+   },
+   "payment": "UPI",
+   "items": [
+    {
+     "productId": "P1019",
+     "name": "ANC Wireless Headphones",
+     "brand": "SonicWave",
+     "qty": 1,
+     "size": null,
+     "color": "Black",
+     "unitPrice": 5999,
+     "status": "PLACED"
+    },
+    {
+     "productId": "P1005",
+     "name": "Slim Fit Stretch Jeans",
+     "brand": "DenimLab",
+     "qty": 1,
+     "size": "34",
+     "color": "Indigo",
+     "unitPrice": 1999,
+     "status": "PLACED"
+    },
+    {
+     "productId": "P1028",
+     "name": "Matte Lipstick Set (4 shades)",
+     "brand": "GlowLab",
+     "qty": 1,
+     "size": null,
+     "color": "Assorted",
+     "unitPrice": 799,
+     "status": "PLACED"
+    },
+    {
+     "productId": "P1026",
+     "name": "Electric Kettle 1.5L",
+     "brand": "HomeChef",
+     "qty": 1,
+     "size": null,
+     "color": "Steel",
+     "unitPrice": 999,
+     "status": "PLACED"
+    }
+   ]
+  },
+  {
+   "orderId": "ORD-1004",
+   "customerId": "CUST-1001",
+   "placedOn": "2026-10-31",
+   "status": "PACKED",
+   "expectedDelivery": "2026-11-05",
+   "address": {
+    "name": "Vasudev Gudipati",
+    "line1": "Flat 402, Lakeview Residency",
+    "line2": "Madhapur",
+    "city": "Hyderabad",
+    "state": "Telangana",
+    "pincode": "500081",
+    "phone": "9876543210"
+   },
+   "payment": "COD",
+   "items": [
+    {
+     "productId": "P1011",
+     "name": "Floral Print Wrap Dress",
+     "brand": "Aarya",
+     "qty": 1,
+     "size": "M",
+     "color": "Blue Floral",
+     "unitPrice": 1999,
+     "status": "PACKED"
+    }
+   ]
+  }
+ ]
+}

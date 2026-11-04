@@ -1,0 +1,39 @@
+server:
+  port: 8081
+
+app:
+  env: ${APP_ENV:@app.env@}     # UAT | PROD - baked in by the Maven profile (-Puat / -Pprod), overridable with APP_ENV
+  version: "@project.version@"
+
+spring:
+  application:
+    name: shopglobal-mock-api
+  # Oracle 11g XE on the Windows server is the only database. Schema SHOPGLOBAL_UAT / SHOPGLOBAL_PROD (db/create-shopglobal-user.sql).
+  # DB_PASSWORD has no default: set it as an environment variable (Eclipse run configuration) or a Kubernetes Secret.
+  datasource:
+    url: ${DB_URL:jdbc:oracle:thin:@//192.168.16.247:1521/xe}
+    username: ${DB_USER:SHOPGLOBAL_UAT}
+    password: ${DB_PASSWORD}
+    hikari:
+      # Oracle XE allows only a few sessions in total, so keep the pool small
+      maximum-pool-size: 5
+      minimum-idle: 1
+      data-source-properties:
+        "[oracle.jdbc.timezoneAsRegion]": "false"
+
+springdoc:
+  api-docs:
+    path: /openapi
+  swagger-ui:
+    path: /docs
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      probes:
+        enabled: true
+

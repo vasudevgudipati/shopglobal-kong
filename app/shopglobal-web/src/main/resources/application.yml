@@ -1,0 +1,54 @@
+server:
+  port: 8080
+  servlet:
+    session:
+      timeout: 8h
+      cookie:
+        http-only: true
+        same-site: lax
+
+app:
+  env: ${APP_ENV:@app.env@}     # UAT | PROD - baked in by the Maven profile (-Puat / -Pprod), overridable with APP_ENV
+  version: "@project.version@"
+
+spring:
+  application:
+    name: shopglobal-web
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+# ---------------------------------------------------------------------------
+# Every environment-specific value can be overridden with an environment
+# variable (SHOPGLOBAL_API_BASE_URL, AGENT_MODE, KONG_AI_CHAT_URL, ...).
+# ---------------------------------------------------------------------------
+shopglobal:
+  api:
+    # Storefront data comes from the marketplace API only - there is no local database or local mock in this app.
+    # UAT: the mock API on the cluster (or the Kong API gateway URL, which also needs the OAUTH_* values below).
+    base-url: ${SHOPGLOBAL_API_BASE_URL:http://192.168.19.41:30081}
+    token: ""            # optional fixed bearer token; normally the OAuth client below is used
+
+# The chat is answered by the shopglobal-agent service (LLM through Kong). There is no offline assistant.
+agent:
+  remote:
+    url: ${AGENT_REMOTE_URL:http://localhost:8082}
+
+# OAuth 2.0 client credentials (Keycloak) for calls to Kong. Leave token-url empty to send no token.
+# The secret is never stored in Git: set OAUTH_CLIENT_SECRET (environment variable or Kubernetes Secret).
+oauth:
+  token-url: ${OAUTH_TOKEN_URL:}
+  client-id: ${OAUTH_CLIENT_ID:}
+  client-secret: ${OAUTH_CLIENT_SECRET:}
+  scope: ${OAUTH_SCOPE:}
+
+# Demo sign-in (no identity provider yet). Users: vasudev, tataji, shubham, kvamshi. One shared demo password.
+demo:
+  password: ${DEMO_PASSWORD:welcome@123}

@@ -1,0 +1,80 @@
+# UAT deployment: mock API + website (the agent is deployed separately: shopglobal-agent-uat.yaml) (namespace carries "shopglobal"). Deploy through Jenkins, not by hand.
+# Images (replace the Docker Hub repository if different), built with the matching Maven profile:
+#   docker build --build-arg BUILD_ENV=uat -t vasudevgudipati/shopglobal-web:1.0.0-uat shopglobal-web
+#   (same for shopglobal-mock-api; the agent image is in shopglobal-agent-uat.yaml)
+#
+# Create the database Secret once (it is NOT in this file on purpose):
+#   kubectl create namespace shopglobal-app-uat
+#   kubectl -n shopglobal-app-uat create secret generic shopglobal-db \
+#     --from-literal=DB_USER=SHOPGLOBAL_UAT --from-literal=DB_PASSWORD='<password from create-shopglobal-user.sql>'
+#
+# Kong: the API data plane (192.168.19.41) reaches the mock API at http://192.168.19.41:30081; the agent reaches the
+# AI data plane (model) and the MCP route (tools) at the URLs below - UAT = the dev/test Konnect control plane's AI data plane.
+apiVersion: v1
+kind: Namespace
+metadata: { name: shopglobal-app-uat }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: shopglobal-mock-api, namespace: shopglobal-app-uat }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: shopglobal-mock-api } }
+  template:
+    metadata: { labels: { app: shopglobal-mock-api } }
+    spec:
+      containers:
+        - name: app
+          image: vasudevgudipati/shopglobal-mock-api:1.0.0-uat
+          ports: [{ containerPort: 8081 }]
+          env:
+            # Oracle 11g XE on the Windows server, one schema per environment
+            - { name: DB_URL, value: "jdbc:oracle:thin:@//192.168.16.247:1521/xe" }
+            - name: DB_USER
+              valueFrom: { secretKeyRef: { name: shopglobal-db, key: DB_USER } }
+            - name: DB_PASSWORD
+              valueFrom: { secretKeyRef: { name: shopglobal-db, key: DB_PASSWORD } }
+          readinessProbe: { httpGet: { path: /actuator/health/readiness, port: 8081 }, initialDelaySeconds: 30, periodSeconds: 10 }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: shopglobal-mock-api, namespace: shopglobal-app-uat }
+spec:
+  type: NodePort      # so the Kong API data plane outside the cluster can reach it
+  selector: { app: shopglobal-mock-api }
+  ports: [{ port: 8081, targetPort: 8081, nodePort: 30081 }]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: shopglobal-web, namespace: shopglobal-app-uat }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: shopglobal-web } }
+  template:
+    metadata: { labels: { app: shopglobal-web } }
+    spec:
+      containers:
+        - name: app
+          image: vasudevgudipati/shopglobal-web:1.0.0-uat
+          ports: [{ containerPort: 8080 }]
+          env:
+            - { name: APP_ENV, value: "UAT" }
+            # OAuth 2.0 client credentials (Keycloak) for calls to Kong. The secret lives in a Kubernetes Secret, not in this file:
+            #   kubectl -n shopglobal-app-uat create secret generic shopglobal-oauth --from-literal=OAUTH_CLIENT_SECRET='<secret>'
+            - { name: OAUTH_TOKEN_URL, value: "https://marmalade-ivy-crazed.ngrok-free.dev/realms/demo/protocol/openid-connect/token" }
+            - { name: OAUTH_CLIENT_ID, value: "shopglobal-web" }
+            - name: OAUTH_CLIENT_SECRET
+              valueFrom: { secretKeyRef: { name: shopglobal-oauth, key: OAUTH_CLIENT_SECRET } }
+            # storefront data now goes through the Kong API data plane (OAuth-protected); PROD: REPLACE with the PROD API data plane address
+            - { name: SHOPGLOBAL_API_BASE_URL, value: "http://192.168.19.41:30080" }
+            # remote = the chat goes to the shopglobal-agent service (on the AI server, NodePort 30082); stub = offline rule-based assistant
+            - { name: AGENT_REMOTE_URL, value: "http://192.168.19.42:30082" }
+          readinessProbe: { httpGet: { path: /actuator/health/readiness, port: 8080 }, initialDelaySeconds: 15 }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: shopglobal-web, namespace: shopglobal-app-uat }
+spec:
+  type: NodePort
+  selector: { app: shopglobal-web }
+  ports: [{ port: 8080, targetPort: 8080, nodePort: 30090 }]

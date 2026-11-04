@@ -1,0 +1,54 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: shopglobal-agent
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+# Every value can be overridden with an environment variable (KONG_AI_CHAT_URL, KONG_MCP_URL, APP_ENV, ...).
+app:
+  env: ${APP_ENV:@app.env@}          # UAT | PROD - sent to Kong as X-App-Env, so UAT and PROD can be told apart in logs
+
+agent:
+  model: ${AGENT_MODEL:shopglobal-auto}   # Kong routes "shopglobal-auto" to the small or the strong model; the app never chooses
+  temperature: ""              # empty = do not send; set e.g. 0.2 only if every routed model accepts it
+  max-steps: 6
+  max-history-messages: 40     # the conversation so far is sent on every model call (context)
+  default-customer-id: ${CUSTOMER_ID:CUST-1001}   # no login yet: the customer whose orders/addresses the tools may touch
+  # Tools that change data. The agent never runs these until the customer presses Confirm.
+  write-tools: cancelOrder,changeDeliveryAddress,placeOrder
+
+kong:
+  ai:
+    base-url: ${KONG_AI_BASE_URL:https://shopglobal-ai-uat.pronteff.com:8443}   # PROD differs
+    chat-path: ${KONG_AI_CHAT_PATH:/v1/chat/completions}
+  mcp:
+    path: ${KONG_MCP_PATH:/mcp/marketplace}
+  http:
+    timeout-seconds: 60
+    retry-delay-ms: 500            # wait before the single retry after a 5xx / timeout
+    rate-limit-delay-ms: 2000      # wait before the single retry after a 429 when Kong sends no Retry-After
+    max-retry-after-seconds: 10
+
+# OAuth 2.0 client credentials (Keycloak). Both the LLM and the MCP calls send "Authorization: Bearer <token>".
+# The secret is never stored in Git: set OAUTH_CLIENT_SECRET (environment variable or Kubernetes Secret).
+oauth:
+  token-url: ${OAUTH_TOKEN_URL:https://marmalade-ivy-crazed.ngrok-free.dev/realms/demo/protocol/openid-connect/token}
+  client-id: ${OAUTH_CLIENT_ID:kong-ai-admin}
+  client-secret: ${OAUTH_CLIENT_SECRET:}
+  scope: ${OAUTH_SCOPE:}
+  skew-seconds: 30                 # renew the token this long before it expires
+
+logging:
+  level:
+    com.shopglobal.agent: ${LOG_LEVEL:INFO}   # DEBUG also logs the X-Cache-Status header of each model answer

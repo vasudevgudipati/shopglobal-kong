@@ -1,0 +1,42 @@
+# UAT shopping agent only. Deploy on the cluster of the AI server (192.168.19.42) next to the Kong AI data plane.
+# It needs no database. Image: vasudevgudipati/shopglobal-agent:1.0.0-uat
+#   docker build --build-arg BUILD_ENV=uat -t vasudevgudipati/shopglobal-agent:1.0.0-uat shopglobal-agent
+#
+# Without Kubernetes on that server, run it as a container instead:
+#   docker run -d --name shopglobal-agent --restart unless-stopped -p 30082:8082 -e APP_ENV=UAT \
+#     -e KONG_AI_BASE_URL=<gateway base url> -e OAUTH_CLIENT_SECRET=<secret> vasudevgudipati/shopglobal-agent:1.0.0-uat
+apiVersion: v1
+kind: Namespace
+metadata: { name: shopglobal-app-uat }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: shopglobal-agent, namespace: shopglobal-app-uat }
+spec:
+  replicas: 1         # conversation memory is in-process; Redis-backed memory comes before scaling this out
+  selector: { matchLabels: { app: shopglobal-agent } }
+  template:
+    metadata: { labels: { app: shopglobal-agent } }
+    spec:
+      containers:
+        - name: app
+          image: vasudevgudipati/shopglobal-agent:1.0.0-uat
+          ports: [{ containerPort: 8082 }]
+          env:
+            - { name: APP_ENV, value: "UAT" }
+            - { name: KONG_AI_BASE_URL, value: "https://shopglobal-ai-uat.pronteff.com:8443" }
+            - { name: AGENT_MODEL, value: "shopglobal-auto" }
+            - { name: OAUTH_TOKEN_URL, value: "https://marmalade-ivy-crazed.ngrok-free.dev/realms/demo/protocol/openid-connect/token" }
+            - { name: OAUTH_CLIENT_ID, value: "kong-ai-admin" }
+            # kubectl -n shopglobal-app-uat create secret generic shopglobal-agent-oauth --from-literal=OAUTH_CLIENT_SECRET='<secret>'
+            - name: OAUTH_CLIENT_SECRET
+              valueFrom: { secretKeyRef: { name: shopglobal-agent-oauth, key: OAUTH_CLIENT_SECRET } }
+          readinessProbe: { httpGet: { path: /actuator/health/readiness, port: 8082 }, initialDelaySeconds: 20 }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: shopglobal-agent, namespace: shopglobal-app-uat }
+spec:
+  type: NodePort      # NodePort only so the agent endpoint can be tested directly; the website uses the in-cluster name
+  selector: { app: shopglobal-agent }
+  ports: [{ port: 8082, targetPort: 8082, nodePort: 30082 }]
