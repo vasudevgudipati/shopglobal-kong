@@ -5,6 +5,7 @@ _format_version: "3.0"
 # Paths are anchored regexes ("~" prefix; Konnect accepts RE2 syntax only - no lookahead) so /api/orders does not also swallow /api/orders/{id}.
 # Plugins: CORS, OAuth 2.0 introspection (Keycloak realm demo) and IP restriction apply to every route of the service;
 # Proxy Cache Advanced (Redis) is attached to categories, return-policy (300 s) and order status (30 s); Rate Limiting Advanced is per consumer (100/min, 10/min on infrequent routes).
+# A second service (shopglobal-mock-api-internal) gives the AI gateway server a token-free route, limited to its IP.
 # Secrets are NOT stored here: __KEYCLOAK_BASIC__ and __REDIS_PASSWORD__ are filled in by the Jenkins pipeline at deploy time.
 
 services:
@@ -168,6 +169,42 @@ services:
         tags: [shopglobal, uat, addresses]
 
 # Consumers = applications calling the API. custom_id must equal the Keycloak client id of the application.
+  # ---- Internal route for the AI gateway (MCP tools) ----
+  # The AI gateway server (192.168.19.42) calls /internal/api/... through NGINX. No token check (a server cannot sign in with Keycloak),
+  # so access is limited to that one IP, and rate limited. The real client IP comes from X-Forwarded-For (see helm/uat/common-dp.yaml).
+  # /internal/api/orders -> upstream /api/orders (the route prefix is stripped, the service path adds /api back).
+  - name: shopglobal-mock-api-internal
+    url: http://shopglobal-mock-api.shopglobal-app-uat.svc.cluster.local:8081/api
+    tags: [shopglobal, uat, internal]
+    plugins:
+      - name: ip-restriction
+        config:
+          allow:
+            - 192.168.19.42/32            # AI gateway server only
+          status: 403
+          message: Your IP address is not allowed
+        tags: [shopglobal, uat, internal]
+      - name: rate-limiting-advanced
+        config:
+          limit: [100]
+          window_size: [60]
+          window_type: sliding
+          identifier: ip
+          strategy: redis
+          sync_rate: 1
+          namespace: shopglobal-uat-internal
+          redis:
+            host: redis.shopglobal-uat-api.svc.cluster.local
+            port: 6379
+            password: "__REDIS_PASSWORD__"
+            database: 0
+        tags: [shopglobal, uat, internal]
+    routes:
+      - name: internal-mcp-api
+        paths: ["/internal/api"]
+        strip_path: true
+        tags: [shopglobal, uat, internal]
+
 consumers:
   - username: kong-dev-portal
     custom_id: kong-dev-portal        # = Keycloak client id

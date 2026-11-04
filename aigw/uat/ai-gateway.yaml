@@ -1,0 +1,259 @@
+# ShopGlobal UAT - Konnect AI Gateway "shopglobal-ai-uat" as code (kongctl).
+# Deployed by Jenkins job shopglobal-uat-ai-config (jenkins/uat/ai-config.Jenkinsfile). Do not apply by hand.
+# The gateway itself and its data plane come from the platform pipeline; this file holds what runs on it.
+#
+# Secrets are never stored here. Jenkins passes them as environment variables:
+#   GEMINI_API_KEY      <- credential gemini-api-key
+#   OPENAI_AUTH_HEADER  <- "Bearer " + credential openai-api-key (built in the Jenkinsfile)
+#
+# Clients: POST /v1/chat/completions with  "model": "shopglobal-frontier" | "shopglobal-fast".
+# No client authentication on the AI gateway yet (Keycloak is added later).
+_defaults:
+  kongctl:
+    namespace: shopglobal-uat
+
+ai_gateways:
+  # Existing gateway created once in the Konnect UI; referenced here, not managed.
+  - ref: shopglobal-ai-uat
+    name: shopglobal-ai-uat
+    display_name: shopglobal-ai-uat
+    _external:
+      selector:
+        matchFields:
+          name: shopglobal-ai-uat
+
+# ---------------------------------------------------------------- providers
+ai_gateway_model_providers:
+  - ref: provider-gemini
+    ai_gateway: !ref shopglobal-ai-uat
+    name: shopglobal-gemini
+    display_name: ShopGlobal Gemini
+    type: gemini
+    config:
+      auth:
+        type: basic
+        headers:
+          - name: x-goog-api-key
+            value: !secret {source: !env GEMINI_API_KEY}
+  - ref: provider-openai
+    ai_gateway: !ref shopglobal-ai-uat
+    name: shopglobal-openai
+    display_name: ShopGlobal OpenAI
+    type: openai
+    config:
+      auth:
+        type: basic
+        headers:
+          - name: Authorization
+            value: !secret {source: !env OPENAI_AUTH_HEADER}
+  - ref: provider-ollama
+    ai_gateway: !ref shopglobal-ai-uat
+    name: shopglobal-ollama
+    display_name: ShopGlobal Ollama (fallback)
+    type: ollama
+    config:
+      auth:
+        type: basic
+
+# ---------------------------------------------------------------- models (two routed models, Ollama as fallback)
+# Same base path /v1; the client picks a model with the "model" field of the request body.
+# Fallback: the cloud model has the higher weight; on 429/5xx/timeout the gateway moves to the Ollama target.
+ai_gateway_models:
+  - ref: model-frontier
+    ai_gateway: !ref shopglobal-ai-uat
+    name: shopglobal-frontier
+    display_name: ShopGlobal frontier (complex requests)
+    type: model
+    capabilities:
+      - generate
+    formats:
+      - type: openai
+    config:
+      route:
+        paths:
+          - /v1
+        model:
+          body_param: model
+          values:
+            - shopglobal-frontier
+      balancer:
+        algorithm: priority
+        failover_criteria: [error, timeout, http_429, http_500, http_502, http_503, http_504, non_idempotent]
+    targets:
+      - name: gemini-3.8-flash
+        provider: shopglobal-gemini
+        weight: 100
+        config:
+          type: gemini
+      - name: llama3.2
+        provider: shopglobal-ollama
+        weight: 1
+        config:
+          type: ollama
+          upstream_url: http://192.168.19.42:11434
+
+  - ref: model-fast
+    ai_gateway: !ref shopglobal-ai-uat
+    name: shopglobal-fast
+    display_name: ShopGlobal fast (simple requests)
+    type: model
+    capabilities:
+      - generate
+    formats:
+      - type: openai
+    config:
+      route:
+        paths:
+          - /v1
+        model:
+          body_param: model
+          values:
+            - shopglobal-fast
+      balancer:
+        algorithm: priority
+        failover_criteria: [error, timeout, http_429, http_500, http_502, http_503, http_504, non_idempotent]
+    targets:
+      - name: gpt-5-mini
+        provider: shopglobal-openai
+        weight: 100
+        config:
+          type: openai
+      - name: llama3.2
+        provider: shopglobal-ollama
+        weight: 1
+        config:
+          type: ollama
+          upstream_url: http://192.168.19.42:11434
+
+# ---------------------------------------------------------------- MCP: the ShopGlobal Marketplace API as MCP tools
+# Generated from apiops/uat/openapi.yaml (12 operations). Tools call the API gateway through NGINX, on the internal
+# route /internal/api/... (apiops/uat/kong.yaml), which only accepts this server's IP (192.168.19.42) and needs no token.
+# MCP clients connect to  https://shopglobal-ai-uat.pronteff.com:8443/mcp/marketplace
+ai_gateway_mcp_servers:
+  - ref: mcp-marketplace
+    ai_gateway: !ref shopglobal-ai-uat
+    name: shopglobal-marketplace-mcp
+    display_name: ShopGlobal Marketplace API
+    type: conversion-listener
+    enabled: true
+    config:
+      url: https://shopglobal-api-uat.pronteff.com:8443
+      route:
+        paths:
+          - /mcp/marketplace
+    tools:
+      - name: searchProducts
+        description: Search products
+        method: GET
+        path: /internal/api/products
+        annotations:
+          read_only_hint: true
+      - name: compareProducts
+        description: Compare products
+        method: GET
+        path: /internal/api/products/compare
+        annotations:
+          read_only_hint: true
+      - name: getProduct
+        description: Get one product
+        method: GET
+        path: /internal/api/products/{productId}
+        parameters:
+        - name: productId
+          in: path
+          required: true
+          description: productId
+          schema:
+            type: string
+        annotations:
+          read_only_hint: true
+      - name: listCategories
+        description: List product categories
+        method: GET
+        path: /internal/api/categories
+        annotations:
+          read_only_hint: true
+      - name: getReturnPolicy
+        description: Get the store return policy
+        method: GET
+        path: /internal/api/return-policy
+        annotations:
+          read_only_hint: true
+      - name: getOrderReturnPolicies
+        description: Get the return policies that apply to an order
+        method: GET
+        path: /internal/api/orders/{orderId}/return-policies
+        parameters:
+        - name: orderId
+          in: path
+          required: true
+          description: orderId
+          schema:
+            type: string
+        annotations:
+          read_only_hint: true
+      - name: listOrders
+        description: List orders
+        method: GET
+        path: /internal/api/orders
+        annotations:
+          read_only_hint: true
+      - name: placeOrder
+        description: Place an order. Storefront use only.
+        method: POST
+        path: /internal/api/orders
+        request_body:
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+      - name: getOrderStatus
+        description: Get the status of an order
+        method: GET
+        path: /internal/api/orders/{orderId}
+        parameters:
+        - name: orderId
+          in: path
+          required: true
+          description: orderId
+          schema:
+            type: string
+        annotations:
+          read_only_hint: true
+      - name: cancelOrder
+        description: Cancel an order
+        method: POST
+        path: /internal/api/orders/{orderId}/cancel
+        parameters:
+        - name: orderId
+          in: path
+          required: true
+          description: orderId
+          schema:
+            type: string
+        annotations:
+          destructive_hint: true
+      - name: changeDeliveryAddress
+        description: Change the delivery address of an order
+        method: PUT
+        path: /internal/api/orders/{orderId}/address
+        parameters:
+        - name: orderId
+          in: path
+          required: true
+          description: orderId
+          schema:
+            type: string
+        request_body:
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+      - name: listSavedAddresses
+        description: List saved addresses
+        method: GET
+        path: /internal/api/addresses
+        annotations:
+          read_only_hint: true

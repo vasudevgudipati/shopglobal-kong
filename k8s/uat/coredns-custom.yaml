@@ -1,0 +1,14 @@
+# k3s on 192.168.19.42: let pods (the AI data plane) resolve the API gateway edge name.
+# Separate server block, because the default CoreDNS config already uses the "hosts" plugin once.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coredns-custom
+  namespace: kube-system
+data:
+  shopglobal.server: |
+    shopglobal-api-uat.pronteff.com:53 {
+      hosts {
+        192.168.19.41 shopglobal-api-uat.pronteff.com
+      }
+    }

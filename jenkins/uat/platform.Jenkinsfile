@@ -1,6 +1,6 @@
 // ShopGlobal Kong - UAT PLATFORM pipeline (run rarely: new environment, chart or image upgrade).
 // Jenkins script path: jenkins/uat/platform.Jenkinsfile
-// Creates/updates: API control plane + Dev Portal (Terraform), API data plane and Redis (.41), AI gateway data plane (.42).
+// Creates/updates: API control plane + Dev Portal (Terraform), API data plane and Redis (.41), AI cluster DNS and AI gateway data plane (.42).
 // Does NOT touch routes/services - that is the api-config pipeline.
 // API gateway (classic control plane, Terraform)  -> k3s on 192.168.19.41
 // AI gateway  (Konnect AI Gateway, created in UI) -> k3s on 192.168.19.42
@@ -87,6 +87,17 @@ pipeline {
             kubectl --kubeconfig $KC_API -n $NS_API rollout status deployment/redis --timeout=180s
           '''
         }
+      }
+    }
+    stage('AI cluster DNS (.42)') {
+      steps {
+        // Lets pods on .42 (the AI data plane) resolve the API gateway edge name, so MCP tools can call it.
+        sh '''
+          set -e
+          kubectl --kubeconfig $KC_AI apply -f k8s/uat/coredns-custom.yaml
+          kubectl --kubeconfig $KC_AI -n kube-system rollout restart deploy coredns
+          kubectl --kubeconfig $KC_AI -n kube-system rollout status deploy coredns --timeout=120s
+        '''
       }
     }
     stage('AI gateway: certificate and data plane (.42)') {
