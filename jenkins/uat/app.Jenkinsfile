@@ -27,6 +27,7 @@ pipeline {
           sh '''
             set -e
             kubectl --kubeconfig $KC_API -n $NS get secret shopglobal-db >/dev/null 2>&1 || { echo "MISSING on .41: secret shopglobal-db (create it once, see DEPLOY.md)"; exit 1; }
+            kubectl --kubeconfig $KC_AI create namespace $NS --dry-run=client -o yaml | kubectl --kubeconfig $KC_AI apply -f -
             printf %s "$AI_SECRET" | kubectl --kubeconfig $KC_AI -n $NS create secret generic shopglobal-agent-oauth \
               --from-file=OAUTH_CLIENT_SECRET=/dev/stdin --dry-run=client -o yaml | kubectl --kubeconfig $KC_AI apply -f -
           '''
