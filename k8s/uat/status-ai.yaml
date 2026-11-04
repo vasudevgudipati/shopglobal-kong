@@ -1,0 +1,15 @@
+# In-cluster address of the AI gateway data plane's status port (Prometheus metrics at /metrics).
+apiVersion: v1
+kind: Service
+metadata:
+  name: kong-ai-gw-status
+  namespace: shopglobal-uat-ai
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: kong
+    app.kubernetes.io/instance: kong-ai-gw
+  ports:
+    - name: status
+      port: 8100
+      targetPort: 8100

@@ -15,7 +15,9 @@
 #   Redis password: not in this file. Policies and the router use the Kong vault reference {vault://env/redis-password};
 #   the data plane reads it from the env var REDIS_PASSWORD (helm/uat/ai-dp.yaml, Secret redis-auth).
 #   The semantic cache's OpenAI embeddings header uses {vault://env/openai-auth-header} (env OPENAI_AUTH_HEADER, Secret openai-auth).
-# No client authentication on the AI gateway yet (Keycloak is added later).
+# Client authentication: Keycloak (realm demo) via the auth strategy shopglobal-keycloak; every model and the MCP server require a Bearer token.
+#   KEYCLOAK_AI_CLIENT_SECRET <- credential keycloak-ai-client-secret
+# Logs: HTTP Log policy -> OpenSearch (header from the vault ref {vault://env/opensearch-auth}, env OPENSEARCH_AUTH, Secret opensearch-auth). Metrics: Prometheus policy.
 _defaults:
   kongctl:
     namespace: shopglobal-uat
@@ -169,6 +171,97 @@ ai_gateway_policies:
 # ---------------------------------------------------------------- models (two routed models, Ollama as fallback)
 # Same base path /v1; the client picks a model with the "model" field of the request body.
 # Fallback: the cloud model has the higher weight; on 429/5xx/timeout the gateway moves to the Ollama target.
+  # ---- Observability (global: every model and MCP server)
+  - ref: pol-http-log
+    ai_gateway: !ref shopglobal-ai-uat
+    name: shopglobal-http-log
+    display_name: ShopGlobal HTTP log to OpenSearch
+    type: http-log
+    enabled: true
+    global: true
+    config:
+      http_endpoint: https://sso.pronteff.com:9200/kong-shopglobal-uat/_doc
+      method: POST
+      content_type: application/json
+      timeout: 10000
+      keepalive: 60000
+      headers:
+        Authorization: "{vault://env/opensearch-auth}"
+      queue:
+        max_batch_size: 1
+        max_entries: 10000
+        max_coalescing_delay: 1
+        max_retry_time: 60
+        initial_retry_delay: 0.01
+        max_retry_delay: 60
+      custom_fields_by_lua:
+        # Sensitive data masking (fields of the ShopGlobal API contract + account_id/balance). Response body is re-encoded with them replaced.
+        response_body: |
+          local body = kong.service.response.get_raw_body()
+          if not body then return nil end
+          local ok, data = pcall(cjson.decode, body)
+          if not ok or type(data) ~= "table" then
+            return "[REDACTED: invalid or non-JSON response]"
+          end
+          local mask = {
+            account_id = true, balance = true,
+            customerId = true, phone = true, address = true,
+            line1 = true, line2 = true, city = true, state = true, pincode = true,
+            payment = true,
+          }
+          local function walk(t)
+            if t.line1 ~= nil or t.pincode ~= nil then t.name = "[REDACTED]" end
+            for k, v in pairs(t) do
+              if type(k) == "string" and mask[k] then
+                t[k] = "[REDACTED]"
+              elseif type(v) == "table" then
+                walk(v)
+              end
+            end
+          end
+          walk(data)
+          return cjson.encode(data)
+        # Credentials never reach OpenSearch.
+        "request.headers.authorization": "return nil"
+        "request.headers.proxy-authorization": "return nil"
+        "request.headers.cookie": "return nil"
+        "request.headers.x-customer-id": "return '[REDACTED]'"
+
+  - ref: pol-prometheus
+    ai_gateway: !ref shopglobal-ai-uat
+    name: shopglobal-prometheus
+    display_name: ShopGlobal Prometheus metrics
+    type: prometheus
+    enabled: true
+    global: true
+    config:
+      status_code_metrics: true
+      latency_metrics: true
+      bandwidth_metrics: true
+      upstream_health_metrics: true
+      ai_metrics: true
+      per_consumer: true
+
+# ---------------------------------------------------------------- authentication (Keycloak)
+ai_gateway_auth_strategies:
+  - ref: auth-keycloak
+    ai_gateway: !ref shopglobal-ai-uat
+    name: shopglobal-keycloak
+    display_name: ShopGlobal Keycloak
+    type: openid-connect
+    config:
+      issuer: https://marmalade-ivy-crazed.ngrok-free.dev/realms/demo
+      client_id:
+        - shopglobal-ai-gateway
+      client_secret:
+        - !secret {source: !env KEYCLOAK_AI_CLIENT_SECRET}
+      auth_methods:
+        - bearer
+      scopes:
+        - openid
+      cache_tokens_salt: shopglobal-keycloak-uat
+      consumer_optional: true
+
 ai_gateway_models:
   - ref: model-frontier
     ai_gateway: !ref shopglobal-ai-uat
@@ -180,6 +273,9 @@ ai_gateway_models:
     formats:
       - type: openai
     policies: [ !ref pol-prompt-guard#name, !ref pol-prompt-decorator#name, !ref pol-ai-rate-limit#name ]
+    access:
+      auth_strategies:
+        - !ref auth-keycloak#name
     config:
       route:
         paths:
@@ -214,6 +310,9 @@ ai_gateway_models:
     formats:
       - type: openai
     policies: [ !ref pol-prompt-guard#name, !ref pol-prompt-decorator#name, !ref pol-ai-rate-limit#name ]
+    access:
+      auth_strategies:
+        - !ref auth-keycloak#name
     config:
       route:
         paths:
@@ -253,6 +352,9 @@ ai_gateway_models:
     formats:
       - type: openai
     policies: [ !ref pol-prompt-guard#name, !ref pol-prompt-decorator#name, !ref pol-ai-rate-limit#name ]
+    access:
+      auth_strategies:
+        - !ref auth-keycloak#name
     config:
       route:
         paths:
@@ -309,6 +411,9 @@ ai_gateway_models:
     formats:
       - type: openai
     policies: [ !ref pol-prompt-guard#name, !ref pol-prompt-decorator#name, !ref pol-semantic-cache#name, !ref pol-ai-rate-limit#name ]
+    access:
+      auth_strategies:
+        - !ref auth-keycloak#name
     config:
       route:
         paths:
@@ -346,6 +451,9 @@ ai_gateway_mcp_servers:
     display_name: ShopGlobal Marketplace API
     type: conversion-listener
     enabled: true
+    access:
+      auth_strategies:
+        - !ref auth-keycloak#name
     config:
       url: https://shopglobal-api-uat.pronteff.com:8443
       route:

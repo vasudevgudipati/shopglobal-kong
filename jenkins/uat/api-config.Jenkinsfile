@@ -22,11 +22,12 @@ pipeline {
     stage('Render config (inject secrets)') {
       steps {
         withCredentials([string(credentialsId: 'keycloak-introspect-basic', variable: 'KC_BASIC'),
-                         string(credentialsId: 'redis-password', variable: 'REDIS_PW')]) {
+                         string(credentialsId: 'redis-password', variable: 'REDIS_PW'),
+                         string(credentialsId: 'opensearch-basic', variable: 'OS_AUTH')]) {
           sh '''
             set -e
             umask 077
-            sed -e "s#__KEYCLOAK_BASIC__#${KC_BASIC}#g" -e "s#__REDIS_PASSWORD__#${REDIS_PW}#g" apiops/$ENV_NAME/kong.yaml > "$RENDERED"
+            sed -e "s#__KEYCLOAK_BASIC__#${KC_BASIC}#g" -e "s#__REDIS_PASSWORD__#${REDIS_PW}#g" -e "s#__OPENSEARCH_AUTH__#${OS_AUTH}#g" apiops/$ENV_NAME/kong.yaml > "$RENDERED"
             if grep -q '__[A-Z_]*__' "$RENDERED"; then echo "ERROR: a secret placeholder was not replaced"; rm -f "$RENDERED"; exit 1; fi
             echo "rendered $(wc -l < "$RENDERED") lines"
           '''

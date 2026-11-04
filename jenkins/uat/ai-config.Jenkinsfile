@@ -24,7 +24,8 @@ pipeline {
       steps {
         withCredentials([string(credentialsId: 'konnect-pat',       variable: 'KONNECT_TOKEN'),
                          string(credentialsId: 'gemini-api-key',    variable: 'GEMINI_API_KEY'),
-                         string(credentialsId: 'openai-api-key',    variable: 'OPENAI_KEY')]) {
+                         string(credentialsId: 'openai-api-key',    variable: 'OPENAI_KEY'),
+                         string(credentialsId: 'keycloak-ai-client-secret', variable: 'KEYCLOAK_AI_CLIENT_SECRET')]) {
           sh '''
             set -e
             export OPENAI_AUTH_HEADER="Bearer $OPENAI_KEY"
@@ -38,7 +39,8 @@ pipeline {
       steps {
         withCredentials([string(credentialsId: 'konnect-pat',       variable: 'KONNECT_TOKEN'),
                          string(credentialsId: 'gemini-api-key',    variable: 'GEMINI_API_KEY'),
-                         string(credentialsId: 'openai-api-key',    variable: 'OPENAI_KEY')]) {
+                         string(credentialsId: 'openai-api-key',    variable: 'OPENAI_KEY'),
+                         string(credentialsId: 'keycloak-ai-client-secret', variable: 'KEYCLOAK_AI_CLIENT_SECRET')]) {
           sh '''
             set -e
             export OPENAI_AUTH_HEADER="Bearer $OPENAI_KEY"

@@ -43,3 +43,11 @@ AI gateway (aigw/uat/ai-gateway.yaml, deployed by the ai-config pipeline)
 - MCP server `shopglobal-marketplace-mcp` on `/mcp/marketplace`: the 12 operations of apiops/uat/openapi.yaml as MCP tools, calling the API gateway through NGINX on the internal route `/internal/api` (service shopglobal-mock-api-internal in apiops/uat/kong.yaml): no token, allowed only from 192.168.19.42, 100 per minute.
 - The AI data plane resolves `shopglobal-api-uat.pronteff.com` through the CoreDNS override k8s/uat/coredns-custom.yaml (platform pipeline).
 - First run: leave DIFF_ONLY ticked (default), read the diff, then untick.
+
+## Observability and AI gateway authentication (added 2026-11-04)
+- Backup: `jenkins/uat/backup.Jenkinsfile` (decK + kongctl dumps archived by Jenkins). Tag the repo before big changes.
+- Logs: HTTP Log to OpenSearch index `kong-shopglobal-uat` on both gateways (API: global plugin in `apiops/uat/kong.yaml`; AI: policy `shopglobal-http-log`).
+  The Lua in `custom_fields_by_lua` masks account_id, balance, customerId, name (address records), phone, address, line1, line2, city, state, pincode, payment in the response body and removes Authorization, Proxy-Authorization, Cookie and X-Customer-Id from the logged request. Jenkins credential `opensearch-basic` (Secret text, whole header value "Basic ...").
+- Metrics: Prometheus plugin on both gateways, status port 8100. Prometheus runs on .42 (`k8s/uat/prometheus.yaml`, NodePort 30091); API DP status is NodePort 30100 on .41. Grafana dashboard: `grafana/kong-shopglobal.json`, loaded by `jenkins/uat/observability.Jenkinsfile` (credential `grafana-token`).
+- Keycloak: auth strategy `shopglobal-keycloak` (OIDC, bearer) on all AI models and the MCP server. Keycloak client `shopglobal-ai-gateway`; secret in Jenkins credential `keycloak-ai-client-secret`. Needs kongctl with AI auth strategy support (docs: v1.24+).
+- Run order: platform (Metrics + secrets) -> api-config -> ai-config -> observability.

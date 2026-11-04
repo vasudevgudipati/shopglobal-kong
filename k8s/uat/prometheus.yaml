@@ -1,0 +1,84 @@
+# Prometheus for the Kong gateways (cluster on .42). Scrapes the AI data plane in-cluster and the API data plane on 192.168.19.41:30100.
+# Grafana reaches it at http://192.168.19.42:30091 . Data kept 15 days on a 5Gi volume.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoring
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: monitoring
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+    scrape_configs:
+      - job_name: kong-ai
+        metrics_path: /metrics
+        static_configs:
+          - targets: ["kong-ai-gw-status.shopglobal-uat-ai.svc.cluster.local:8100"]
+            labels: { gateway: ai, env: uat }
+      - job_name: kong-api
+        metrics_path: /metrics
+        static_configs:
+          - targets: ["192.168.19.41:30100"]
+            labels: { gateway: api, env: uat }
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: prometheus-data
+  namespace: monitoring
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus
+  namespace: monitoring
+spec:
+  replicas: 1
+  strategy: { type: Recreate }
+  selector:
+    matchLabels: { app: prometheus }
+  template:
+    metadata:
+      labels: { app: prometheus }
+    spec:
+      securityContext: { fsGroup: 65534, runAsUser: 65534, runAsNonRoot: true }
+      containers:
+        - name: prometheus
+          image: prom/prometheus:v2.55.1
+          args:
+            - --config.file=/etc/prometheus/prometheus.yml
+            - --storage.tsdb.path=/prometheus
+            - --storage.tsdb.retention.time=15d
+            - --web.enable-lifecycle
+          ports: [{ containerPort: 9090 }]
+          readinessProbe: { httpGet: { path: /-/ready, port: 9090 } }
+          resources: { requests: { cpu: 100m, memory: 512Mi } }
+          volumeMounts:
+            - { name: config, mountPath: /etc/prometheus }
+            - { name: data, mountPath: /prometheus }
+      volumes:
+        - name: config
+          configMap: { name: prometheus-config }
+        - name: data
+          persistentVolumeClaim: { claimName: prometheus-data }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus
+  namespace: monitoring
+spec:
+  type: NodePort
+  selector: { app: prometheus }
+  ports:
+    - { name: web, port: 9090, targetPort: 9090, nodePort: 30091 }

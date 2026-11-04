@@ -71,6 +71,7 @@ pipeline {
               --set env.cluster_control_plane=$CP:443 --set env.cluster_server_name=$CP \
               --set env.cluster_telemetry_endpoint=$TP:443 --set env.cluster_telemetry_server_name=$TP \
               --set env.cluster_dp_labels="env:uat\\,type:api" \
+              --set status.enabled=true --set status.http.enabled=true --set status.http.containerPort=8100 \
               --wait --timeout 8m
           '''
         }
@@ -126,6 +127,18 @@ pipeline {
         }
       }
     }
+    stage('OpenSearch log secret (.42)') {
+      steps {
+        // Header value ("Basic ...") for the AI gateway's HTTP Log policy. The API gateway gets it from api-config instead.
+        withCredentials([string(credentialsId: 'opensearch-basic', variable: 'OS_AUTH')]) {
+          sh '''
+            set -e
+            kubectl --kubeconfig $KC_AI create namespace $NS_AI --dry-run=client -o yaml | kubectl --kubeconfig $KC_AI apply -f -
+            printf %s "$OS_AUTH" | kubectl --kubeconfig $KC_AI -n $NS_AI create secret generic opensearch-auth --from-file=header=/dev/stdin --dry-run=client -o yaml | kubectl --kubeconfig $KC_AI apply -f -
+          '''
+        }
+      }
+    }
     stage('AI gateway: certificate and data plane (.42)') {
       steps {
         withCredentials([file(credentialsId: 'ai-gw-tls-crt', variable: 'AI_CRT'),
@@ -143,6 +156,17 @@ pipeline {
               --wait --timeout 10m
           '''
         }
+      }
+    }
+    stage('Metrics: status endpoints and Prometheus') {
+      steps {
+        sh '''
+          set -e
+          kubectl --kubeconfig $KC_API apply -f k8s/uat/status-api.yaml
+          kubectl --kubeconfig $KC_AI  apply -f k8s/uat/status-ai.yaml
+          kubectl --kubeconfig $KC_AI  apply -f k8s/uat/prometheus.yaml
+          kubectl --kubeconfig $KC_AI -n monitoring rollout status deployment/prometheus --timeout=180s
+        '''
       }
     }
   }

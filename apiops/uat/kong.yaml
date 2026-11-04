@@ -356,3 +356,64 @@ plugins:
         password: "__REDIS_PASSWORD__"
         database: 0
     tags: [shopglobal, uat]
+
+# ---------------------------------------------------------------- observability (global plugins, every service and route)
+# HTTP Log -> OpenSearch index kong-shopglobal-uat (sensitive fields masked by Lua). __OPENSEARCH_AUTH__ is filled in by Jenkins (credential opensearch-basic).
+# Prometheus -> metrics on the data plane status port (8100), scraped by Prometheus (k8s/uat/prometheus.yaml).
+plugins:
+  - name: http-log
+    config:
+      http_endpoint: https://sso.pronteff.com:9200/kong-shopglobal-uat/_doc
+      method: POST
+      content_type: application/json
+      timeout: 10000
+      keepalive: 60000
+      headers:
+        Authorization: "__OPENSEARCH_AUTH__"
+      queue:
+        max_batch_size: 1
+        max_entries: 10000
+        max_coalescing_delay: 1
+        max_retry_time: 60
+        initial_retry_delay: 0.01
+        max_retry_delay: 60
+      custom_fields_by_lua:
+        # Sensitive data masking (fields of the ShopGlobal API contract + account_id/balance). Response body is re-encoded with them replaced.
+        response_body: |
+          local body = kong.service.response.get_raw_body()
+          if not body then return nil end
+          local ok, data = pcall(cjson.decode, body)
+          if not ok or type(data) ~= "table" then
+            return "[REDACTED: invalid or non-JSON response]"
+          end
+          local mask = {
+            account_id = true, balance = true,
+            customerId = true, phone = true, address = true,
+            line1 = true, line2 = true, city = true, state = true, pincode = true,
+            payment = true,
+          }
+          local function walk(t)
+            if t.line1 ~= nil or t.pincode ~= nil then t.name = "[REDACTED]" end
+            for k, v in pairs(t) do
+              if type(k) == "string" and mask[k] then
+                t[k] = "[REDACTED]"
+              elseif type(v) == "table" then
+                walk(v)
+              end
+            end
+          end
+          walk(data)
+          return cjson.encode(data)
+        # Credentials never reach OpenSearch.
+        "request.headers.authorization": "return nil"
+        "request.headers.proxy-authorization": "return nil"
+        "request.headers.cookie": "return nil"
+        "request.headers.x-customer-id": "return '[REDACTED]'"
+  - name: prometheus
+    config:
+      status_code_metrics: true
+      latency_metrics: true
+      bandwidth_metrics: true
+      upstream_health_metrics: true
+      ai_metrics: true
+      per_consumer: true
