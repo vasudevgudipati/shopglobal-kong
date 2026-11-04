@@ -59,14 +59,9 @@ spec:
           ports: [{ containerPort: 8080 }]
           env:
             - { name: APP_ENV, value: "UAT" }
-            # OAuth 2.0 client credentials (Keycloak) for calls to Kong. The secret lives in a Kubernetes Secret, not in this file:
-            #   kubectl -n shopglobal-app-uat create secret generic shopglobal-oauth --from-literal=OAUTH_CLIENT_SECRET='<secret>'
-            - { name: OAUTH_TOKEN_URL, value: "https://marmalade-ivy-crazed.ngrok-free.dev/realms/demo/protocol/openid-connect/token" }
-            - { name: OAUTH_CLIENT_ID, value: "shopglobal-web" }
-            - name: OAUTH_CLIENT_SECRET
-              valueFrom: { secretKeyRef: { name: shopglobal-oauth, key: OAUTH_CLIENT_SECRET } }
-            # storefront data now goes through the Kong API data plane (OAuth-protected); PROD: REPLACE with the PROD API data plane address
-            - { name: SHOPGLOBAL_API_BASE_URL, value: "http://192.168.19.41:30080" }
+            # The website reads the marketplace API directly (mock API NodePort, no token). To go through the Kong API gateway
+            # (http://192.168.19.41:30080) later, add a Keycloak client + Kong consumer "shopglobal-web" and the OAUTH_* variables.
+            - { name: SHOPGLOBAL_API_BASE_URL, value: "http://192.168.19.41:30081" }
             # remote = the chat goes to the shopglobal-agent service (on the AI server, NodePort 30082); stub = offline rule-based assistant
             - { name: AGENT_REMOTE_URL, value: "http://192.168.19.42:30082" }
           readinessProbe: { httpGet: { path: /actuator/health/readiness, port: 8080 }, initialDelaySeconds: 15 }
