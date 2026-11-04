@@ -114,6 +114,7 @@ ai_gateway_policies:
     type: ai-semantic-cache
     enabled: true
     global: false
+    condition: 'has(kong.ctx.shared.cache_ok) && kong.ctx.shared.cache_ok == "yes"'
     config:
       message_countback: 1            # only the customer's last message is compared
       cache_ttl: 3600
@@ -136,6 +137,67 @@ ai_gateway_policies:
           port: 6379
           password: "{vault://env/redis-password}"
           database: 0               # Redis search (vector index) only works in database 0
+
+  # Cache gate (Pre-Function, runs before every other policy): marks generic return-policy questions as cacheable.
+  # The semantic cache below has a condition that reads this mark, so the caching decision is made at Kong, not in the agent.
+  - ref: pol-cache-gate
+    ai_gateway: !ref shopglobal-ai-uat
+    name: shopglobal-cache-gate
+    display_name: ShopGlobal cache gate (generic return-policy questions)
+    type: pre-function
+    enabled: true
+    global: false
+    config:
+      access:
+        - |
+          -- Cache gate: decides at the gateway whether the semantic cache may serve / store this request.
+          -- Cacheable = a GENERIC return / refund / exchange policy question (English, Hindi, Hinglish) in the customer's last message.
+          -- Never cacheable: order or product ids, "my / this / bought" style personal questions, named products or categories,
+          -- tracking / cancel / address requests, and any request whose last message is not from the customer (tool results).
+          kong.ctx.shared.cache_ok = "no"
+          local okj, cjson = pcall(require, "cjson.safe")
+          if not okj then return end
+          local raw = kong.request.get_raw_body()
+          if not raw then return end
+          local body = cjson.decode(raw)
+          if type(body) ~= "table" or type(body.messages) ~= "table" then return end
+          local m = body.messages[#body.messages]
+          if type(m) ~= "table" or m.role ~= "user" then return end
+          local text = m.content
+          if type(text) == "table" then
+            local parts = {}
+            for _, p in ipairs(text) do
+              if type(p) == "table" and type(p.text) == "string" then parts[#parts + 1] = p.text end
+            end
+            text = table.concat(parts, " ")
+          end
+          if type(text) ~= "string" or #text < 8 or #text > 300 then return end
+          if string.find(text, "[Oo][Rr][Dd]%s*%-?%s*%d") or string.find(text, "[Pp]%d%d%d") then return end
+          local t = string.lower(text)
+          t = string.gsub(t, "%p", " ")
+          t = string.gsub(t, "%s+", " ")
+          t = " " .. t .. " "
+          local function has(list)
+            for _, w in ipairs(list) do
+              if string.find(t, w, 1, true) then return true end
+            end
+            return false
+          end
+          local topic = { "return", "refund", "exchange", "replace", "wapas", "vapas", "vapsi",
+            "वापस", "वापसी", "रिफंड", "एक्सचेंज" }
+          local ask = { "policy", "rule", "how long", "how many", "how do", "how does", "how to", "eligible", "allowed",
+            "can i", "do you", "days", "window", "process", "condition", "time limit", "charges",
+            "नीति", "पॉलिसी", "नियम", "दिन", "कैसे", "कितने", "क्या", "समय", "niyam", "niti", "kitne din", "kaise", "kya" }
+          local personal = { " my ", " mine ", " this ", " that ", " these ", " those ", " it ", " its ", " bought ", " ordered ",
+            " received ", " i got ", " where ", " status ", " track", "cancel", "address", "deliver",
+            " मेरा ", " मेरी ", " मेरे ", " मैंने ", " खरीदा ", " यह ", " इस ", " उस ", "कहाँ", "कहां", "कैंसल", "ट्रैक", "डिलीवर", "पता ",
+            " mera ", " meri ", " mere ", " maine ", " kharida ", " kahan " }
+          local named = { "shoe", "footwear", "sneaker", "jacket", "trouser", "jean", "shirt", "dress", "kurta", "saree", "electronic",
+            "headphone", "phone", "laptop", "watch", "kettle", "lipstick", "beauty", "kitchen", "fashion", "furniture", "toy",
+            "जूते", "जूता", "कपड़े", "जैकेट", "फोन", "मोबाइल", "जींस" }
+          if has(topic) and has(ask) and not has(personal) and not has(named) then
+            kong.ctx.shared.cache_ok = "yes"
+          end
 
   # AI Rate Limiting Advanced: token quotas, counted in Redis. No client identity on the AI gateway yet, so the quota is per model;
   # add a consumer / consumer_group match here when Keycloak (OIDC) is enabled.
@@ -245,7 +307,25 @@ ai_gateway_policies:
       ai_metrics: true
       per_consumer: true
 
-# Keycloak authentication is on hold: see aigw/uat/keycloak-auth.yaml.disabled (the auth strategy and the 'access' blocks for models and the MCP server).
+# ---------------------------------------------------------------- authentication (Keycloak)
+ai_gateway_auth_strategies:
+  - ref: auth-keycloak
+    ai_gateway: !ref shopglobal-ai-uat
+    name: shopglobal-keycloak
+    display_name: ShopGlobal Keycloak
+    type: openid-connect
+    config:
+      issuer: https://marmalade-ivy-crazed.ngrok-free.dev/realms/demo
+      client_id:
+        - kong-ai-admin
+      client_secret:
+        - !secret {source: !env KEYCLOAK_AI_CLIENT_SECRET}
+      auth_methods:
+        - bearer
+      scopes:
+        - openid
+      cache_tokens_salt: shopglobal-keycloak-uat
+      consumer_optional: true
 
 ai_gateway_models:
   - ref: model-frontier
@@ -258,6 +338,9 @@ ai_gateway_models:
     formats:
       - type: openai
     policies: [ !ref pol-prompt-guard#name, !ref pol-prompt-decorator#name, !ref pol-ai-rate-limit#name ]
+    access:
+      auth_strategies:
+        - !ref auth-keycloak#name
     config:
       route:
         paths:
@@ -292,6 +375,9 @@ ai_gateway_models:
     formats:
       - type: openai
     policies: [ !ref pol-prompt-guard#name, !ref pol-prompt-decorator#name, !ref pol-ai-rate-limit#name ]
+    access:
+      auth_strategies:
+        - !ref auth-keycloak#name
     config:
       route:
         paths:
@@ -330,7 +416,10 @@ ai_gateway_models:
       - generate
     formats:
       - type: openai
-    policies: [ !ref pol-prompt-guard#name, !ref pol-prompt-decorator#name, !ref pol-ai-rate-limit#name ]
+    policies: [ !ref pol-cache-gate#name, !ref pol-prompt-guard#name, !ref pol-prompt-decorator#name, !ref pol-semantic-cache#name, !ref pol-ai-rate-limit#name ]
+    access:
+      auth_strategies:
+        - !ref auth-keycloak#name
     config:
       route:
         paths:
@@ -386,7 +475,10 @@ ai_gateway_models:
       - generate
     formats:
       - type: openai
-    policies: [ !ref pol-prompt-guard#name, !ref pol-prompt-decorator#name, !ref pol-semantic-cache#name, !ref pol-ai-rate-limit#name ]
+    policies: [ !ref pol-cache-gate#name, !ref pol-prompt-guard#name, !ref pol-prompt-decorator#name, !ref pol-semantic-cache#name, !ref pol-ai-rate-limit#name ]
+    access:
+      auth_strategies:
+        - !ref auth-keycloak#name
     config:
       route:
         paths:
@@ -424,6 +516,9 @@ ai_gateway_mcp_servers:
     display_name: ShopGlobal Marketplace API
     type: conversion-listener
     enabled: true
+    access:
+      auth_strategies:
+        - !ref auth-keycloak#name
     config:
       url: https://shopglobal-api-uat.pronteff.com:8443
       route:
