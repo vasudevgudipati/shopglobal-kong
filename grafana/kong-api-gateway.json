@@ -1,0 +1,187 @@
+{
+ "uid": "shopglobal-kong-api",
+ "title": "ShopGlobal - API Gateway (UAT)",
+ "tags": [
+  "shopglobal",
+  "kong",
+  "api"
+ ],
+ "timezone": "browser",
+ "schemaVersion": 39,
+ "version": 1,
+ "refresh": "30s",
+ "time": {
+  "from": "now-3h",
+  "to": "now"
+ },
+ "panels": [
+  {
+   "id": 1,
+   "type": "timeseries",
+   "title": "Requests/s by service",
+   "datasource": {
+    "type": "prometheus",
+    "uid": "shopglobal-prom"
+   },
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 0,
+    "y": 0
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "reqps"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "sum(rate(kong_http_requests_total{gateway=\"api\"}[1m])) by (service)",
+     "legendFormat": "{{service}}"
+    }
+   ]
+  },
+  {
+   "id": 2,
+   "type": "timeseries",
+   "title": "Requests/s by status code",
+   "datasource": {
+    "type": "prometheus",
+    "uid": "shopglobal-prom"
+   },
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 12,
+    "y": 0
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "reqps"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "sum(rate(kong_http_requests_total{gateway=\"api\"}[1m])) by (code)",
+     "legendFormat": "{{code}}"
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "type": "timeseries",
+   "title": "p95 latency by service (ms)",
+   "datasource": {
+    "type": "prometheus",
+    "uid": "shopglobal-prom"
+   },
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 0,
+    "y": 8
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "ms"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "histogram_quantile(0.95, sum(rate(kong_request_latency_ms_bucket{gateway=\"api\"}[5m])) by (le, service))",
+     "legendFormat": "{{service}}"
+    }
+   ]
+  },
+  {
+   "id": 4,
+   "type": "timeseries",
+   "title": "Requests/s by consumer",
+   "datasource": {
+    "type": "prometheus",
+    "uid": "shopglobal-prom"
+   },
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 12,
+    "y": 8
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "reqps"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "sum(rate(kong_http_requests_total{gateway=\"api\"}[5m])) by (consumer)",
+     "legendFormat": "{{consumer}}"
+    }
+   ]
+  },
+  {
+   "id": 5,
+   "type": "timeseries",
+   "title": "5xx errors/s",
+   "datasource": {
+    "type": "prometheus",
+    "uid": "shopglobal-prom"
+   },
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 0,
+    "y": 16
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "reqps"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "sum(rate(kong_http_requests_total{gateway=\"api\",code=~\"5..\"}[5m])) by (service)",
+     "legendFormat": "{{service}}"
+    }
+   ]
+  },
+  {
+   "id": 6,
+   "type": "timeseries",
+   "title": "Bandwidth (bytes/s)",
+   "datasource": {
+    "type": "prometheus",
+    "uid": "shopglobal-prom"
+   },
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 12,
+    "y": 16
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "Bps"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "sum(rate(kong_bandwidth_bytes{gateway=\"api\"}[5m])) by (direction)",
+     "legendFormat": "{{direction}}"
+    }
+   ]
+  }
+ ]
+}

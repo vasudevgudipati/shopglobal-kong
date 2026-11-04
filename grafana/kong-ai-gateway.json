@@ -1,0 +1,187 @@
+{
+ "uid": "shopglobal-kong-ai",
+ "title": "ShopGlobal - AI Gateway (UAT)",
+ "tags": [
+  "shopglobal",
+  "kong",
+  "ai"
+ ],
+ "timezone": "browser",
+ "schemaVersion": 39,
+ "version": 1,
+ "refresh": "30s",
+ "time": {
+  "from": "now-3h",
+  "to": "now"
+ },
+ "panels": [
+  {
+   "id": 1,
+   "type": "timeseries",
+   "title": "LLM requests/s by model",
+   "datasource": {
+    "type": "prometheus",
+    "uid": "shopglobal-prom"
+   },
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 0,
+    "y": 0
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "reqps"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "sum(rate(kong_ai_llm_requests_total{gateway=\"ai\"}[5m])) by (ai_model)",
+     "legendFormat": "{{ai_model}}"
+    }
+   ]
+  },
+  {
+   "id": 2,
+   "type": "timeseries",
+   "title": "Tokens per hour by model",
+   "datasource": {
+    "type": "prometheus",
+    "uid": "shopglobal-prom"
+   },
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 12,
+    "y": 0
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "sum(increase(kong_ai_llm_tokens_total{gateway=\"ai\"}[1h])) by (ai_model, token_type)",
+     "legendFormat": "{{ai_model}} {{token_type}}"
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "type": "timeseries",
+   "title": "Tokens per hour by consumer",
+   "datasource": {
+    "type": "prometheus",
+    "uid": "shopglobal-prom"
+   },
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 0,
+    "y": 8
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "sum(increase(kong_ai_llm_tokens_total{gateway=\"ai\"}[1h])) by (consumer)",
+     "legendFormat": "{{consumer}}"
+    }
+   ]
+  },
+  {
+   "id": 4,
+   "type": "timeseries",
+   "title": "Cache hits vs misses (requests/s)",
+   "datasource": {
+    "type": "prometheus",
+    "uid": "shopglobal-prom"
+   },
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 12,
+    "y": 8
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "reqps"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "sum(rate(kong_ai_llm_requests_total{gateway=\"ai\"}[5m])) by (cache_status)",
+     "legendFormat": "{{cache_status}}"
+    }
+   ]
+  },
+  {
+   "id": 5,
+   "type": "timeseries",
+   "title": "Provider p95 latency by model (ms)",
+   "datasource": {
+    "type": "prometheus",
+    "uid": "shopglobal-prom"
+   },
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 0,
+    "y": 16
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "ms"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "histogram_quantile(0.95, sum(rate(kong_ai_llm_provider_latency_ms_bucket{gateway=\"ai\"}[5m])) by (le, ai_model))",
+     "legendFormat": "{{ai_model}}"
+    }
+   ]
+  },
+  {
+   "id": 6,
+   "type": "timeseries",
+   "title": "HTTP status codes (AI gateway)",
+   "datasource": {
+    "type": "prometheus",
+    "uid": "shopglobal-prom"
+   },
+   "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 12,
+    "y": 16
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "reqps"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "sum(rate(kong_http_requests_total{gateway=\"ai\"}[1m])) by (code)",
+     "legendFormat": "{{code}}"
+    }
+   ]
+  }
+ ]
+}

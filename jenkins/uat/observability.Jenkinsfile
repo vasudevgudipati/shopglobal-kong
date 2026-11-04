@@ -18,20 +18,25 @@ pipeline {
             BODY='{"uid":"shopglobal-prom","name":"ShopGlobal-Prometheus","type":"prometheus","access":"proxy","url":"'$PROM_URL'","isDefault":false}'
             code=$(curl -s -o /dev/null -w '%{http_code}' -H "Authorization: Bearer $GF_TOKEN" $GRAFANA_URL/api/datasources/uid/shopglobal-prom)
             if [ "$code" = "200" ]; then M=PUT; U=$GRAFANA_URL/api/datasources/uid/shopglobal-prom; else M=POST; U=$GRAFANA_URL/api/datasources; fi
-            curl -sf -X $M -H "Authorization: Bearer $GF_TOKEN" -H 'Content-Type: application/json' -d "$BODY" "$U"; echo
+            code=$(curl -s -o /tmp/gf.out -w '%{http_code}' -X $M -H "Authorization: Bearer $GF_TOKEN" -H 'Content-Type: application/json' -d "$BODY" "$U")
+            echo "Grafana answered HTTP $code: $(cat /tmp/gf.out)"; rm -f /tmp/gf.out
+            [ "$code" -lt 300 ]
           '''
         }
       }
     }
-    stage('Dashboard') {
+    stage('Dashboards') {
       steps {
         withCredentials([string(credentialsId: 'grafana-token', variable: 'GF_TOKEN')]) {
           sh '''
             set -e
-            printf '{"dashboard":' > /tmp/dash.json; cat grafana/kong-shopglobal.json >> /tmp/dash.json
-            printf ',"overwrite":true,"message":"jenkins"}' >> /tmp/dash.json
-            curl -sf -X POST -H "Authorization: Bearer $GF_TOKEN" -H 'Content-Type: application/json' -d @/tmp/dash.json $GRAFANA_URL/api/dashboards/db; echo
-            rm -f /tmp/dash.json
+            for f in grafana/kong-api-gateway.json grafana/kong-ai-gateway.json; do
+              printf '{"dashboard":' > /tmp/dash.json; cat $f >> /tmp/dash.json
+              printf ',"overwrite":true,"message":"jenkins"}' >> /tmp/dash.json
+              code=$(curl -s -o /tmp/gf.out -w '%{http_code}' -X POST -H "Authorization: Bearer $GF_TOKEN" -H 'Content-Type: application/json' -d @/tmp/dash.json $GRAFANA_URL/api/dashboards/db)
+              echo "$f -> Grafana answered HTTP $code: $(cat /tmp/gf.out)"; rm -f /tmp/gf.out /tmp/dash.json
+              [ "$code" -lt 300 ]
+            done
           '''
         }
       }
