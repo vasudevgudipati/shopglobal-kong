@@ -387,8 +387,10 @@ plugins:
         response_body: |
           local okb, body = pcall(kong.service.response.get_raw_body)
           if not okb or not body then return nil end
-          local ok, data = pcall(cjson.decode, body)
-          if not ok or type(data) ~= "table" then
+          local okc, cjson = pcall(require, "cjson.safe")
+          if not okc then return "[REDACTED: json library unavailable]" end
+          local data = cjson.decode(body)
+          if type(data) ~= "table" then
             return "[REDACTED: invalid or non-JSON response]"
           end
           local mask = {

@@ -23,6 +23,7 @@ env:
   lua_ssl_trusted_certificate: system
   proxy_access_log: "off"
   dns_stale_ttl: "3600"
+  untrusted_lua_sandbox_requires: cjson.safe   # lets the HTTP Log masking Lua use require("cjson.safe")
 # Redis Stack password for the AI policies and semantic routing. The gateway config holds only {vault://env/redis-password};
 # Kong reads the value from this environment variable. The Secret redis-auth is created by the platform pipeline.
 customEnv:

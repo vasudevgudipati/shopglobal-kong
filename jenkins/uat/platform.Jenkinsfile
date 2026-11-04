@@ -71,7 +71,7 @@ pipeline {
               --set env.cluster_control_plane=$CP:443 --set env.cluster_server_name=$CP \
               --set env.cluster_telemetry_endpoint=$TP:443 --set env.cluster_telemetry_server_name=$TP \
               --set env.cluster_dp_labels="env:uat\\,type:api" \
-              --set status.enabled=true --set status.http.enabled=true --set status.http.containerPort=8100 \
+              --set env.untrusted_lua_sandbox_requires=cjson.safe --set status.enabled=true --set status.http.enabled=true --set status.http.containerPort=8100 \
               --wait --timeout 8m
           '''
         }
