@@ -65,8 +65,8 @@ proxy:
   enabled: true
   type: NodePort
   externalTrafficPolicy: Local   # keep the caller's real IP; the port answers only on nodes that run a pod
-  http: { enabled: true, servicePort: 80,  nodePort: 30090 }
-  tls:  { enabled: true, servicePort: 443, nodePort: 30444 }
+  http: { enabled: true, servicePort: 80,  nodePort: 30190 }
+  tls:  { enabled: true, servicePort: 443, nodePort: 30544 }
 admin:
   enabled: false
 manager:
