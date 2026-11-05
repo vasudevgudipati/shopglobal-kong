@@ -47,7 +47,7 @@ services:
       - name: cors
         config:
           origins:
-            - https://6a7795276d93.in.kongportals.com   # Dev Portal
+            - https://0bebd247d532.in.kongportals.com   # Dev Portal (PROD)
           methods: [GET, POST, PUT, OPTIONS]
           headers: [Authorization, Content-Type, Accept, X-Customer-Id]
           credentials: true
