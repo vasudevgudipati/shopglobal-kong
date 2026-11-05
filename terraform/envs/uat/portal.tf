@@ -14,13 +14,13 @@ resource "konnect_portal" "this" {
   display_name = var.portal_display_name
   description  = "ShopGlobal UAT - developer portal for the marketplace APIs"
 
-  # Login is switched on later, when Keycloak is wired in.
-  authentication_enabled    = false
+  # Login required: visitors are sent to the Keycloak sign-in (identity provider is set by the portal-config pipeline).
+  authentication_enabled    = true
   rbac_enabled              = false
   auto_approve_developers   = true
   auto_approve_applications = false
-  default_api_visibility    = "public"
-  default_page_visibility   = "public"
+  default_api_visibility    = "private"
+  default_page_visibility   = "private"
   force_destroy             = "false"
 }
 
@@ -41,7 +41,7 @@ resource "konnect_portal_page" "home" {
   title       = "ShopGlobal Developer Portal"
   description = "Home page: lists the published APIs"
   status      = "published"
-  visibility  = "public"
+  visibility  = "private"
   content     = file("${path.module}/../../../portal/uat/home.md")
 }
 
@@ -52,7 +52,7 @@ resource "konnect_portal_page" "apis" {
   title       = "APIs"
   description = "Browse the ShopGlobal APIs"
   status      = "published"
-  visibility  = "public"
+  visibility  = "private"
   content     = file("${path.module}/../../../portal/uat/apis.md")
 }
 
@@ -72,11 +72,11 @@ resource "konnect_portal_customization" "this" {
 
   menu = {
     main = [
-      { title = "APIs", path = "/apis", external = false, visibility = "public" },
+      { title = "APIs", path = "/apis", external = false, visibility = "private" },
     ]
     footer_sections = []
     footer_bottom = [
-      { title = "ShopGlobal UAT - for testing only", path = "/", external = false, visibility = "public" },
+      { title = "ShopGlobal UAT - for testing only", path = "/", external = false, visibility = "private" },
     ]
   }
 }

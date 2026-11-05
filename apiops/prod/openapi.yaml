@@ -6,6 +6,8 @@ info:
 servers:
 - url: https://shopglobal-api.pronteff.com:8443
   description: PROD
+security:
+- bearerAuth: []
 tags:
 - name: Products
 - name: Returns
@@ -424,6 +426,12 @@ paths:
                 items:
                   $ref: '#/components/schemas/SavedAddress'
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Keycloak access token (realm demo, client credentials). Paste the token only, without the word Bearer.
   parameters:
     CustomerId:
       name: X-Customer-Id
