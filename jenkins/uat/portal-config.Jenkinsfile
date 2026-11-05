@@ -13,6 +13,15 @@ pipeline {
     PORTAL_DIR = 'terraform/portal/uat'
   }
   stages {
+    stage('Adopt existing sign-in') {
+      steps {
+        withCredentials([string(credentialsId: 'konnect-pat', variable: 'TF_VAR_konnect_pat'), string(credentialsId: 'keycloak-portal-client-secret-uat', variable: 'TF_VAR_oidc_client_secret')]) {
+          dir(env.PORTAL_DIR) {
+            sh 'bash ../adopt-existing.sh /var/lib/jenkins/tfstate/shopglobal/uat/terraform.tfstate'
+          }
+        }
+      }
+    }
     stage('Portal plan') {
       steps {
         withCredentials([string(credentialsId: 'konnect-pat', variable: 'TF_VAR_konnect_pat'), string(credentialsId: 'keycloak-portal-client-secret-uat', variable: 'TF_VAR_oidc_client_secret')]) {
