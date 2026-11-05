@@ -1,0 +1,427 @@
+_format_version: "3.0"
+
+# ShopGlobal PROD - API gateway (control plane shopglobal-api-prod)
+# One service for the mock API, one route per operation.
+# Paths are anchored regexes ("~" prefix; Konnect accepts RE2 syntax only - no lookahead) so /api/orders does not also swallow /api/orders/{id}.
+# Plugins: CORS, OAuth 2.0 introspection (Keycloak realm demo) and IP restriction apply to every route of the service;
+# Proxy Cache Advanced (Redis) is attached to products (search, compare, get), categories, return-policy and saved addresses (300 s) and order status (30 s, per X-Customer-Id); Rate Limiting Advanced is per consumer (100/min, 10/min on infrequent routes).
+# A second service (shopglobal-mock-api-internal) gives the AI gateway server a token-free route, limited to its IP.
+# Secrets are NOT stored here: __KEYCLOAK_BASIC__ and __REDIS_PASSWORD__ are filled in by the Jenkins pipeline at deploy time.
+
+services:
+  - name: shopglobal-mock-api
+    url: http://shopglobal-mock-api.shopglobal-app-prod.svc.cluster.local:8081
+    connect_timeout: 5000
+    read_timeout: 30000
+    write_timeout: 30000
+    retries: 2
+    tags: [shopglobal, prod]
+    plugins:
+      - name: cors
+        config:
+          origins:
+            - https://6a7795276d93.in.kongportals.com   # Dev Portal
+          methods: [GET, POST, PUT, OPTIONS]
+          headers: [Authorization, Content-Type, Accept]
+          credentials: true
+          max_age: 3600
+          preflight_continue: false
+        tags: [shopglobal, prod]
+      - name: oauth2-introspection
+        config:
+          introspection_url: https://marmalade-ivy-crazed.ngrok-free.dev/realms/demo/protocol/openid-connect/token/introspect
+          authorization_value: "__KEYCLOAK_BASIC__"
+          token_type_hint: access_token
+          consumer_by: client_id          # matches the consumer's custom_id to the Keycloak client id
+          ttl: 60                         # cache introspection results for 60 s
+          timeout: 10000
+          hide_credentials: false
+          run_on_preflight: false
+        tags: [shopglobal, prod]
+      - name: ip-restriction
+        config:
+          allow:
+            - 192.168.19.0/24             # cluster nodes, NGINX load balancer, Jenkins
+            - 10.244.0.0/16               # pods in the PROD cluster (flannel)
+            - 10.243.126.0/24             # admin PC range (current IP 10.243.126.248; it changes)
+            - 10.81.128.0/24              # admin PC as seen by NGINX via VPN/NAT (currently 10.81.128.4; it changes)
+          status: 403
+          message: Your IP address is not allowed
+        tags: [shopglobal, prod]
+    routes:
+      # ---- CORS preflight: browsers send OPTIONS before the real call; the cors plugin answers it ----
+      - name: cors-preflight
+        methods: [OPTIONS]
+        paths: ["~/api/.*"]
+        strip_path: false
+        tags: [shopglobal, prod, cors]
+
+      # ---- products ----
+      - name: products-search            # searchProducts
+        methods: [GET]
+        paths: ["~/api/products$"]
+        strip_path: false
+        tags: [shopglobal, prod, products]
+        plugins:
+          - name: proxy-cache-advanced
+            config:
+              strategy: redis
+              response_code: [200]
+              request_method: [GET, HEAD]
+              content_type: [application/json]
+              cache_ttl: 300   # catalogue is static; the query string is part of the cache key
+              redis:
+                host: redis.shopglobal-prod-api.svc.cluster.local
+                port: 6379
+                password: "__REDIS_PASSWORD__"
+                database: 0
+            tags: [shopglobal, prod]
+      - name: products-compare           # compareProducts
+        methods: [GET]
+        paths: ["~/api/products/compare$"]
+        regex_priority: 10               # wins over products-get, which also matches /api/products/compare
+        strip_path: false
+        tags: [shopglobal, prod, products]
+        plugins:
+          - name: proxy-cache-advanced
+            config:
+              strategy: redis
+              response_code: [200]
+              request_method: [GET, HEAD]
+              content_type: [application/json]
+              cache_ttl: 300   # query string (ids) is part of the cache key
+              redis:
+                host: redis.shopglobal-prod-api.svc.cluster.local
+                port: 6379
+                password: "__REDIS_PASSWORD__"
+                database: 0
+            tags: [shopglobal, prod]
+      - name: products-get               # getProduct
+        methods: [GET]
+        paths: ["~/api/products/[^/]+$"]
+        strip_path: false
+        tags: [shopglobal, prod, products]
+        plugins:
+          - name: proxy-cache-advanced
+            config:
+              strategy: redis
+              response_code: [200]
+              request_method: [GET, HEAD]
+              content_type: [application/json]
+              cache_ttl: 300
+              redis:
+                host: redis.shopglobal-prod-api.svc.cluster.local
+                port: 6379
+                password: "__REDIS_PASSWORD__"
+                database: 0
+            tags: [shopglobal, prod]
+      - name: categories-list            # listCategories
+        methods: [GET]
+        paths: ["~/api/categories$"]
+        strip_path: false
+        tags: [shopglobal, prod, products]
+        plugins:
+          - name: proxy-cache-advanced
+            config:
+              strategy: redis
+              response_code: [200]
+              request_method: [GET, HEAD]
+              content_type: [application/json]
+              cache_ttl: 300
+              redis:
+                host: redis.shopglobal-prod-api.svc.cluster.local
+                port: 6379
+                password: "__REDIS_PASSWORD__"
+                database: 0
+            tags: [shopglobal, prod]
+
+      # ---- returns ----
+      - name: return-policy-get          # getReturnPolicy (static data: cache candidate)
+        methods: [GET]
+        paths: ["~/api/return-policy$"]
+        strip_path: false
+        tags: [shopglobal, prod, returns, cacheable]
+        plugins:
+          - name: proxy-cache-advanced
+            config:
+              strategy: redis
+              response_code: [200]
+              request_method: [GET, HEAD]
+              content_type: [application/json]
+              cache_ttl: 300
+              redis:
+                host: redis.shopglobal-prod-api.svc.cluster.local
+                port: 6379
+                password: "__REDIS_PASSWORD__"
+                database: 0
+            tags: [shopglobal, prod]
+      - name: orders-return-policies     # getOrderReturnPolicies
+        methods: [GET]
+        paths: ["~/api/orders/[^/]+/return-policies$"]
+        strip_path: false
+        tags: [shopglobal, prod, returns]
+
+      # ---- orders ----
+      - name: orders-list                # listOrders
+        methods: [GET]
+        paths: ["~/api/orders$"]
+        strip_path: false
+        tags: [shopglobal, prod, orders]
+      - name: orders-get                 # getOrderStatus
+        methods: [GET]
+        paths: ["~/api/orders/[^/]+$"]
+        strip_path: false
+        tags: [shopglobal, prod, orders]
+        plugins:
+          - name: proxy-cache-advanced
+            config:
+              strategy: redis
+              response_code: [200]
+              request_method: [GET, HEAD]
+              content_type: [application/json]
+              cache_ttl: 30                 # short: an order's status changes when it is cancelled or re-addressed
+              vary_headers: [X-Customer-Id]   # orders belong to a customer; never share an entry between customers
+              redis:
+                host: redis.shopglobal-prod-api.svc.cluster.local
+                port: 6379
+                password: "__REDIS_PASSWORD__"
+                database: 0
+            tags: [shopglobal, prod]
+      - name: orders-place               # placeOrder - storefront only, never an MCP tool
+        methods: [POST]
+        paths: ["~/api/orders$"]
+        strip_path: false
+        tags: [shopglobal, prod, orders, no-mcp]
+      - name: orders-cancel              # cancelOrder (write)
+        methods: [POST]
+        paths: ["~/api/orders/[^/]+/cancel$"]
+        strip_path: false
+        tags: [shopglobal, prod, orders, write]
+      - name: orders-change-address      # changeDeliveryAddress (write)
+        methods: [PUT]
+        paths: ["~/api/orders/[^/]+/address$"]
+        strip_path: false
+        tags: [shopglobal, prod, orders, write]
+
+      # ---- addresses ----
+      - name: addresses-list             # listSavedAddresses
+        methods: [GET]
+        paths: ["~/api/addresses$"]
+        strip_path: false
+        tags: [shopglobal, prod, addresses]
+        plugins:
+          - name: proxy-cache-advanced
+            config:
+              strategy: redis
+              response_code: [200]
+              request_method: [GET, HEAD]
+              content_type: [application/json]
+              cache_ttl: 300   # fixed demo data
+              vary_headers: [X-Customer-Id]   # the API answers per customer id; never share an entry between customers
+              redis:
+                host: redis.shopglobal-prod-api.svc.cluster.local
+                port: 6379
+                password: "__REDIS_PASSWORD__"
+                database: 0
+            tags: [shopglobal, prod]
+
+# Consumers = applications calling the API. custom_id must equal the Keycloak client id of the application.
+  # ---- Internal route for the AI gateway (MCP tools) ----
+  # The AI gateway server (192.168.19.3 and .5) calls /internal/api/... (nodes kongdp3 and kongdp4). No token check (a server cannot sign in with Keycloak),
+  # so access is limited to those two IPs, and rate limited. The real client IP comes from X-Forwarded-For (see helm/prod/common-dp.yaml).
+  # /internal/api/orders -> upstream /api/orders (the route prefix is stripped, the service path adds /api back).
+  - name: shopglobal-mock-api-internal
+    url: http://shopglobal-mock-api.shopglobal-app-prod.svc.cluster.local:8081/api
+    tags: [shopglobal, prod, internal]
+    plugins:
+      - name: ip-restriction
+        config:
+          allow:
+            - 192.168.19.3/32             # AI gateway node kongdp3
+            - 192.168.19.5/32             # AI gateway node kongdp4
+          status: 403
+          message: Your IP address is not allowed
+        tags: [shopglobal, prod, internal]
+      - name: rate-limiting-advanced
+        config:
+          limit: [100]
+          window_size: [60]
+          window_type: sliding
+          identifier: ip
+          strategy: redis
+          sync_rate: 1
+          namespace: shopglobal-prod-internal
+          redis:
+            host: redis.shopglobal-prod-api.svc.cluster.local
+            port: 6379
+            password: "__REDIS_PASSWORD__"
+            database: 0
+        tags: [shopglobal, prod, internal]
+    routes:
+      - name: internal-mcp-api
+        paths: ["/internal/api"]
+        strip_path: true
+        tags: [shopglobal, prod, internal]
+
+consumers:
+  - username: kong-dev-portal
+    custom_id: kong-dev-portal        # = Keycloak client id
+    tags: [shopglobal, prod]
+
+# Rate limits (Rate Limiting Advanced, counted in Redis, per consumer):
+#   100 requests per minute on all routes, 10 per minute on the infrequent routes (writes and saved addresses).
+# A plugin on consumer + route wins over the consumer-wide one, so each infrequent route has its own entry.
+plugins:
+  - name: rate-limiting-advanced
+    consumer: kong-dev-portal
+    config:
+      limit: [100]
+      window_size: [60]
+      window_type: sliding
+      identifier: consumer
+      strategy: redis
+      sync_rate: 1
+      namespace: shopglobal-prod-kong-dev-portal
+      redis:
+        host: redis.shopglobal-prod-api.svc.cluster.local
+        port: 6379
+        password: "__REDIS_PASSWORD__"
+        database: 0
+    tags: [shopglobal, prod]
+  - name: rate-limiting-advanced
+    consumer: kong-dev-portal
+    route: orders-place
+    config:
+      limit: [10]
+      window_size: [60]
+      window_type: sliding
+      identifier: consumer
+      strategy: redis
+      sync_rate: 1
+      namespace: shopglobal-prod-kong-dev-portal-orders-place
+      redis:
+        host: redis.shopglobal-prod-api.svc.cluster.local
+        port: 6379
+        password: "__REDIS_PASSWORD__"
+        database: 0
+    tags: [shopglobal, prod]
+  - name: rate-limiting-advanced
+    consumer: kong-dev-portal
+    route: orders-cancel
+    config:
+      limit: [10]
+      window_size: [60]
+      window_type: sliding
+      identifier: consumer
+      strategy: redis
+      sync_rate: 1
+      namespace: shopglobal-prod-kong-dev-portal-orders-cancel
+      redis:
+        host: redis.shopglobal-prod-api.svc.cluster.local
+        port: 6379
+        password: "__REDIS_PASSWORD__"
+        database: 0
+    tags: [shopglobal, prod]
+  - name: rate-limiting-advanced
+    consumer: kong-dev-portal
+    route: orders-change-address
+    config:
+      limit: [10]
+      window_size: [60]
+      window_type: sliding
+      identifier: consumer
+      strategy: redis
+      sync_rate: 1
+      namespace: shopglobal-prod-kong-dev-portal-orders-change-address
+      redis:
+        host: redis.shopglobal-prod-api.svc.cluster.local
+        port: 6379
+        password: "__REDIS_PASSWORD__"
+        database: 0
+    tags: [shopglobal, prod]
+  - name: rate-limiting-advanced
+    consumer: kong-dev-portal
+    route: addresses-list
+    config:
+      limit: [10]
+      window_size: [60]
+      window_type: sliding
+      identifier: consumer
+      strategy: redis
+      sync_rate: 1
+      namespace: shopglobal-prod-kong-dev-portal-addresses-list
+      redis:
+        host: redis.shopglobal-prod-api.svc.cluster.local
+        port: 6379
+        password: "__REDIS_PASSWORD__"
+        database: 0
+    tags: [shopglobal, prod]
+
+# ---------------------------------------------------------------- observability (global plugins, every service and route)
+# HTTP Log -> OpenSearch index kong-shopglobal-prod (sensitive fields masked by Lua). __OPENSEARCH_AUTH__ is filled in by Jenkins (credential opensearch-basic).
+# Prometheus -> metrics on the data plane status port (8100), scraped by Prometheus (the observability step (later)).
+plugins:
+  # Response buffering: lets the HTTP Log Lua read (and mask) the response body. Fine for this API (small JSON, no streaming).
+  - name: pre-function
+    config:
+      access:
+        - "kong.service.request.enable_buffering()"
+  - name: http-log
+    config:
+      http_endpoint: https://sso.pronteff.com:9200/kong-shopglobal-prod/_doc
+      method: POST
+      content_type: application/json
+      timeout: 10000
+      keepalive: 60000
+      headers:
+        Authorization: "__OPENSEARCH_AUTH__"
+      queue:
+        max_batch_size: 1
+        max_entries: 10000
+        max_coalescing_delay: 1
+        max_retry_time: 60
+        initial_retry_delay: 0.01
+        max_retry_delay: 60
+      custom_fields_by_lua:
+        # Sensitive data masking (fields of the ShopGlobal API contract + account_id/balance). Response body is re-encoded with them replaced.
+        response_body: |
+          local okb, body = pcall(kong.service.response.get_raw_body)
+          if not okb or not body then return nil end
+          local okc, cjson = pcall(require, "cjson.safe")
+          if not okc then return "[REDACTED: json library unavailable]" end
+          local data = cjson.decode(body)
+          if type(data) ~= "table" then
+            return "[REDACTED: invalid or non-JSON response]"
+          end
+          local mask = {
+            account_id = true, balance = true,
+            customerId = true, phone = true, address = true,
+            line1 = true, line2 = true, city = true, state = true, pincode = true,
+            payment = true,
+          }
+          local function walk(t)
+            if t.line1 ~= nil or t.pincode ~= nil then t.name = "[REDACTED]" end
+            for k, v in pairs(t) do
+              if type(k) == "string" and mask[k] then
+                t[k] = "[REDACTED]"
+              elseif type(v) == "table" then
+                walk(v)
+              end
+            end
+          end
+          walk(data)
+          return cjson.encode(data)
+        # Credentials never reach OpenSearch.
+        "request.headers.authorization": "return nil"
+        "request.headers.proxy-authorization": "return nil"
+        "request.headers.cookie": "return nil"
+        "authenticated_entity.id": "return nil"   # the Keycloak access token
+        "request.headers.x-customer-id": "return '[REDACTED]'"
+  - name: prometheus
+    config:
+      status_code_metrics: true
+      latency_metrics: true
+      bandwidth_metrics: true
+      upstream_health_metrics: true
+      ai_metrics: true
+      per_consumer: true
