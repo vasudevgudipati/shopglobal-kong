@@ -2,8 +2,8 @@
 // Jenkins script path: jenkins/prod/app.Jenkinsfile        Job name: shopglobal-prod-app
 // APPLY unticked = read-only preflight + plan (builds nothing). APPLY ticked = build, push, approval, deploy, verify.
 // Mock API: version a (stable, kongdp1:8081) first - it seeds an empty schema - then b (canary, kongdp2:8082). Kong's upstream weights are set in apiops/prod/kong.yaml.
-// Website: kongdp1, NodePort 30200, calls Kong in-cluster with its own Keycloak client. Does NOT use /internal/api and does NOT touch Konnect.
-// Jenkins credentials: dockerhub, shopglobal-db-prod (user SHOPGLOBAL_PROD + password), shopglobal-web-oauth-secret-prod (Secret text: client secret of Keycloak client shopglobal-web-prod).
+// Website: kongdp1, NodePort 30200, calls Kong in-cluster on the token-free route /internal/api (no Keycloak client). Does NOT touch Konnect.
+// Jenkins credentials: dockerhub, shopglobal-db-prod (user SHOPGLOBAL_PROD + password).
 pipeline {
   agent any
   options { disableConcurrentBuilds(); timestamps() }
@@ -98,11 +98,6 @@ pipeline {
               sh '''kubectl --kubeconfig $KC -n $NS create secret generic shopglobal-db --from-literal=DB_USER="$DB_U" --from-literal=DB_PASSWORD="$DB_P" --dry-run=client -o yaml | kubectl --kubeconfig $KC apply -f -'''
             }
           }
-          if (params.SERVICE != 'mock-api') {
-            withCredentials([string(credentialsId: 'shopglobal-web-oauth-secret-prod', variable: 'WEB_SECRET')]) {
-              sh '''printf %s "$WEB_SECRET" | kubectl --kubeconfig $KC -n $NS create secret generic shopglobal-web-oauth --from-file=OAUTH_CLIENT_SECRET=/dev/stdin --dry-run=client -o yaml | kubectl --kubeconfig $KC apply -f -'''
-            }
-          }
         }
       }
     }
@@ -150,9 +145,10 @@ pipeline {
               echo "website via NodePort on kongdp1 and kongdp2:"
               for h in 192.168.19.1 192.168.19.2; do curl -s -o /dev/null -m 10 -w "$h HTTP %{http_code}\\n" http://$h:$WEB_PORT/actuator/health/readiness || true; done
             fi
-            echo "Kong -> upstream (from a pod; no token, so 401 means the route and Kong are reached):"
-            kubectl --kubeconfig $KC -n $NS run kongcheck-$BUILD_NUMBER --rm -i --restart=Never --image=curlimages/curl --command -- \
-              sh -c 'curl -s -o /dev/null -w "HTTP %{http_code}\\n" http://kong-api-dp-prod-kong-proxy.shopglobal-prod-api.svc.cluster.local/api/categories' || true
+            echo "Kong internal route (from a pod on kongdp1, like the website; 200 = reached, 403 = Kong chat must allow 10.244.1.0/24):"
+            kubectl --kubeconfig $KC -n $NS run kongcheck-$BUILD_NUMBER --rm -i --restart=Never --image=curlimages/curl \
+              --overrides='{"spec":{"nodeSelector":{"kubernetes.io/hostname":"kongdp1"}}}' --command -- \
+              sh -c 'curl -s -o /dev/null -w "HTTP %{http_code}\n" http://kong-api-dp-prod-kong-proxy.shopglobal-prod-api.svc.cluster.local/internal/api/categories' || true
           '''
         }
       }

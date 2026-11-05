@@ -1,7 +1,8 @@
 # PROD website. Applied by jenkins/prod/app.Jenkinsfile (it fills in IMAGE_WEB and AGENT_URL). Namespace shopglobal-app-prod, node kongdp1.
 # One replica on purpose: sign-in sessions are held in the pod's memory. NGINX can list kongdp1 and kongdp2 on the NodePort (kube-proxy forwards to the pod).
-# The website calls the Kong API gateway INSIDE the cluster (service kong-api-dp-prod-kong-proxy, paths /api/...) with a Keycloak token from its own PROD client.
-# It never uses /internal/api. The client secret comes from the Kubernetes Secret shopglobal-web-oauth, created by the pipeline from a Jenkins credential.
+# The website calls the Kong API gateway INSIDE the cluster (service kong-api-dp-prod-kong-proxy) on the token-free route /internal/api, like UAT (Option A).
+# No Keycloak client or secret is needed. Kong only accepts this route from allowed source IPs: the Kong chat must allow the kongdp1 pod subnet 10.244.1.0/24
+# (this pod runs on kongdp1) on the shopglobal-mock-api-internal service, otherwise the website gets 403.
 apiVersion: apps/v1
 kind: Deployment
 metadata: { name: shopglobal-web, namespace: shopglobal-app-prod }
@@ -18,11 +19,7 @@ spec:
           ports: [{ containerPort: 8080 }]
           env:
             - { name: APP_ENV, value: "PROD" }
-            - { name: SHOPGLOBAL_API_BASE_URL, value: "http://kong-api-dp-prod-kong-proxy.shopglobal-prod-api.svc.cluster.local" }
-            - { name: OAUTH_TOKEN_URL, value: "https://marmalade-ivy-crazed.ngrok-free.dev/realms/demo/protocol/openid-connect/token" }
-            - { name: OAUTH_CLIENT_ID, value: "shopglobal-web-prod" }
-            - name: OAUTH_CLIENT_SECRET
-              valueFrom: { secretKeyRef: { name: shopglobal-web-oauth, key: OAUTH_CLIENT_SECRET } }
+            - { name: SHOPGLOBAL_API_BASE_URL, value: "http://kong-api-dp-prod-kong-proxy.shopglobal-prod-api.svc.cluster.local/internal" }
             - { name: AGENT_REMOTE_URL, value: "AGENT_URL" }
           readinessProbe: { httpGet: { path: /actuator/health/readiness, port: 8080 }, initialDelaySeconds: 15 }
 ---
