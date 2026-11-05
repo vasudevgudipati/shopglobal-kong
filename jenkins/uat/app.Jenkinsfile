@@ -51,16 +51,25 @@ pipeline {
     stage('Deploy mock API + website (.41)') {
       when { expression { params.SERVICE != 'agent' } }
       steps {
-        script {
-          sh "kubectl --kubeconfig $KC_API apply -f k8s/uat/shopglobal-app.yaml"
-          if (params.SERVICE in ['all', 'mock-api']) {
-            sh "kubectl --kubeconfig $KC_API -n $NS set image deploy/shopglobal-mock-api app=${REPO}/shopglobal-mock-api:${TAG}"
-            sh "kubectl --kubeconfig $KC_API -n $NS rollout status deploy/shopglobal-mock-api --timeout=300s"
-          }
-          if (params.SERVICE in ['all', 'web']) {
-            sh "kubectl --kubeconfig $KC_API -n $NS set image deploy/shopglobal-web app=${REPO}/shopglobal-web:${TAG}"
-            sh "kubectl --kubeconfig $KC_API -n $NS rollout status deploy/shopglobal-web --timeout=300s"
-          }
+        // The manifest carries a placeholder image tag (1.0.0-uat). It is replaced here before "kubectl apply": by this build's tag for
+        // what was built, and by the image that is running now for what was not built, so a partial run never rolls the other one back.
+        withEnv(["BUILD_API=${params.SERVICE in ['all', 'mock-api']}", "BUILD_WEB=${params.SERVICE in ['all', 'web']}"]) {
+          sh '''
+            set -e
+            K="kubectl --kubeconfig $KC_API -n $NS"
+            cur() { $K get deploy "$1" -o jsonpath='{.spec.template.spec.containers[0].image}' 2>/dev/null || true; }
+            api=$(cur shopglobal-mock-api); web=$(cur shopglobal-web)
+            [ "$BUILD_API" = true ] && api=$REPO/shopglobal-mock-api:$TAG
+            [ "$BUILD_WEB" = true ] && web=$REPO/shopglobal-web:$TAG
+            cp k8s/uat/shopglobal-app.yaml .app-rendered.yaml
+            [ -n "$api" ] && sed -i "s#image: .*shopglobal-mock-api:.*#image: $api#" .app-rendered.yaml
+            [ -n "$web" ] && sed -i "s#image: .*shopglobal-web:.*#image: $web#" .app-rendered.yaml
+            kubectl --kubeconfig $KC_API apply -f .app-rendered.yaml
+            rm -f .app-rendered.yaml
+            [ "$BUILD_API" = true ] && $K rollout status deploy/shopglobal-mock-api --timeout=300s
+            [ "$BUILD_WEB" = true ] && $K rollout status deploy/shopglobal-web --timeout=300s
+            true
+          '''
         }
       }
     }
@@ -68,8 +77,10 @@ pipeline {
       when { expression { params.SERVICE in ['all', 'agent'] } }
       steps {
         sh '''
-          kubectl --kubeconfig $KC_AI apply -f k8s/uat/shopglobal-agent.yaml
-          kubectl --kubeconfig $KC_AI -n $NS set image deploy/shopglobal-agent app=$REPO/shopglobal-agent:$TAG
+          set -e
+          sed "s#image: .*shopglobal-agent:.*#image: $REPO/shopglobal-agent:$TAG#" k8s/uat/shopglobal-agent.yaml > .agent-rendered.yaml
+          kubectl --kubeconfig $KC_AI apply -f .agent-rendered.yaml
+          rm -f .agent-rendered.yaml
           kubectl --kubeconfig $KC_AI -n $NS rollout status deploy/shopglobal-agent --timeout=300s
         '''
       }
