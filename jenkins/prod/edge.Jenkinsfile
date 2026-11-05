@@ -2,7 +2,8 @@
 // Jenkins script path: jenkins/prod/edge.Jenkinsfile
 // Hosts: 192.168.19.5 (MASTER, priority 150) and kongcp 192.168.19.4 (BACKUP, priority 100). Installed over SSH (credential edge-ssh-prod).
 // NGINX terminates HTTPS on 8443 and routes by host name to: API gateway (kongdp1/kongdp2 NodePort 30080), and optionally web, agent and AI gateway.
-// APPLY unticked: validates the inputs, renders the configuration and shows what would change on each server. APPLY ticked: installs and applies it.
+// TLS: the wildcard certificate of the UAT NGINX, from the Jenkins credentials edge-tls-crt-prod (fullchain.pem) and edge-tls-key-prod (privkey.pem). No self-signed fallback.
+// APPLY unticked: validates the inputs and the certificate, renders the configuration and shows what would change on each server. APPLY ticked: installs and applies it.
 def withEdgeKey(Closure body) {
   withCredentials([sshUserPrivateKey(credentialsId: 'edge-ssh-prod', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) { body() }
 }
@@ -86,6 +87,42 @@ pipeline {
         '''
       }
     }
+    stage('Check TLS certificate') {
+      when { expression { return env.FIRST_RUN != 'true' } }
+      steps {
+        // The same wildcard certificate as the UAT NGINX (*.pronteff.com). It is kept only in Jenkins credentials (Secret file), never in Git:
+        //   edge-tls-crt-prod = certificate chain (fullchain.pem: server certificate first, then the CA certificates)
+        //   edge-tls-key-prod = private key (privkey.pem, no passphrase)
+        withCredentials([file(credentialsId: 'edge-tls-crt-prod', variable: 'TLS_CRT_FILE'), file(credentialsId: 'edge-tls-key-prod', variable: 'TLS_KEY_FILE')]) {
+          sh '''
+            set -e
+            umask 077
+            mkdir -p "$OUT/tls"
+            cp "$TLS_CRT_FILE" "$OUT/tls/tls.crt"; cp "$TLS_KEY_FILE" "$OUT/tls/tls.key"
+            C="$OUT/tls/tls.crt"; K="$OUT/tls/tls.key"
+            openssl x509 -in "$C" -noout || { echo "ERROR: edge-tls-crt-prod is not a PEM certificate"; exit 1; }
+            openssl pkey -in "$K" -noout -passin pass: || { echo "ERROR: edge-tls-key-prod is not a usable private key (it must be PEM without a passphrase)"; exit 1; }
+            A=$(openssl x509 -in "$C" -noout -pubkey | openssl sha256)
+            B=$(openssl pkey -in "$K" -pubout | openssl sha256)
+            [ "$A" = "$B" ] || { echo "ERROR: the private key does not belong to this certificate"; exit 1; }
+            echo "subject : $(openssl x509 -in "$C" -noout -subject)"
+            echo "issuer  : $(openssl x509 -in "$C" -noout -issuer)"
+            echo "valid   : $(openssl x509 -in "$C" -noout -startdate) / $(openssl x509 -in "$C" -noout -enddate)"
+            echo "names   : $(openssl x509 -in "$C" -noout -ext subjectAltName | tail -n +2 | tr -d ' ')"
+            [ "$(openssl x509 -in "$C" -noout -subject_hash)" != "$(openssl x509 -in "$C" -noout -issuer_hash)" ] || { echo "ERROR: this is a self-signed certificate. Use the CA-issued wildcard certificate that the UAT NGINX uses."; exit 1; }
+            openssl x509 -in "$C" -noout -checkend 0 >/dev/null || { echo "ERROR: the certificate has expired"; exit 1; }
+            openssl x509 -in "$C" -noout -checkend 2592000 >/dev/null || echo "WARNING: the certificate expires within 30 days - renew it"
+            for hn in $API_HOST $WEB_HOST $AGENT_HOST $AI_HOST; do
+              openssl x509 -in "$C" -noout -checkhost "$hn" | grep -q "does match" || { echo "ERROR: the certificate does not cover $hn"; exit 1; }
+              echo "covers  : $hn"
+            done
+            N=$(grep -c "BEGIN CERTIFICATE" "$C")
+            [ "$N" -ge 2 ] || echo "WARNING: the file holds only the server certificate; use fullchain.pem so clients also receive the CA certificates"
+            echo "certificate OK ($N certificate(s) in the file)"
+          '''
+        }
+      }
+    }
     stage('Show changes on the servers') {
       when { expression { return env.FIRST_RUN != 'true' } }
       steps {
@@ -144,22 +181,11 @@ pipeline {
                 set -e
                 umask 077
                 SSHO="-i $SSH_KEY -o BatchMode=yes -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile=$WORKSPACE/.edge_known_hosts -o ConnectTimeout=10"
-                mkdir -p "$OUT/tls"
-                PRIMARY=$(echo $EDGE_HOSTS | cut -d' ' -f1); PRIMARY=${PRIMARY%%:*}
-                if ssh $SSHO $SSH_USER@$PRIMARY 'sudo test -f /etc/nginx/tls/tls.crt'; then
-                  echo "Using the certificate already on $PRIMARY (put a CA-issued one there to replace it, then run this job again)"
-                  ssh $SSHO $SSH_USER@$PRIMARY 'sudo cat /etc/nginx/tls/tls.crt' > "$OUT/tls/tls.crt"
-                  ssh $SSHO $SSH_USER@$PRIMARY 'sudo cat /etc/nginx/tls/tls.key' > "$OUT/tls/tls.key"
-                else
-                  echo "Creating a self-signed certificate (valid 365 days) - replace it with a CA-issued one later"
-                  SAN="DNS:$API_HOST,DNS:$WEB_HOST,DNS:$AGENT_HOST,DNS:$AI_HOST,IP:$VIP"
-                  for h in $EDGE_HOSTS; do SAN="$SAN,IP:${h%%:*}"; done
-                  openssl req -x509 -newkey rsa:2048 -nodes -days 365 -keyout "$OUT/tls/tls.key" -out "$OUT/tls/tls.crt" -subj "/CN=shopglobal-prod" -addext "subjectAltName=$SAN"
-                fi
+                [ -s "$OUT/tls/tls.crt" ] && [ -s "$OUT/tls/tls.key" ] || { echo "ERROR: certificate files are missing (the Check TLS certificate stage did not run)"; exit 1; }
                 for h in $EDGE_HOSTS; do
-                  ip=${h%%:*}
+                  ip=${h%%:*}; echo "===== $ip ====="
                   scp $SSHO "$OUT/tls/tls.crt" "$OUT/tls/tls.key" $SSH_USER@$ip:/tmp/
-                  ssh $SSHO $SSH_USER@$ip 'sudo install -d -m 755 /etc/nginx/tls && sudo install -m 644 /tmp/tls.crt /etc/nginx/tls/tls.crt && sudo install -m 600 -o root -g root /tmp/tls.key /etc/nginx/tls/tls.key && rm -f /tmp/tls.crt /tmp/tls.key'
+                  ssh $SSHO $SSH_USER@$ip 'sudo install -d -m 755 /etc/nginx/tls && sudo install -m 644 /tmp/tls.crt /etc/nginx/tls/tls.crt && sudo install -m 600 -o root -g root /tmp/tls.key /etc/nginx/tls/tls.key && rm -f /tmp/tls.crt /tmp/tls.key && echo "certificate installed"'
                 done
               '''
             }
@@ -236,6 +262,10 @@ REMOTE
                   [ "$code" = "401" ] || bad=1
                 done
                 [ $bad = 0 ] || { echo "ERROR: unexpected answer from the edge"; exit 1; }
+                for target in $VIP $(for h in $EDGE_HOSTS; do echo ${h%%:*}; done); do
+                  echo "certificate served by $target:"
+                  echo | openssl s_client -connect $target:$HTTPS_PORT -servername $API_HOST 2>/dev/null | openssl x509 -noout -subject -issuer -enddate
+                done
                 echo "OK. Next: point DNS for $API_HOST (and the other names) at $VIP, then run nginx/prod/test-failover.sh"
               '''
             }
