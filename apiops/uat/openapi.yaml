@@ -430,7 +430,6 @@ components:
     bearerAuth:
       type: http
       scheme: bearer
-      bearerFormat: JWT
       description: Keycloak access token (realm demo, client credentials). Paste the token only, without the word Bearer.
   parameters:
     CustomerId:
