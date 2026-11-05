@@ -1,0 +1,73 @@
+# PROD Konnect AI Gateway data plane (standalone values - does not use common-dp.yaml).
+# Endpoints come from helm/prod/ai-gw-endpoints.env; replicaCount is set by the pipeline from the list of AI nodes.
+ingressController:
+  enabled: false
+image:
+  repository: kong/kong-ai-gateway
+  tag: "2.3.0-distroless"
+deployment:
+  kong:
+    initContainers:
+      clearStalePid:
+        enabled: false   # the distroless AI image has no "rm"; this init container would crash
+  # The MCP tools call the API gateway through the edge. Resolve its name to the virtual IP even before DNS exists.
+  hostAliases:
+    - ip: "192.168.19.10"
+      hostnames: ["shopglobal-api.pronteff.com"]
+secretVolumes:
+  - kong-cluster-cert
+env:
+  role: data_plane
+  database: "off"
+  konnect_mode: "on"
+  vitals: "off"
+  cluster_mtls: pki
+  cluster_cert: /etc/secrets/kong-cluster-cert/tls.crt
+  cluster_cert_key: /etc/secrets/kong-cluster-cert/tls.key
+  lua_ssl_trusted_certificate: system
+  proxy_access_log: "off"
+  dns_stale_ttl: "3600"
+  untrusted_lua_sandbox_requires: cjson.safe   # lets the HTTP Log masking Lua use require("cjson.safe")
+  # Real client address: trust X-Forwarded-For only from the cluster network (NGINX and nodes).
+  trusted_ips: "192.168.19.0/24,10.244.0.0/16"
+  real_ip_header: X-Forwarded-For
+  real_ip_recursive: "on"
+  cluster_dp_labels: "env:prod,type:ai"
+# Secrets (created by the AI platform pipeline from Jenkins credentials). The gateway config holds only vault references.
+customEnv:
+  REDIS_PASSWORD:
+    valueFrom:
+      secretKeyRef: { name: redis-auth, key: password }
+  OPENAI_AUTH_HEADER:
+    valueFrom:
+      secretKeyRef: { name: openai-auth, key: header }
+  OPENSEARCH_AUTH:
+    valueFrom:
+      secretKeyRef: { name: opensearch-auth, key: header }
+status:
+  enabled: true
+  http: { enabled: true, containerPort: 8100 }
+resources:
+  requests: { cpu: "1", memory: 2Gi }
+# Only nodes labelled gateway=ai can run the AI gateway.
+nodeSelector:
+  gateway: ai
+# Never two AI gateway pods on the same node.
+affinity:
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      - topologyKey: kubernetes.io/hostname
+        labelSelector:
+          matchLabels:
+            app.kubernetes.io/name: kong
+            app.kubernetes.io/instance: kong-ai-gw-prod
+proxy:
+  enabled: true
+  type: NodePort
+  externalTrafficPolicy: Local   # keep the caller's real IP; the port answers only on nodes that run a pod
+  http: { enabled: true, servicePort: 80,  nodePort: 30090 }
+  tls:  { enabled: true, servicePort: 443, nodePort: 30444 }
+admin:
+  enabled: false
+manager:
+  enabled: false
