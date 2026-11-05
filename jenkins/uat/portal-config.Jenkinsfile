@@ -22,6 +22,15 @@ pipeline {
         }
       }
     }
+    stage('Show sign-in settings') {
+      steps {
+        withCredentials([string(credentialsId: 'konnect-pat', variable: 'TF_VAR_konnect_pat')]) {
+          dir(env.PORTAL_DIR) {
+            sh 'bash ../show-auth.sh /var/lib/jenkins/tfstate/shopglobal/uat/terraform.tfstate'
+          }
+        }
+      }
+    }
     stage('Portal plan') {
       steps {
         withCredentials([string(credentialsId: 'konnect-pat', variable: 'TF_VAR_konnect_pat'), string(credentialsId: 'keycloak-portal-client-secret-uat', variable: 'TF_VAR_oidc_client_secret')]) {
