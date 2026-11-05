@@ -22,20 +22,24 @@ public class RemoteAgent implements Agent {
     private final HttpClient http = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(5)).build();
     private final ObjectMapper mapper;
     private final String base;
+    private final String prefix;
 
-    public RemoteAgent(ObjectMapper mapper, @Value("${agent.remote.url:http://localhost:8082}") String base) {
+    public RemoteAgent(ObjectMapper mapper, @Value("${agent.remote.url:http://localhost:8082}") String base,
+                       @Value("${agent.remote.prefix:/agent}") String prefix) {
         this.mapper = mapper;
         this.base = base.endsWith("/") ? base.substring(0, base.length() - 1) : base;
+        // Direct to the agent the paths start with /agent. Behind the Kong proxy the URL already ends in /internal/agent, so the prefix is empty.
+        this.prefix = prefix == null ? "" : (prefix.endsWith("/") ? prefix.substring(0, prefix.length() - 1) : prefix);
     }
 
     @Override
     public ChatResponse handle(Session s, String userText, String language) {
-        return post("/agent/message", Map.of("sessionId", s.id, "message", userText, "language", language, "customerId", s.owner.id()), language);
+        return post(prefix + "/message", Map.of("sessionId", s.id, "message", userText, "language", language, "customerId", s.owner.id()), language);
     }
 
     @Override
     public ChatResponse confirm(Session s, String actionId, boolean approve, String language) {
-        return post("/agent/confirm", Map.of("sessionId", s.id, "actionId", actionId == null ? "" : actionId,
+        return post(prefix + "/confirm", Map.of("sessionId", s.id, "actionId", actionId == null ? "" : actionId,
                 "approve", approve, "language", language, "customerId", s.owner.id()), language);
     }
 

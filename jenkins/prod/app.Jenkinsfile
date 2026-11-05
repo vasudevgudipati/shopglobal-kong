@@ -11,7 +11,7 @@ pipeline {
   parameters {
     booleanParam(name: 'APPLY', defaultValue: false, description: 'Tick to deploy to PROD. Left unticked, the job only checks and shows the plan.')
     choice(name: 'SERVICE', choices: ['all', 'mock-api', 'web', 'agent'], description: 'What to build and deploy')
-    string(name: 'AGENT_URL', defaultValue: 'http://localhost:8082', description: 'Agent address used by the website chat: the Kong proxy URL of the agent (no trailing slash)')
+    string(name: 'AGENT_URL', defaultValue: 'https://shopglobal-api.pronteff.com:8443/internal/agent', description: 'Agent address used by the website chat: the Kong proxy URL of the agent, ending in /internal/agent (no trailing slash)')
   }
   environment {
     KC       = '/var/lib/jenkins/.kube/config-prod'

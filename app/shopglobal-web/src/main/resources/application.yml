@@ -40,6 +40,8 @@ shopglobal:
 agent:
   remote:
     url: ${AGENT_REMOTE_URL:http://localhost:8082}
+    # Path prefix in front of /message and /confirm. Direct to the agent: /agent (default). Behind the Kong proxy (url ends in /internal/agent): set AGENT_REMOTE_PREFIX to empty.
+    prefix: ${AGENT_REMOTE_PREFIX:/agent}
 
 # OAuth 2.0 client credentials (Keycloak) for calls to Kong. Leave token-url empty to send no token.
 # The secret is never stored in Git: set OAUTH_CLIENT_SECRET (environment variable or Kubernetes Secret).

@@ -13,6 +13,10 @@ spec:
     metadata: { labels: { app: shopglobal-web } }
     spec:
       nodeSelector: { kubernetes.io/hostname: kongdp1 }
+      # The name does not resolve inside the cluster; map it to the virtual IP of the two NGINX servers.
+      hostAliases:
+        - ip: "192.168.19.10"
+          hostnames: ["shopglobal-api.pronteff.com"]
       containers:
         - name: app
           image: IMAGE_WEB
@@ -21,6 +25,7 @@ spec:
             - { name: APP_ENV, value: "PROD" }
             - { name: SHOPGLOBAL_API_BASE_URL, value: "http://kong-api-dp-prod-kong-proxy.shopglobal-prod-api.svc.cluster.local/internal" }
             - { name: AGENT_REMOTE_URL, value: "AGENT_URL" }
+            - { name: AGENT_REMOTE_PREFIX, value: "" }       # AGENT_URL already ends in /internal/agent (Kong proxy), so no /agent prefix
           readinessProbe: { httpGet: { path: /actuator/health/readiness, port: 8080 }, initialDelaySeconds: 15 }
 ---
 apiVersion: v1
