@@ -17,16 +17,16 @@ RESP=""
 for PATH_TRY in "/v3/portals/${PORTAL_ID}/identity-providers" "/v3/identity-providers?filter%5Bportal_id%5D=${PORTAL_ID}" "/v3/portals/${PORTAL_ID}/identity-provider"; do
   CODE=$(curl -sS -o /tmp/idp.$$ -w '%{http_code}' -H "Authorization: Bearer ${TF_VAR_konnect_pat}" "${BASE}${PATH_TRY}" || true)
   echo "GET ${PATH_TRY%%\?*} -> HTTP ${CODE}"
-  if [ "$CODE" = "200" ] && jq -e '.data' /tmp/idp.$$ >/dev/null 2>&1; then RESP=$(cat /tmp/idp.$$); break; fi
+  if [ "$CODE" = "200" ] && jq -e 'if type=="array" then . else .data end | type=="array"' /tmp/idp.$$ >/dev/null 2>&1; then RESP=$(jq -c 'if type=="array" then . else .data end' /tmp/idp.$$); break; fi
   head -c 400 /tmp/idp.$$ | tr -d '\r' ; echo
 done
 rm -f /tmp/idp.$$
 if [ -z "$RESP" ]; then echo "No endpoint returned a provider list; see the lines above."; exit 1; fi
 echo "Identity providers found on the portal (no secrets shown):"
-echo "$RESP" | jq -c '.data[] | {id, type, enabled, client_id: .config.oidc_identity_provider_config.client_id, issuer: .config.oidc_identity_provider_config.issuer_url}'
-COUNT=$(echo "$RESP" | jq '[.data[] | select(.type=="oidc")] | length')
+echo "$RESP" | jq -c '.[] | {id, type, enabled, client_id: (.config.client_id // .config.oidc_identity_provider_config.client_id), issuer: (.config.issuer_url // .config.oidc_identity_provider_config.issuer_url)}'
+COUNT=$(echo "$RESP" | jq '[.[] | select(.type=="oidc")] | length')
 if [ "$COUNT" = "0" ]; then echo "No OIDC provider exists, Terraform will create it."; exit 0; fi
 if [ "$COUNT" != "1" ]; then echo "More than one OIDC provider exists, import by hand."; exit 1; fi
-IDP_ID=$(echo "$RESP" | jq -r '.data[] | select(.type=="oidc") | .id')
+IDP_ID=$(echo "$RESP" | jq -r '.[] | select(.type=="oidc") | .id')
 echo "Importing provider ${IDP_ID} into Terraform state."
 terraform import -input=false konnect_portal_identity_provider.keycloak "{\"id\":\"${IDP_ID}\",\"portal_id\":\"${PORTAL_ID}\"}"
