@@ -1,0 +1,27 @@
+# PROD API gateway data plane: 2 pods, one on each API node (kongdp1 and kongdp2).
+replicaCount: 2
+
+# Only nodes labelled gateway=api (set by the platform pipeline) can run these pods.
+nodeSelector:
+  gateway: api
+
+# Never two API gateway pods on the same node: a node failure leaves one pod serving.
+affinity:
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      - topologyKey: kubernetes.io/hostname
+        labelSelector:
+          matchLabels:
+            app.kubernetes.io/name: kong
+            app.kubernetes.io/instance: kong-api-dp-prod
+
+podDisruptionBudget:
+  enabled: true
+  maxUnavailable: 1
+
+proxy:
+  enabled: true
+  type: NodePort
+  externalTrafficPolicy: Local   # keep the caller's real IP on direct NodePort access (needed by IP restriction)
+  http:  { enabled: true, servicePort: 80,  nodePort: 30080 }
+  tls:   { enabled: true, servicePort: 443, nodePort: 30443 }

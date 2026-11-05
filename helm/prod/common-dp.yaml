@@ -1,0 +1,41 @@
+# Shared hybrid data plane settings for PROD. Endpoints are injected by Jenkins (--set).
+image:
+  repository: kong/kong-gateway
+  tag: "3.12"
+ingressController:
+  enabled: false
+deployment:
+  kong:
+    enabled: true
+secretVolumes:
+  - kong-cluster-cert
+env:
+  role: data_plane
+  database: "off"
+  konnect_mode: "on"
+  vitals: "off"
+  cluster_mtls: pki
+  cluster_cert: /etc/secrets/kong-cluster-cert/tls.crt
+  cluster_cert_key: /etc/secrets/kong-cluster-cert/tls.key
+  lua_ssl_trusted_certificate: system
+  # Real client address for IP restriction: trust X-Forwarded-For only from the cluster network (NGINX and nodes).
+  trusted_ips: "192.168.19.0/24,10.244.0.0/16"
+  real_ip_header: X-Forwarded-For
+  real_ip_recursive: "on"
+admin:
+  enabled: false
+manager:
+  enabled: false
+portal:
+  enabled: false
+portalapi:
+  enabled: false
+cluster:
+  enabled: false
+clustertelemetry:
+  enabled: false
+enterprise:
+  enabled: false
+resources:
+  requests: { cpu: 500m, memory: 1Gi }
+  limits:   { cpu: "2",  memory: 4Gi }

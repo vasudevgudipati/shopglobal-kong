@@ -1,0 +1,50 @@
+# Redis for ShopGlobal PROD API gateway: proxy cache and rate-limit counters, shared by both API gateway pods.
+# One pod on an API node (cluster has no storage class, so no persistence: the cache and counters rebuild after a restart).
+# The password comes from the Secret redis-auth (created by the platform pipeline from the Jenkins credential redis-password-prod).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: shopglobal-prod-api
+  labels: { app: redis }
+spec:
+  replicas: 1
+  strategy: { type: Recreate }
+  selector:
+    matchLabels: { app: redis }
+  template:
+    metadata:
+      labels: { app: redis }
+    spec:
+      nodeSelector:
+        gateway: api
+      containers:
+        - name: redis
+          image: redis:7.4-alpine
+          command: ["sh", "-c", "exec redis-server --requirepass \"$REDIS_PASSWORD\" --save '' --appendonly no --maxmemory 256mb --maxmemory-policy allkeys-lru"]
+          env:
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef: { name: redis-auth, key: password }
+          ports:
+            - containerPort: 6379
+          readinessProbe:
+            tcpSocket: { port: 6379 }
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          resources:
+            requests: { cpu: 50m, memory: 128Mi }
+            limits:   { cpu: 500m, memory: 384Mi }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  namespace: shopglobal-prod-api
+spec:
+  type: ClusterIP
+  selector: { app: redis }
+  ports:
+    - name: redis
+      port: 6379
+      targetPort: 6379
