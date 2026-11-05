@@ -1,0 +1,36 @@
+# PROD shopping agent. Applied by jenkins/prod/app.Jenkinsfile (SERVICE = agent or all); the pipeline fills in IMAGE_AGENT.
+# Namespace shopglobal-app-prod, node kongdp2 (the website runs on kongdp1), NodePort 30210.
+# It talks to the PROD AI gateway INSIDE the cluster (service kong-ai-gw-prod-kong-proxy, namespace shopglobal-prod-ai, model shopglobal-auto and the MCP route /mcp/marketplace),
+# using a Keycloak token of client kong-ai-prod. The client secret comes from the Kubernetes Secret shopglobal-agent-oauth, created by the pipeline from the Jenkins credential keycloak-ai-client-secret-prod.
+# The website reaches the agent through the Kong API gateway proxy (route /agent), not directly.
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: shopglobal-agent, namespace: shopglobal-app-prod }
+spec:
+  replicas: 1         # conversation memory is in-process; keep one replica
+  selector: { matchLabels: { app: shopglobal-agent } }
+  template:
+    metadata: { labels: { app: shopglobal-agent } }
+    spec:
+      nodeSelector: { kubernetes.io/hostname: kongdp2 }
+      containers:
+        - name: app
+          image: IMAGE_AGENT
+          ports: [{ containerPort: 8082 }]
+          env:
+            - { name: APP_ENV, value: "PROD" }
+            - { name: KONG_AI_BASE_URL, value: "http://kong-ai-gw-prod-kong-proxy.shopglobal-prod-ai.svc.cluster.local" }
+            - { name: AGENT_MODEL, value: "shopglobal-auto" }
+            - { name: OAUTH_TOKEN_URL, value: "https://marmalade-ivy-crazed.ngrok-free.dev/realms/demo/protocol/openid-connect/token" }
+            - { name: OAUTH_CLIENT_ID, value: "kong-ai-prod" }
+            - name: OAUTH_CLIENT_SECRET
+              valueFrom: { secretKeyRef: { name: shopglobal-agent-oauth, key: OAUTH_CLIENT_SECRET } }
+          readinessProbe: { httpGet: { path: /actuator/health/readiness, port: 8082 }, initialDelaySeconds: 20 }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: shopglobal-agent, namespace: shopglobal-app-prod }
+spec:
+  type: NodePort
+  selector: { app: shopglobal-agent }
+  ports: [{ port: 8082, targetPort: 8082, nodePort: 30210 }]
