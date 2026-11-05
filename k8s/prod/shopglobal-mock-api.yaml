@@ -1,7 +1,6 @@
-# PROD deployment: mock API (two instances) + website. The agent is deployed separately, on its own server.
-# Applied by jenkins/prod/app.Jenkinsfile, which fills in the image tags (IMAGE_*) and AGENT_URL. Do not apply by hand.
-#   Mock API A -> node kongdp1, port 8081      Mock API B -> node kongdp2, port 8082      Website -> node kongdp1
-#   Kong (upstream shopglobal-mock-api-upstream, apiops/prod/kong.yaml) balances A and B and health checks both.
+# PROD mock API: two instances in namespace shopglobal-app-prod. Applied by jenkins/prod/app.Jenkinsfile (it fills in IMAGE_* and REPLICAS_*).
+#   Version "a" = stable, node kongdp1, service shopglobal-mock-api-a:8081      Version "b" = canary, node kongdp2, service shopglobal-mock-api-b:8082
+# Kong (upstream shopglobal-mock-api-upstream in apiops/prod/kong.yaml) routes to these two service names and ports - do not rename them.
 # The database Secret shopglobal-db (schema SHOPGLOBAL_PROD) is created by the pipeline from the Jenkins credential shopglobal-db-prod.
 apiVersion: v1
 kind: Namespace
@@ -41,7 +40,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata: { name: shopglobal-mock-api-b, namespace: shopglobal-app-prod }
 spec:
-  replicas: REPLICAS_MOCK_API_B      # 0 on the very first deploy, so A seeds the empty schema alone; the pipeline then sets 1
+  replicas: REPLICAS_MOCK_API_B
   selector: { matchLabels: { app: shopglobal-mock-api-b } }
   template:
     metadata: { labels: { app: shopglobal-mock-api-b, tier: mock-api } }
@@ -66,32 +65,3 @@ metadata: { name: shopglobal-mock-api-b, namespace: shopglobal-app-prod }
 spec:
   selector: { app: shopglobal-mock-api-b }
   ports: [{ port: 8082, targetPort: 8082 }]
----
-apiVersion: apps/v1
-kind: Deployment
-metadata: { name: shopglobal-web, namespace: shopglobal-app-prod }
-spec:
-  replicas: 1
-  selector: { matchLabels: { app: shopglobal-web } }
-  template:
-    metadata: { labels: { app: shopglobal-web } }
-    spec:
-      nodeSelector: { kubernetes.io/hostname: kongdp1 }
-      containers:
-        - name: app
-          image: IMAGE_WEB
-          ports: [{ containerPort: 8080 }]
-          env:
-            - { name: APP_ENV, value: "PROD" }
-            # Through the Kong API gateway (in-cluster proxy service), token-free route /internal/api - never the mock API directly.
-            - { name: SHOPGLOBAL_API_BASE_URL, value: "http://kong-api-dp-prod-kong-proxy.shopglobal-prod-api.svc.cluster.local/internal" }
-            - { name: AGENT_REMOTE_URL, value: "AGENT_URL" }
-          readinessProbe: { httpGet: { path: /actuator/health/readiness, port: 8080 }, initialDelaySeconds: 15 }
----
-apiVersion: v1
-kind: Service
-metadata: { name: shopglobal-web, namespace: shopglobal-app-prod }
-spec:
-  type: NodePort
-  selector: { app: shopglobal-web }
-  ports: [{ port: 8080, targetPort: 8080, nodePort: 30090 }]
