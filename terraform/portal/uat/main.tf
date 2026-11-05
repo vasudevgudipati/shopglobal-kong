@@ -40,6 +40,9 @@ resource "konnect_portal_identity_provider" "keycloak" {
 # Keycloak is the only way in: portal self-registration with e-mail and password is switched off.
 resource "konnect_portal_auth" "this" {
   portal_id          = local.portal_id
-  basic_auth_enabled = false
-  depends_on         = [konnect_portal_identity_provider.keycloak]
+  basic_auth_enabled      = false
+  # No role/team mapping: every signed-in user gets the same access (portal RBAC is off), so a missing "groups" claim cannot break the sign-in.
+  idp_mapping_enabled     = false
+  konnect_mapping_enabled = false
+  depends_on              = [konnect_portal_identity_provider.keycloak]
 }
