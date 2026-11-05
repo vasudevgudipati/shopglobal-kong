@@ -1,15 +1,15 @@
 // ShopGlobal Kong - PROD API CONFIG pipeline (run on every API change, after UAT passed).
 // Jenkins script path: jenkins/prod/api-config.Jenkinsfile
 // 1. Renders apiops/prod/kong.yaml (secrets are filled in from Jenkins credentials, never stored in git).
-// 2. Shows the decK diff, saves a backup of the current PROD configuration, then waits for manual approval.
-// 3. Syncs services, routes, plugins and consumers to the PROD API control plane with decK.
+// 2. Shows the decK diff. With APPLY ticked it also saves a backup of the current PROD configuration first.
+// 3. Only with APPLY ticked: syncs services, routes, plugins and consumers to the PROD API control plane with decK.
 // 4. Updates the API catalog entry with Terraform and smoke-tests BOTH API nodes.
 // Needs the platform pipeline (control plane, Redis, data plane) to have run already.
 pipeline {
   agent any
   options { disableConcurrentBuilds(); timestamps() }
   parameters {
-    booleanParam(name: 'DIFF_ONLY', defaultValue: false, description: 'Show what would change, but do not apply')
+    booleanParam(name: 'APPLY', defaultValue: false, description: 'Tick to apply to PROD. Left unticked, the job only shows what would change.')
   }
   environment {
     ENV_NAME     = 'prod'
@@ -19,6 +19,19 @@ pipeline {
     RENDERED     = "${WORKSPACE}/.kong-rendered.yaml"
   }
   stages {
+    stage('Run mode') {
+      steps {
+        script {
+          def mode = params.APPLY ? 'APPLY - changes WILL be made to PROD' : 'PLAN ONLY - nothing will be changed'
+          echo "=============================================================="
+          echo " APPLY selected : ${params.APPLY}"
+          echo " Mode           : ${mode}"
+          echo " Build          : #${env.BUILD_NUMBER}   Started by: ${currentBuild.getBuildCauses()[0]?.shortDescription}"
+          echo "=============================================================="
+          currentBuild.displayName = "#${env.BUILD_NUMBER} " + (params.APPLY ? 'APPLY' : 'PLAN')
+        }
+      }
+    }
     stage('Render config (inject secrets)') {
       steps {
         withCredentials([string(credentialsId: 'keycloak-introspect-basic-prod', variable: 'KC_BASIC'),
@@ -42,7 +55,7 @@ pipeline {
       }
     }
     stage('Backup current PROD config') {
-      when { expression { return !params.DIFF_ONLY } }
+      when { expression { return params.APPLY } }
       steps {
         // Rollback copy: the configuration as it is now, before this change. Kept with the build.
         withCredentials([string(credentialsId: 'konnect-pat', variable: 'KONNECT_TOKEN')]) {
@@ -56,14 +69,8 @@ pipeline {
         archiveArtifacts artifacts: 'backup-out/**', allowEmptyArchive: true
       }
     }
-    stage('Approval') {
-      when { expression { return !params.DIFF_ONLY } }
-      steps {
-        input message: 'The diff above is what will change in PROD. Apply it?', ok: 'Apply to PROD'
-      }
-    }
     stage('decK sync') {
-      when { expression { return !params.DIFF_ONLY } }
+      when { expression { return params.APPLY } }
       steps {
         withCredentials([string(credentialsId: 'konnect-pat', variable: 'KONNECT_TOKEN')]) {
           sh 'deck gateway sync "$RENDERED" --konnect-token "$KONNECT_TOKEN" --konnect-addr $KONNECT_ADDR --konnect-control-plane-name $CP_NAME'
@@ -80,7 +87,7 @@ pipeline {
       }
     }
     stage('Catalog apply') {
-      when { expression { return !params.DIFF_ONLY } }
+      when { expression { return params.APPLY } }
       steps {
         withCredentials([string(credentialsId: 'konnect-pat', variable: 'TF_VAR_konnect_pat')]) {
           dir(env.CATALOG_DIR) { sh 'terraform apply -input=false tfplan' }
@@ -88,7 +95,7 @@ pipeline {
       }
     }
     stage('Smoke test (both API nodes)') {
-      when { expression { return !params.DIFF_ONLY } }
+      when { expression { return params.APPLY } }
       steps {
         // 401 (no token) is the expected answer: the node is up and protected. Each API node is tested on its own.
         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
