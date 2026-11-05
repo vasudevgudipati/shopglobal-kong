@@ -24,7 +24,8 @@ spec:
           ports: [{ containerPort: 8082 }]
           env:
             - { name: APP_ENV, value: "UAT" }
-            - { name: KONG_AI_BASE_URL, value: "https://shopglobal-ai-uat.pronteff.com:8443" }
+            # AI gateway data plane on this same server (NodePort 30090). The public name shopglobal-ai-uat.pronteff.com does not resolve inside the cluster.
+            - { name: KONG_AI_BASE_URL, value: "http://192.168.19.42:30090" }
             - { name: AGENT_MODEL, value: "shopglobal-auto" }
             - { name: OAUTH_TOKEN_URL, value: "https://marmalade-ivy-crazed.ngrok-free.dev/realms/demo/protocol/openid-connect/token" }
             - { name: OAUTH_CLIENT_ID, value: "kong-ai-admin" }
