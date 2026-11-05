@@ -257,7 +257,7 @@ services:
 # Consumers = applications calling the API. custom_id must equal the Keycloak client id of the application.
   # ---- Internal route for the AI gateway (MCP tools) ----
   # The AI gateway nodes (kongdp3 192.168.19.3 and kongdp4 192.168.18.29) call /internal/api/... No token check (a server cannot sign in with Keycloak),
-  # so access is limited to those two IPs, and rate limited. The real client IP comes from X-Forwarded-For (see helm/prod/common-dp.yaml).
+  # so access is limited to those two IPs plus the website pods on kongdp1 (10.244.1.0/24), and rate limited. The real client IP comes from X-Forwarded-For (see helm/prod/common-dp.yaml).
   # /internal/api/orders -> upstream /api/orders (the route prefix is stripped, the service path adds /api back).
   - name: shopglobal-mock-api-internal
     host: shopglobal-mock-api-upstream
@@ -271,6 +271,7 @@ services:
           allow:
             - 192.168.19.3/32             # AI gateway node kongdp3
             - 192.168.18.29/32            # AI gateway node kongdp4
+            - 10.244.1.0/24               # website pods on kongdp1 (in-cluster, through kong-api-dp-prod-kong-proxy)
           status: 403
           message: Your IP address is not allowed
         tags: [shopglobal, prod, internal]
