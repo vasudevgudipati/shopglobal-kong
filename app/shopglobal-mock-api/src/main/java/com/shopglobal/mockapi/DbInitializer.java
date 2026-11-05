@@ -111,11 +111,18 @@ public class DbInitializer implements ApplicationRunner {
         try {
             jdbc.execute(ddl);
         } catch (DataAccessException e) {
-            String m = String.valueOf(e.getMessage());
-            // ORA-00955 = name already used
-            if (m.contains("ORA-00955") || m.toLowerCase().contains("already exists")) return;
+            if (alreadyExists(e)) return;   // the table/sequence is already there (every restart after the first)
             throw e;
         }
+    }
+
+    /** ORA-00955 = name already used. Spring 6 no longer puts the cause text into getMessage(), so the whole cause chain is checked. */
+    private static boolean alreadyExists(Throwable t) {
+        for (int i = 0; t != null && i < 10; i++, t = t.getCause()) {
+            String m = t.getMessage();
+            if (m != null && (m.contains("ORA-00955") || m.toLowerCase().contains("already exists"))) return true;
+        }
+        return false;
     }
 
     private void insertProduct(Product p) {
