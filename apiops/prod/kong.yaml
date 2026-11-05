@@ -49,7 +49,7 @@ services:
           origins:
             - https://6a7795276d93.in.kongportals.com   # Dev Portal
           methods: [GET, POST, PUT, OPTIONS]
-          headers: [Authorization, Content-Type, Accept]
+          headers: [Authorization, Content-Type, Accept, X-Customer-Id]
           credentials: true
           max_age: 3600
           preflight_continue: false
@@ -296,6 +296,89 @@ services:
         strip_path: true
         tags: [shopglobal, prod, internal]
 
+  # ---- ShopGlobal chat agent behind Kong (two ways in) ----
+  # PROD agent runs in the same cluster as Kong, so the service name works (alternative by node: 192.168.19.2:30210).
+  # Agent endpoints: POST /agent/message, POST /agent/confirm, POST /agent/reset, GET /agent/info.
+  # 1) WITH TOKEN: /agent/...  (Keycloak token checked here, for Postman and other callers; the path reaches the agent unchanged)
+  # 2) PLAIN: /internal/agent/...  (no token; for the web app's server only, limited to its IPs and rate limited; the prefix is
+  #    stripped and the service path adds /agent back, so /internal/agent/message -> agent /agent/message)
+  # Read timeout is long because one answer can use several model and tool calls. No retries: message and confirm change data.
+  - name: shopglobal-agent
+    url: http://shopglobal-agent.shopglobal-app-prod.svc.cluster.local:8082
+    connect_timeout: 5000
+    read_timeout: 180000
+    write_timeout: 180000
+    retries: 0
+    tags: [shopglobal, prod, agent]
+    plugins:
+      - name: oauth2-introspection
+        config:
+          introspection_url: https://marmalade-ivy-crazed.ngrok-free.dev/realms/demo/protocol/openid-connect/token/introspect
+          authorization_value: "__KEYCLOAK_BASIC__"
+          token_type_hint: access_token
+          consumer_by: client_id
+          ttl: 60
+          timeout: 10000
+          hide_credentials: false
+          run_on_preflight: false
+        tags: [shopglobal, prod, agent]
+      - name: ip-restriction
+        config:
+          allow:
+            - 192.168.19.0/24             # cluster nodes, NGINX load balancer, Jenkins and all other 192.168.19.* hosts
+            - 192.168.16.0/24             # user PCs and other hosts in 192.168.16.*
+            - 192.168.18.29/32            # AI gateway node kongdp4
+            - 10.244.0.0/16               # pods in the PROD cluster (flannel)
+            - 10.243.126.0/24            # admin PC range (current IP 10.243.126.248; it changes)
+            - 10.81.128.0/24             # admin PC as seen by NGINX via VPN/NAT (currently 10.81.128.4; it changes)
+          status: 403
+          message: Your IP address is not allowed
+        tags: [shopglobal, prod, agent]
+    routes:
+      - name: agent-token
+        methods: [GET, POST]
+        paths: ["~/agent(/.*)?$"]
+        strip_path: false
+        tags: [shopglobal, prod, agent]
+
+  - name: shopglobal-agent-internal
+    url: http://shopglobal-agent.shopglobal-app-prod.svc.cluster.local:8082/agent
+    connect_timeout: 5000
+    read_timeout: 180000
+    write_timeout: 180000
+    retries: 0
+    tags: [shopglobal, prod, agent, internal]
+    plugins:
+      - name: ip-restriction
+        config:
+          allow:
+            - 10.244.1.0/24              # PROD website pods on kongdp1 (calling Kong inside the cluster)
+            - 192.168.19.1/32            # kongdp1 node (website calls through NGINX are seen with the node address)
+          status: 403
+          message: Your IP address is not allowed
+        tags: [shopglobal, prod, agent, internal]
+      - name: rate-limiting-advanced
+        config:
+          limit: [30]
+          window_size: [60]
+          window_type: sliding
+          identifier: ip
+          strategy: redis
+          sync_rate: 1
+          namespace: shopglobal-prod-agent-internal
+          redis:
+            host: redis.shopglobal-prod-api.svc.cluster.local
+            port: 6379
+            password: "__REDIS_PASSWORD__"
+            database: 0
+        tags: [shopglobal, prod, agent, internal]
+    routes:
+      - name: agent-plain
+        methods: [GET, POST]
+        paths: ["/internal/agent"]
+        strip_path: true
+        tags: [shopglobal, prod, agent, internal]
+
 consumers:
   - username: kong-dev-portal
     custom_id: kong-dev-portal        # = Keycloak client id
@@ -393,7 +476,7 @@ plugins:
 # ---------------------------------------------------------------- observability (global plugins, every service and route)
 # HTTP Log -> OpenSearch index kong-shopglobal-prod (sensitive fields masked by Lua). __OPENSEARCH_AUTH__ is filled in by Jenkins (credential opensearch-basic).
 # Prometheus -> metrics on the data plane status port (8100), scraped by Prometheus (the observability step (later)).
-plugins:
+# (observability plugins continue the same plugins list; a second "plugins:" key would silently replace the rate limits above)
   # Response buffering: lets the HTTP Log Lua read (and mask) the response body. Fine for this API (small JSON, no streaming).
   - name: pre-function
     config:
@@ -458,3 +541,21 @@ plugins:
       upstream_health_metrics: true
       ai_metrics: true
       per_consumer: true
+  # Agent, token route: 20 requests per minute per consumer (each message can trigger several paid model calls).
+  - name: rate-limiting-advanced
+    consumer: kong-dev-portal
+    route: agent-token
+    config:
+      limit: [20]
+      window_size: [60]
+      window_type: sliding
+      identifier: consumer
+      strategy: redis
+      sync_rate: 1
+      namespace: shopglobal-prod-kong-dev-portal-agent-token
+      redis:
+        host: redis.shopglobal-prod-api.svc.cluster.local
+        port: 6379
+        password: "__REDIS_PASSWORD__"
+        database: 0
+    tags: [shopglobal, prod, agent]
