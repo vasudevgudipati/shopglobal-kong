@@ -34,6 +34,13 @@ pipeline {
     stage('Run mode') {
       steps {
         script {
+          // First build after the pipeline file changed: Jenkins has not registered the parameters yet, so they arrive empty.
+          env.FIRST_RUN = (params.VRID == null) ? 'true' : 'false'
+          if (env.FIRST_RUN == 'true') {
+            echo "FIRST RUN: the parameters are now registered. Nothing else ran. Open the job and click 'Build with Parameters'."
+            currentBuild.displayName = "#${env.BUILD_NUMBER} REGISTER"
+            return
+          }
           def mode = params.APPLY ? 'APPLY - changes WILL be made to the PROD edge servers' : 'PLAN ONLY - nothing will be changed'
           echo "=============================================================="
           echo " APPLY selected : ${params.APPLY}"
@@ -46,6 +53,7 @@ pipeline {
       }
     }
     stage('Validate inputs') {
+      when { expression { return env.FIRST_RUN != 'true' } }
       steps {
         sh '''
           set -e
@@ -59,6 +67,7 @@ pipeline {
       }
     }
     stage('Render configuration') {
+      when { expression { return env.FIRST_RUN != 'true' } }
       steps {
         sh '''
           set -e
@@ -78,6 +87,7 @@ pipeline {
       }
     }
     stage('Show changes on the servers') {
+      when { expression { return env.FIRST_RUN != 'true' } }
       steps {
         withEdgeKey {
           sh '''
@@ -96,7 +106,7 @@ pipeline {
       }
     }
     stage('Apply to PROD edge (only when APPLY is ticked)') {
-      when { expression { return params.APPLY } }
+      when { expression { return env.FIRST_RUN != 'true' && params.APPLY } }
       stages {
         stage('Check the virtual IP is free') {
           steps {
