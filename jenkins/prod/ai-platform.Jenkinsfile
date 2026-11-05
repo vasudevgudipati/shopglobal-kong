@@ -59,6 +59,12 @@ pipeline {
           case "$CP_HOST$TP_HOST" in *REPLACE_ME*) echo "ERROR: fill helm/prod/ai-gw-endpoints.env (hostnames from the Konnect wizard for shopglobal-ai-prod) and commit it"; exit 1 ;; esac
           echo "Konnect endpoints: $CP_HOST / $TP_HOST"
           echo "Nodes to run: $(echo $AI_NODES | wc -w)"
+          echo "Checking that the NodePorts of the AI gateway are free (the existing Kong in namespace kong uses some):"
+          for p in 30190 30544 30101; do
+            CLASH=$(kubectl --kubeconfig $KC get svc -A -o jsonpath='{range .items[*]}{.metadata.namespace}{"/"}{.metadata.name}{" "}{range .spec.ports[*]}{.nodePort}{" "}{end}{"\\n"}{end}' | grep -w "$p" | grep -v "^$NS_AI/" || true)
+            [ -z "$CLASH" ] || { echo "ERROR: NodePort $p is already used by: $CLASH"; exit 1; }
+            echo "NodePort $p: free"
+          done
         '''
       }
     }
