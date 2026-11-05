@@ -1,4 +1,5 @@
 # Prometheus for the Kong gateways (cluster on .42). Scrapes the AI data plane in-cluster and the API data plane on 192.168.19.41:30100.
+# It also scrapes PROD (labels env: prod): API nodes 192.168.19.1/.2 :30100, AI nodes 192.168.19.3 and 192.168.18.29 :30101.
 # Grafana reaches it at http://192.168.19.42:30091 . Data kept 15 days on a 5Gi volume.
 apiVersion: v1
 kind: Namespace
@@ -25,6 +26,20 @@ data:
         static_configs:
           - targets: ["192.168.19.41:30100"]
             labels: { gateway: api, env: uat }
+      - job_name: kong-api-prod
+        metrics_path: /metrics
+        static_configs:
+          - targets: ["192.168.19.1:30100"]
+            labels: { gateway: api, env: prod, node: kongdp1 }
+          - targets: ["192.168.19.2:30100"]
+            labels: { gateway: api, env: prod, node: kongdp2 }
+      - job_name: kong-ai-prod
+        metrics_path: /metrics
+        static_configs:
+          - targets: ["192.168.19.3:30101"]
+            labels: { gateway: ai, env: prod, node: kongdp3 }
+          - targets: ["192.168.18.29:30101"]
+            labels: { gateway: ai, env: prod, node: kongdp4 }
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
