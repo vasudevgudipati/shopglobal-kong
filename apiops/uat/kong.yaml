@@ -41,8 +41,8 @@ services:
       - name: ip-restriction
         config:
           allow:
-            - 192.168.19.41/32            # API gateway server
-            - 192.168.19.42/32            # AI gateway / Jenkins / AI agent server
+            - 192.168.19.0/24             # servers: API gateway .41, AI gateway / Jenkins / AI agent .42 and all other 192.168.19.* hosts
+            - 192.168.16.0/24             # user PCs and other hosts in 192.168.16.*
             - 10.42.0.0/16                # k3s pods on .41 (web app, mock API, NGINX)
             - 10.243.126.0/24             # admin PC range (current IP 10.243.126.248; it changes)
             - 10.81.128.0/24              # admin PC as seen by NGINX via VPN/NAT (currently 10.81.128.4; it changes)
@@ -229,7 +229,7 @@ services:
 # Consumers = applications calling the API. custom_id must equal the Keycloak client id of the application.
   # ---- Internal route for the AI gateway (MCP tools) ----
   # The AI gateway server (192.168.19.42) calls /internal/api/... through NGINX. No token check (a server cannot sign in with Keycloak),
-  # so access is limited to the AI gateway server and the website, and rate limited per IP. The real client IP comes from X-Forwarded-For (see helm/uat/common-dp.yaml).
+  # so access is limited to that one IP, and rate limited. The real client IP comes from X-Forwarded-For (see helm/uat/common-dp.yaml).
   # /internal/api/orders -> upstream /api/orders (the route prefix is stripped, the service path adds /api back).
   - name: shopglobal-mock-api-internal
     url: http://shopglobal-mock-api.shopglobal-app-uat.svc.cluster.local:8081/api
@@ -238,9 +238,7 @@ services:
       - name: ip-restriction
         config:
           allow:
-            - 192.168.19.42/32            # AI gateway server (MCP tools)
-            - 192.168.19.41/32            # website (NodePort traffic may arrive from the node address)
-            - 10.42.0.0/16                # website pod on the k3s cluster of .41
+            - 192.168.19.42/32            # AI gateway server only
           status: 403
           message: Your IP address is not allowed
         tags: [shopglobal, uat, internal]

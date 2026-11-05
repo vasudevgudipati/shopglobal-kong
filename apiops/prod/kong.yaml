@@ -41,7 +41,9 @@ services:
       - name: ip-restriction
         config:
           allow:
-            - 192.168.19.0/24             # cluster nodes, NGINX load balancer, Jenkins
+            - 192.168.19.0/24             # cluster nodes, NGINX load balancer, Jenkins and all other 192.168.19.* hosts
+            - 192.168.16.0/24             # user PCs and other hosts in 192.168.16.*
+            - 192.168.18.29/32            # AI gateway node kongdp4
             - 10.244.0.0/16               # pods in the PROD cluster (flannel)
             - 10.243.126.0/24             # admin PC range (current IP 10.243.126.248; it changes)
             - 10.81.128.0/24              # admin PC as seen by NGINX via VPN/NAT (currently 10.81.128.4; it changes)
@@ -238,7 +240,7 @@ services:
         config:
           allow:
             - 192.168.19.3/32             # AI gateway node kongdp3
-            # add the second AI gateway node here when it joins
+            - 192.168.18.29/32            # AI gateway node kongdp4
           status: 403
           message: Your IP address is not allowed
         tags: [shopglobal, prod, internal]
