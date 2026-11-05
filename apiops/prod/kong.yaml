@@ -8,9 +8,36 @@ _format_version: "3.0"
 # A second service (shopglobal-mock-api-internal) gives the AI gateway server a token-free route, limited to its IP.
 # Secrets are NOT stored here: __KEYCLOAK_BASIC__ and __REDIS_PASSWORD__ are filled in by the Jenkins pipeline at deploy time.
 
+# ---- Upstream for the mock API: stable version "a" (port 8081) and canary version "b" (port 8082) ----
+# Services point at this upstream name, not at a Kubernetes service. Canary: raise the weight of target b (e.g. a=90, b=10) and run api-config;
+# weight 0 = the canary receives no traffic. Health: TCP probes every 5 s plus passive checks on real traffic.
+upstreams:
+  - name: shopglobal-mock-api-upstream
+    algorithm: round-robin
+    tags: [shopglobal, prod]
+    healthchecks:
+      active:
+        type: tcp
+        timeout: 2
+        concurrency: 5
+        healthy:   { interval: 5, successes: 2 }
+        unhealthy: { interval: 5, tcp_failures: 2, timeouts: 2 }
+      passive:
+        healthy:   { successes: 2 }
+        unhealthy: { http_failures: 3, tcp_failures: 2, timeouts: 3, http_statuses: [500, 502, 503, 504] }
+    targets:
+      - target: shopglobal-mock-api-a.shopglobal-app-prod.svc.cluster.local:8081
+        weight: 100
+        tags: [shopglobal, prod]
+      - target: shopglobal-mock-api-b.shopglobal-app-prod.svc.cluster.local:8082
+        weight: 0
+        tags: [shopglobal, prod, canary]
+
 services:
   - name: shopglobal-mock-api
-    url: http://shopglobal-mock-api.shopglobal-app-prod.svc.cluster.local:8081
+    host: shopglobal-mock-api-upstream
+    port: 8081
+    protocol: http
     connect_timeout: 5000
     read_timeout: 30000
     write_timeout: 30000
@@ -229,11 +256,14 @@ services:
 
 # Consumers = applications calling the API. custom_id must equal the Keycloak client id of the application.
   # ---- Internal route for the AI gateway (MCP tools) ----
-  # The AI gateway server (192.168.19.3 and .5) calls /internal/api/... (nodes kongdp3 and kongdp4). No token check (a server cannot sign in with Keycloak),
+  # The AI gateway nodes (kongdp3 192.168.19.3 and kongdp4 192.168.18.29) call /internal/api/... No token check (a server cannot sign in with Keycloak),
   # so access is limited to those two IPs, and rate limited. The real client IP comes from X-Forwarded-For (see helm/prod/common-dp.yaml).
   # /internal/api/orders -> upstream /api/orders (the route prefix is stripped, the service path adds /api back).
   - name: shopglobal-mock-api-internal
-    url: http://shopglobal-mock-api.shopglobal-app-prod.svc.cluster.local:8081/api
+    host: shopglobal-mock-api-upstream
+    port: 8081
+    protocol: http
+    path: /api
     tags: [shopglobal, prod, internal]
     plugins:
       - name: ip-restriction
