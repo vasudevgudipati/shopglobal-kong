@@ -19,6 +19,7 @@ pipeline {
     RELEASE   = 'kong-ai-gw-prod'
     CHART_VER = '3.4.1'
     CHART_DIR = '/var/lib/jenkins/charts'
+    AI_NODES  = "${params.AI_NODES}"   // explicit, so the shell steps always see the value
   }
   stages {
     stage('Run mode') {
