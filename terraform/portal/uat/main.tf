@@ -41,8 +41,8 @@ resource "konnect_portal_identity_provider" "keycloak" {
 resource "konnect_portal_auth" "this" {
   portal_id          = local.portal_id
   basic_auth_enabled      = false
-  # No role/team mapping: every signed-in user gets the same access (portal RBAC is off), so a missing "groups" claim cannot break the sign-in.
+  # Konnect requires one mapping mode to stay on. Konnect mapping does not read a "groups" claim from Keycloak, so the sign-in cannot fail on a missing claim.
   idp_mapping_enabled     = false
-  konnect_mapping_enabled = false
+  konnect_mapping_enabled = true
   depends_on              = [konnect_portal_identity_provider.keycloak]
 }
