@@ -48,6 +48,7 @@ services:
         config:
           origins:
             - https://0bebd247d532.in.kongportals.com   # Dev Portal (PROD)
+            - https://cloud.konghq.com   # Konnect console (Catalog API tester)
           methods: [GET, POST, PUT, OPTIONS]
           headers: [Authorization, Content-Type, Accept, X-Customer-Id]
           credentials: true
